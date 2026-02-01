@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Rule - Step 4: Test & Activate - IT Operations AI Agent</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .wizard-container { max-width: 900px; margin: 0 auto; }
+        .wizard-progress {
+            display: flex; justify-content: space-between; margin-bottom: 32px; position: relative;
+        }
+        .wizard-progress::before {
+            content: ''; position: absolute; top: 20px; left: 60px; right: 60px;
+            height: 3px; background: #E9ECEF; z-index: 0;
+        }
+        .wizard-step { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+        .wizard-step-number {
+            width: 40px; height: 40px; border-radius: 50%; background: #E9ECEF;
+            color: #6C757D; display: flex; align-items: center; justify-content: center;
+            font-weight: 600; font-size: 16px; margin-bottom: 8px; transition: all 0.3s;
+        }
+        .wizard-step.active .wizard-step-number { background: #2563EB; color: white; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2); }
+        .wizard-step.completed .wizard-step-number { background: #28A745; color: white; }
+        .wizard-step-label { font-size: 13px; color: #6C757D; text-align: center; }
+        .wizard-step.active .wizard-step-label { color: #2563EB; font-weight: 600; }
+        .wizard-step.completed .wizard-step-label { color: #28A745; }
+        .wizard-content { background: white; border-radius: 12px; padding: 32px; min-height: 400px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .wizard-footer { display: flex; justify-content: space-between; margin-top: 24px; padding-top: 24px; border-top: 1px solid #E9ECEF; }
+        .wizard-hint { background: #E3F2FD; border-radius: 8px; padding: 16px; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 12px; }
+        .wizard-hint-icon { font-size: 20px; }
+        .wizard-hint-content h4 { margin: 0 0 4px 0; font-size: 14px; color: #1565C0; }
+        .wizard-hint-content p { margin: 0; font-size: 13px; color: #1976D2; }
+        .draft-indicator { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #6C757D; }
+        .draft-indicator .dot { width: 8px; height: 8px; border-radius: 50%; background: #28A745; }
+        .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #6C757D; margin-bottom: 16px; }
+        .breadcrumb a { color: #2563EB; text-decoration: none; }
+        .summary-section { background: #F8F9FA; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .summary-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-weight: 600; }
+        .summary-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #E9ECEF; font-size: 14px; }
+        .summary-row:last-child { border-bottom: none; }
+        .summary-label { color: #6C757D; }
+        .test-result { border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .test-result.success { background: #F0FDF4; border: 1px solid #86EFAC; }
+        .test-result.running { background: #EFF6FF; border: 1px solid #93C5FD; }
+        .test-result-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .test-result-icon { font-size: 24px; }
+        .preview-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .preview-table th, .preview-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #E9ECEF; }
+        .preview-table th { background: #F1F5F9; font-weight: 600; color: #475569; font-size: 11px; text-transform: uppercase; }
+        .preview-table tr:hover { background: #F8FAFC; }
+        .activation-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 24px; }
+        .activation-option {
+            border: 2px solid #E9ECEF; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;
+        }
+        .activation-option:hover { border-color: #2563EB; }
+        .activation-option.selected { border-color: #2563EB; background: #E3F2FD; }
+        .activation-option-title { font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+        .activation-option-desc { font-size: 13px; color: #6C757D; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="icon">🤖</span>
+                    <span>ITOA Agent</span>
+                </div>
+            </div>
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar (Ctrl+B)">◀</button>
+            <nav class="sidebar-nav">
+                <a href="02_dashboard.html" class="nav-item"><span class="icon">📊</span><span>Dashboard</span></a>
+                <a href="03_rules.html" class="nav-item active"><span class="icon">📋</span><span>Rules</span></a>
+                <a href="04_scan_results.html" class="nav-item"><span class="icon">🔍</span><span>Scan Results</span></a>
+                <a href="06_approvals.html" class="nav-item"><span class="icon">⚡</span><span>Actions</span><span class="badge">5</span></a>
+                <a href="07_action_definitions.html" class="nav-item"><span class="icon">🔧</span><span>Action Definitions</span></a>
+                <a href="10_logs.html" class="nav-item"><span class="icon">📜</span><span>Logs</span></a>
+                <a href="09_settings.html" class="nav-item"><span class="icon">⚙️</span><span>Settings</span></a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <header class="header">
+                <div>
+                    <h1 class="header-title">Create New Rule</h1>
+                    <span style="color: #6C757D; font-size: 14px;">Low Disk Space - Critical</span>
+                </div>
+                <div class="header-actions">
+                    <div class="draft-indicator">
+                        <span class="dot"></span>
+                        <span>Draft auto-saved</span>
+                    </div>
+                    <div class="user-menu">
+                        <div class="user-avatar">JD</div>
+                        <span>John Doe</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <nav class="breadcrumb">
+                    <a href="02_dashboard.html">🏠 Home</a>
+                    <span>›</span>
+                    <a href="03_rules.html">Rules</a>
+                    <span>›</span>
+                    <span>Create New Rule</span>
+                </nav>
+
+                <div class="wizard-container">
+                    <!-- Progress Steps -->
+                    <div class="wizard-progress">
+                        <div class="wizard-step completed">
+                            <div class="wizard-step-number">✓</div>
+                            <div class="wizard-step-label">1. Define Rule</div>
+                        </div>
+                        <div class="wizard-step completed">
+                            <div class="wizard-step-number">✓</div>
+                            <div class="wizard-step-label">2. Set Conditions</div>
+                        </div>
+                        <div class="wizard-step completed">
+                            <div class="wizard-step-number">✓</div>
+                            <div class="wizard-step-label">3. Choose Actions</div>
+                        </div>
+                        <div class="wizard-step active">
+                            <div class="wizard-step-number">4</div>
+                            <div class="wizard-step-label">4. Test & Activate</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Test & Activate -->
+                    <div class="wizard-content">
+                        <div class="wizard-hint">
+                            <span class="wizard-hint-icon">💡</span>
+                            <div class="wizard-hint-content">
+                                <h4>Almost Done!</h4>
+                                <p>Review your rule configuration, run a test to preview matching devices, then activate the rule. You can always edit the rule later.</p>
+                            </div>
+                        </div>
+
+                        <!-- Rule Summary -->
+                        <div class="summary-section">
+                            <div class="summary-header">
+                                <span>📋</span> Rule Summary
+                                <a href="05_wizard_step1.html" style="margin-left: auto; font-size: 13px; font-weight: normal;">Edit</a>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Rule Name</span>
+                                <span><strong>Low Disk Space - Critical</strong></span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Category</span>
+                                <span>💾 Disk Space</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Entity Type</span>
+                                <span>🖥️ Devices</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Schedule</span>
+                                <span>Manual (run on demand)</span>
+                            </div>
+                        </div>
+
+                        <div class="summary-section">
+                            <div class="summary-header">
+                                <span>🔍</span> Conditions
+                                <a href="05_wizard_step2.html" style="margin-left: auto; font-size: 13px; font-weight: normal;">Edit</a>
+                            </div>
+                            <div style="background: white; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 13px;">
+                                <span style="color: #6C757D;">IF</span> Disk Free Space <strong>&lt; 10 GB</strong> 
+                                <span style="color: #2563EB; margin: 0 8px; font-weight: 600;">AND</span> 
+                                Last Active Days <strong>&gt; 28</strong>
+                            </div>
+                        </div>
+
+                        <div class="summary-section">
+                            <div class="summary-header">
+                                <span>⚡</span> Actions (2)
+                                <a href="05_wizard_step3.html" style="margin-left: auto; font-size: 13px; font-weight: normal;">Edit</a>
+                            </div>
+                            <div class="summary-row">
+                                <span>1. 📧 Send Email Notification</span>
+                                <span class="status-badge active">Auto-execute</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>2. 📦 Create MECM Collection</span>
+                                <span class="status-badge pending">Needs approval</span>
+                            </div>
+                        </div>
+
+                        <!-- Test Results -->
+                        <div class="test-result success">
+                            <div class="test-result-header">
+                                <span class="test-result-icon">✅</span>
+                                <div>
+                                    <strong style="color: #166534;">Test Run Completed Successfully</strong>
+                                    <div style="font-size: 13px; color: #166534;">Found 523 matching devices • Completed in 2.3 seconds</div>
+                                </div>
+                                <button class="btn btn-sm btn-secondary" style="margin-left: auto;">🔄 Re-run Test</button>
+                            </div>
+                            
+                            <!-- Preview Table -->
+                            <div style="background: white; border-radius: 8px; overflow: hidden; margin-top: 16px;">
+                                <div style="padding: 12px 16px; border-bottom: 1px solid #E9ECEF; display: flex; justify-content: space-between; align-items: center;">
+                                    <strong>Preview: Sample Matching Devices (showing 5 of 523)</strong>
+                                    <button class="btn btn-sm btn-secondary">📥 Export All</button>
+                                </div>
+                                <table class="preview-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Device Name</th>
+                                            <th>User</th>
+                                            <th>Disk Free</th>
+                                            <th>Last Active</th>
+                                            <th>Department</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>DESKTOP-A1B2C3</strong></td>
+                                            <td>john.smith@company.com</td>
+                                            <td><span style="color: #DC3545; font-weight: 600;">3.2 GB</span></td>
+                                            <td>45 days ago</td>
+                                            <td>Engineering</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>LAPTOP-X9Y8Z7</strong></td>
+                                            <td>sarah.jones@company.com</td>
+                                            <td><span style="color: #DC3545; font-weight: 600;">5.8 GB</span></td>
+                                            <td>32 days ago</td>
+                                            <td>Marketing</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>WORKSTATION-001</strong></td>
+                                            <td>mike.wilson@company.com</td>
+                                            <td><span style="color: #F59E0B; font-weight: 600;">8.1 GB</span></td>
+                                            <td>29 days ago</td>
+                                            <td>Design</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>DESKTOP-QWE456</strong></td>
+                                            <td>lisa.chen@company.com</td>
+                                            <td><span style="color: #DC3545; font-weight: 600;">1.5 GB</span></td>
+                                            <td>60 days ago</td>
+                                            <td>Finance</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>LAPTOP-DEV-042</strong></td>
+                                            <td>alex.kim@company.com</td>
+                                            <td><span style="color: #F59E0B; font-weight: 600;">9.2 GB</span></td>
+                                            <td>35 days ago</td>
+                                            <td>Engineering</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Activation Options -->
+                        <div>
+                            <label style="font-weight: 600; display: block; margin-bottom: 12px;">
+                                What would you like to do with this rule?
+                            </label>
+                            <div class="activation-options">
+                                <div class="activation-option selected">
+                                    <div class="activation-option-title">
+                                        <input type="radio" name="activation" checked>
+                                        <span>🚀</span> Save & Activate
+                                    </div>
+                                    <div class="activation-option-desc">
+                                        Rule will be active and ready to run. You can run it manually or set up a schedule later.
+                                    </div>
+                                </div>
+                                <div class="activation-option">
+                                    <div class="activation-option-title">
+                                        <input type="radio" name="activation">
+                                        <span>💾</span> Save as Draft
+                                    </div>
+                                    <div class="activation-option-desc">
+                                        Rule will be saved but not activated. You can review and activate it later.
+                                    </div>
+                                </div>
+                                <div class="activation-option">
+                                    <div class="activation-option-title">
+                                        <input type="radio" name="activation">
+                                        <span>▶️</span> Save & Run Now
+                                    </div>
+                                    <div class="activation-option-desc">
+                                        Activate the rule and immediately execute it against current device data.
+                                    </div>
+                                </div>
+                                <div class="activation-option">
+                                    <div class="activation-option-title">
+                                        <input type="radio" name="activation">
+                                        <span>📅</span> Save & Schedule
+                                    </div>
+                                    <div class="activation-option-desc">
+                                        Activate the rule and configure an automatic execution schedule.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wizard Footer -->
+                    <div class="wizard-footer">
+                        <a href="05_wizard_step3.html" class="btn btn-secondary">
+                            ← Previous: Choose Actions
+                        </a>
+                        <div style="display: flex; gap: 12px;">
+                            <a href="03_rules.html" class="btn btn-secondary">Cancel</a>
+                            <button class="btn btn-success btn-lg" onclick="showSuccessModal()">
+                                ✓ Complete & Activate Rule
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal" style="display: none;">
+        <div class="modal" style="max-width: 500px; text-align: center;">
+            <div class="modal-body" style="padding: 40px;">
+                <div style="font-size: 64px; margin-bottom: 16px;">🎉</div>
+                <h2 style="margin-bottom: 8px;">Rule Created Successfully!</h2>
+                <p style="color: #6C757D; margin-bottom: 24px;">
+                    Your rule "Low Disk Space - Critical" has been activated and is ready to use.
+                </p>
+                <div style="background: #F8F9FA; border-radius: 8px; padding: 16px; margin-bottom: 24px; text-align: left;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: #6C757D;">Matching Devices:</span>
+                        <strong>523 devices</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: #6C757D;">Status:</span>
+                        <span class="status-badge active">● Active</span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 12px; justify-content: center;">
+                    <button class="btn btn-primary" onclick="window.location.href='04_scan_results.html'">
+                        ▶️ Run Rule Now
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.location.href='03_rules.html'">
+                        View All Rules
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'b') { e.preventDefault(); toggleSidebar(); }
+            if (e.key === 'Escape') { document.getElementById('successModal').style.display = 'none'; }
+        });
+        
+        function showSuccessModal() {
+            document.getElementById('successModal').style.display = 'flex';
+        }
+        
+        // Activation option selection
+        document.querySelectorAll('.activation-option').forEach(opt => {
+            opt.addEventListener('click', function() {
+                document.querySelectorAll('.activation-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+    </script>
+</body>
+</html>

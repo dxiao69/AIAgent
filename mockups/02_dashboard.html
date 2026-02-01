@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - IT Operations AI Agent</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="icon">🤖</span>
+                    <span>ITOA Agent</span>
+                </div>
+            </div>
+            <!-- Sidebar Toggle Button -->
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar (Ctrl+B)">
+                ◀
+            </button>
+            <nav class="sidebar-nav">
+                <a href="02_dashboard.html" class="nav-item active">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="03_rules.html" class="nav-item">
+                    <span class="icon">📋</span>
+                    <span>Rules</span>
+                </a>
+                <a href="04_scan_results.html" class="nav-item">
+                    <span class="icon">🔍</span>
+                    <span>Scan Results</span>
+                </a>
+                <a href="06_approvals.html" class="nav-item">
+                    <span class="icon">⚡</span>
+                    <span>Actions</span>
+                    <span class="badge">5</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">📈</span>
+                    <span>Reports</span>
+                </a>
+                <a href="07_action_definitions.html" class="nav-item">
+                    <span class="icon">🔧</span>
+                    <span>Action Definitions</span>
+                </a>
+                <a href="10_logs.html" class="nav-item">
+                    <span class="icon">📜</span>
+                    <span>Logs</span>
+                </a>
+                <a href="09_settings.html" class="nav-item">
+                    <span class="icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            <div style="padding: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <div class="shortcut-hint" style="color: #ADB5BD; font-size: 11px;">
+                    <span class="kbd" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);">Ctrl</span>
+                    <span>+</span>
+                    <span class="kbd" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);">B</span>
+                    <span>Toggle sidebar</span>
+                </div>
+                <div style="font-size: 12px; color: #ADB5BD; margin-top: 8px;">
+                    Version 1.0.0<br>
+                    Last sync: 2 min ago
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Header -->
+            <header class="header">
+                <div>
+                    <!-- Breadcrumb -->
+                    <nav class="breadcrumb">
+                        <a href="02_dashboard.html" class="breadcrumb-item">🏠 Home</a>
+                        <span class="breadcrumb-separator">›</span>
+                        <span class="breadcrumb-item active">Dashboard</span>
+                    </nav>
+                    <h1 class="header-title">Dashboard</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary">
+                        <span>🔄</span> Sync Data
+                    </button>
+                    <div class="user-menu">
+                        <div class="user-avatar">JD</div>
+                        <span>John Doe</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">💻</div>
+                        <div class="stat-label">Devices Scanned</div>
+                        <div class="stat-value">98,432</div>
+                        <div class="stat-change positive">↑ 2.1% from last week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">⚠️</div>
+                        <div class="stat-label">Issues Found</div>
+                        <div class="stat-value">1,247</div>
+                        <div class="stat-change positive">↓ 15% from last week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon red">⏳</div>
+                        <div class="stat-label">Pending Approvals</div>
+                        <div class="stat-value">5</div>
+                        <div class="stat-change negative">Requires attention</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">✅</div>
+                        <div class="stat-label">Actions Today</div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-change positive">All completed successfully</div>
+                    </div>
+                </div>
+
+                <!-- Two Column Layout -->
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+                    <!-- Issues by Category Chart -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Issues by Category</h2>
+                            <select class="form-select" style="width: auto;">
+                                <option>Last 7 days</option>
+                                <option>Last 30 days</option>
+                                <option>Last 90 days</option>
+                            </select>
+                        </div>
+                        <div style="padding: 20px 0;">
+                            <!-- Simulated bar chart -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                    <span>Low Disk Space</span>
+                                    <span style="font-weight: 600;">523</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-bar-fill" style="width: 85%; background-color: #DC3545;"></div>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 16px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                    <span>EOL Hardware</span>
+                                    <span style="font-weight: 600;">312</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-bar-fill" style="width: 60%; background-color: #FFC107;"></div>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 16px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                    <span>Missing Patches</span>
+                                    <span style="font-weight: 600;">245</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-bar-fill" style="width: 45%; background-color: #0066CC;"></div>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 16px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                    <span>Vulnerable Apps</span>
+                                    <span style="font-weight: 600;">167</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-bar-fill" style="width: 30%; background-color: #6C757D;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Recent Activity</h2>
+                            <button class="btn btn-sm btn-secondary">View All</button>
+                        </div>
+                        <div class="activity-feed">
+                            <div class="activity-item">
+                                <div class="activity-icon blue">📋</div>
+                                <div class="activity-content">
+                                    <div class="activity-text">Rule "EOL-1Y" executed</div>
+                                    <div class="activity-time">10:32 AM • 312 devices found</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon green">✓</div>
+                                <div class="activity-content">
+                                    <div class="activity-text">Action approved by Sarah M.</div>
+                                    <div class="activity-time">10:15 AM • Patch deployment</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon blue">+</div>
+                                <div class="activity-content">
+                                    <div class="activity-text">New rule created</div>
+                                    <div class="activity-time">09:45 AM • "Inactive Devices"</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon green">✓</div>
+                                <div class="activity-content">
+                                    <div class="activity-text">Scan completed</div>
+                                    <div class="activity-time">09:30 AM • 98,432 devices</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon orange">📧</div>
+                                <div class="activity-content">
+                                    <div class="activity-text">Notifications sent</div>
+                                    <div class="activity-time">09:00 AM • 45 users notified</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card" style="margin-top: 24px;">
+                    <div class="card-header">
+                        <h2 class="card-title">Quick Actions</h2>
+                        <span class="text-muted" style="font-size: 12px;">Common tasks to get started</span>
+                    </div>
+                    <div class="quick-actions-grid">
+                        <a href="05_rule_builder_wizard.html" class="quick-action-card">
+                            <span class="quick-action-icon">➕</span>
+                            <span class="quick-action-title">Create New Rule</span>
+                            <span class="quick-action-description">Define conditions to find devices or apps</span>
+                        </a>
+                        <a href="04_scan_results.html" class="quick-action-card">
+                            <span class="quick-action-icon">▶️</span>
+                            <span class="quick-action-title">Run All Rules</span>
+                            <span class="quick-action-description">Execute all active rules now</span>
+                        </a>
+                        <a href="06_approvals.html" class="quick-action-card">
+                            <span class="quick-action-icon">⏳</span>
+                            <span class="quick-action-title">Pending Approvals</span>
+                            <span class="quick-action-description">5 actions waiting for your review</span>
+                        </a>
+                        <a href="#" class="quick-action-card">
+                            <span class="quick-action-icon">📊</span>
+                            <span class="quick-action-title">Generate Report</span>
+                            <span class="quick-action-description">Export data and analytics</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript for Collapsible Sidebar -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        // Keyboard shortcut: Ctrl+B to toggle sidebar
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'b') {
+                e.preventDefault();
+                toggleSidebar();
+            }
+        });
+    </script>
+</body>
+</html>

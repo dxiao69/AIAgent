@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rules - IT Operations AI Agent</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="icon">🤖</span>
+                    <span>ITOA Agent</span>
+                </div>
+            </div>
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar (Ctrl+B)">◀</button>
+            <nav class="sidebar-nav">
+                <a href="02_dashboard.html" class="nav-item">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="03_rules.html" class="nav-item active">
+                    <span class="icon">📋</span>
+                    <span>Rules</span>
+                </a>
+                <a href="04_scan_results.html" class="nav-item">
+                    <span class="icon">🔍</span>
+                    <span>Scan Results</span>
+                </a>
+                <a href="06_approvals.html" class="nav-item">
+                    <span class="icon">⚡</span>
+                    <span>Actions</span>
+                    <span class="badge">5</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">📈</span>
+                    <span>Reports</span>
+                </a>
+                <a href="07_action_definitions.html" class="nav-item">
+                    <span class="icon">🔧</span>
+                    <span>Action Definitions</span>
+                </a>
+                <a href="10_logs.html" class="nav-item">
+                    <span class="icon">📜</span>
+                    <span>Logs</span>
+                </a>
+                <a href="09_settings.html" class="nav-item">
+                    <span class="icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            <div style="padding: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <div class="shortcut-hint" style="color: #ADB5BD; font-size: 11px;">
+                    <span class="kbd" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);">Ctrl+B</span>
+                    <span>Toggle</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Header -->
+            <header class="header">
+                <div>
+                    <nav class="breadcrumb">
+                        <a href="02_dashboard.html" class="breadcrumb-item">🏠 Home</a>
+                        <span class="breadcrumb-separator">›</span>
+                        <span class="breadcrumb-item active">Rules</span>
+                    </nav>
+                    <h1 class="header-title">Rules Management</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="window.location.href='05_rule_builder_wizard.html'">
+                        <span>➕</span> Create New Rule
+                    </button>
+                    <div class="user-menu">
+                        <div class="user-avatar">JD</div>
+                        <span>John Doe</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Contextual Help for new users -->
+                <div class="contextual-help dismissible" id="rulesHelp">
+                    <span class="contextual-help-icon">💡</span>
+                    <div class="contextual-help-content">
+                        <div class="contextual-help-title">Welcome to Rules Management</div>
+                        <div class="contextual-help-text">
+                            Rules define conditions to find devices or applications that need attention. 
+                            Create your first rule using natural language like "Find all devices with less than 10GB disk space" 
+                            or use the manual condition builder.
+                        </div>
+                    </div>
+                    <button class="contextual-help-close" onclick="document.getElementById('rulesHelp').style.display='none'">×</button>
+                </div>
+
+                <!-- Filters -->
+                <div class="card">
+                    <div style="display: flex; gap: 16px; align-items: center;">
+                        <div class="form-group" style="margin-bottom: 0; flex: 1;">
+                            <input type="text" class="form-input" placeholder="🔍 Search rules...">
+                        </div>
+                        <select class="form-select" style="width: 200px;">
+                            <option>All Categories</option>
+                            <option>Disk Space</option>
+                            <option>EOL/EOS</option>
+                            <option>Compliance</option>
+                            <option>Vulnerability</option>
+                        </select>
+                        <select class="form-select" style="width: 150px;">
+                            <option>All Status</option>
+                            <option>Active</option>
+                            <option>Inactive</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Rule Templates -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">📚 Rule Templates</h2>
+                        <button class="btn btn-sm btn-secondary">View All Templates</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                        <div style="border: 1px solid #DEE2E6; border-radius: 8px; padding: 16px; cursor: pointer;"
+                             onmouseover="this.style.borderColor='#0066CC'" 
+                             onmouseout="this.style.borderColor='#DEE2E6'">
+                            <div style="font-size: 24px; margin-bottom: 8px;">💾</div>
+                            <h3 style="font-size: 14px; margin-bottom: 4px;">Low Disk Space Alert</h3>
+                            <p style="font-size: 12px; color: #6C757D;">🖥️ Devices • Disk free space < 10GB</p>
+                        </div>
+                        <div style="border: 1px solid #DEE2E6; border-radius: 8px; padding: 16px; cursor: pointer;"
+                             onmouseover="this.style.borderColor='#0066CC'" 
+                             onmouseout="this.style.borderColor='#DEE2E6'">
+                            <div style="font-size: 24px; margin-bottom: 8px;">☕</div>
+                            <h3 style="font-size: 14px; margin-bottom: 4px;">Outdated Java</h3>
+                            <p style="font-size: 12px; color: #6C757D;">📦 Apps • Java version < 17</p>
+                        </div>
+                        <div style="border: 1px solid #DEE2E6; border-radius: 8px; padding: 16px; cursor: pointer;"
+                             onmouseover="this.style.borderColor='#0066CC'" 
+                             onmouseout="this.style.borderColor='#DEE2E6'">
+                            <div style="font-size: 24px; margin-bottom: 8px;">🔒</div>
+                            <h3 style="font-size: 14px; margin-bottom: 4px;">CVE Vulnerabilities</h3>
+                            <p style="font-size: 12px; color: #6C757D;">📦 Apps • CVE count > 0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rules Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Your Rules</h2>
+                        <span class="text-muted">8 rules total</span>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rule Name</th>
+                                    <th>Entity</th>
+                                    <th>Category</th>
+                                    <th>Conditions</th>
+                                    <th>Schedule</th>
+                                    <th>Last Run</th>
+                                    <th>Results</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <strong>Low Disk Space - Inactive</strong>
+                                        <div style="font-size: 12px; color: #6C757D;">Devices needing cleanup</div>
+                                    </td>
+                                    <td><span style="background: #E3F2FD; padding: 2px 8px; border-radius: 4px; font-size: 12px;">🖥️ Devices</span></td>
+                                    <td><span class="status-badge info">Disk Space</span></td>
+                                    <td>
+                                        <code style="font-size: 12px; background: #F8F9FA; padding: 2px 6px; border-radius: 4px;">
+                                            disk < 10GB AND inactive > 28 days
+                                        </code>
+                                    </td>
+                                    <td>Daily @ 8:00 AM</td>
+                                    <td>Today, 8:00 AM</td>
+                                    <td><strong>523</strong> devices</td>
+                                    <td><span class="status-badge active">● Active</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" onclick="window.location.href='04_scan_results.html'">▶ Run</button>
+                                        <button class="btn btn-sm btn-secondary">✏️</button>
+                                    </td>
+                                </tr>
+                                <tr style="background: #FFFBEB;">
+                                    <td>
+                                        <strong>Outdated Java Installations</strong>
+                                        <div style="font-size: 12px; color: #6C757D;">Java 8 EOL - Security risk</div>
+                                    </td>
+                                    <td><span style="background: #FFF3CD; padding: 2px 8px; border-radius: 4px; font-size: 12px;">📦 Apps</span></td>
+                                    <td><span class="status-badge error">Vulnerability</span></td>
+                                    <td>
+                                        <code style="font-size: 12px; background: #F8F9FA; padding: 2px 6px; border-radius: 4px;">
+                                            app_name = "Java" AND version < 17
+                                        </code>
+                                    </td>
+                                    <td>Daily @ 9:00 AM</td>
+                                    <td>Today, 9:15 AM</td>
+                                    <td><strong>5</strong> apps / <strong>342</strong> devices</td>
+                                    <td><span class="status-badge active">● Active</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" onclick="window.location.href='04_scan_results_apps.html'">▶ Run</button>
+                                        <button class="btn btn-sm btn-secondary">✏️</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>EOL Hardware - 1 Year Warning</strong>
+                                        <div style="font-size: 12px; color: #6C757D;">Planning for hardware refresh</div>
+                                    </td>
+                                    <td><span style="background: #E3F2FD; padding: 2px 8px; border-radius: 4px; font-size: 12px;">🖥️ Devices</span></td>
+                                    <td><span class="status-badge pending">EOL/EOS</span></td>
+                                    <td>
+                                        <code style="font-size: 12px; background: #F8F9FA; padding: 2px 6px; border-radius: 4px;">
+                                            eol_date within 365 days
+                                        </code>
+                                    </td>
+                                    <td>Weekly @ Monday</td>
+                                    <td>Jan 27, 2026</td>
+                                    <td><strong>312</strong> devices</td>
+                                    <td><span class="status-badge active">● Active</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary">▶ Run</button>
+                                        <button class="btn btn-sm btn-secondary">✏️</button>
+                                    </td>
+                                </tr>
+                                <tr style="background: #FFFBEB;">
+                                    <td>
+                                        <strong>Applications with CVEs</strong>
+                                        <div style="font-size: 12px; color: #6C757D;">Known security vulnerabilities</div>
+                                    </td>
+                                    <td><span style="background: #FFF3CD; padding: 2px 8px; border-radius: 4px; font-size: 12px;">📦 Apps</span></td>
+                                    <td><span class="status-badge error">Vulnerability</span></td>
+                                    <td>
+                                        <code style="font-size: 12px; background: #F8F9FA; padding: 2px 6px; border-radius: 4px;">
+                                            cve_count > 0
+                                        </code>
+                                    </td>
+                                    <td>Daily @ 7:00 AM</td>
+                                    <td>Today, 7:00 AM</td>
+                                    <td><strong>12</strong> apps / <strong>567</strong> devices</td>
+                                    <td><span class="status-badge active">● Active</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary">▶ Run</button>
+                                        <button class="btn btn-sm btn-secondary">✏️</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>EOL Hardware - 6 Month Critical</strong>
+                                        <div style="font-size: 12px; color: #6C757D;">Urgent refresh needed</div>
+                                    </td>
+                                    <td><span style="background: #E3F2FD; padding: 2px 8px; border-radius: 4px; font-size: 12px;">🖥️ Devices</span></td>
+                                    <td><span class="status-badge error">EOL/EOS</span></td>
+                                    <td>
+                                        <code style="font-size: 12px; background: #F8F9FA; padding: 2px 6px; border-radius: 4px;">
+                                            eol_date within 180 days
+                                        </code>
+                                    </td>
+                                    <td>Daily @ 9:00 AM</td>
+                                    <td>Today, 9:00 AM</td>
+                                    <td><strong>87</strong> devices</td>
+                                    <td><span class="status-badge active">● Active</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary">▶ Run</button>
+                                        <button class="btn btn-sm btn-secondary">✏️</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Missing Critical Patches</strong>
+                                        <div style="font-size: 12px; color: #6C757D;">Security compliance</div>
+                                    </td>
+                                    <td><span style="background: #E3F2FD; padding: 2px 8px; border-radius: 4px; font-size: 12px;">🖥️ Devices</span></td>
+                                    <td><span class="status-badge info">Compliance</span></td>
+                                    <td>
+                                        <code style="font-size: 12px; background: #F8F9FA; padding: 2px 6px; border-radius: 4px;">
+                                            critical_patches_missing > 0
+                                        </code>
+                                    </td>
+                                    <td>Daily @ 7:00 AM</td>
+                                    <td>Today, 7:00 AM</td>
+                                    <td><strong>245</strong> devices</td>
+                                    <td><span class="status-badge active">● Active</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary">▶ Run</button>
+                                        <button class="btn btn-sm btn-secondary">✏️</button>
+                                    </td>
+                                </tr>
+                                <tr style="background: #FFFBEB;">
+                                    <td>
+                                        <strong>EOL Software Alert</strong>
+                                        <div style="font-size: 12px; color: #6C757D;">End-of-life applications</div>
+                                    </td>
+                                    <td><span style="background: #FFF3CD; padding: 2px 8px; border-radius: 4px; font-size: 12px;">📦 Apps</span></td>
+                                    <td><span class="status-badge pending">EOL/EOS</span></td>
+                                    <td>
+                                        <code style="font-size: 12px; background: #F8F9FA; padding: 2px 6px; border-radius: 4px;">
+                                            app_eol_date < today
+                                        </code>
+                                    </td>
+                                    <td>Weekly @ Monday</td>
+                                    <td>Jan 27, 2026</td>
+                                    <td><strong>8</strong> apps / <strong>234</strong> devices</td>
+                                    <td><span class="status-badge active">● Active</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary">▶ Run</button>
+                                        <button class="btn btn-sm btn-secondary">✏️</button>
+                                    </td>
+                                </tr>
+                                <tr style="opacity: 0.6;">
+                                    <td>
+                                        <strong>Test Rule - Inactive Devices</strong>
+                                        <div style="font-size: 12px; color: #6C757D;">Draft rule for testing</div>
+                                    </td>
+                                    <td><span style="background: #E3F2FD; padding: 2px 8px; border-radius: 4px; font-size: 12px;">🖥️ Devices</span></td>
+                                    <td><span class="status-badge info">Disk Space</span></td>
+                                    <td>
+                                        <code style="font-size: 12px; background: #F8F9FA; padding: 2px 6px; border-radius: 4px;">
+                                            last_active > 60 days
+                                        </code>
+                                    </td>
+                                    <td>Manual</td>
+                                    <td>Never</td>
+                                    <td>—</td>
+                                    <td><span class="status-badge" style="background-color: #E9ECEF; color: #6C757D;">○ Inactive</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary">▶ Run</button>
+                                        <button class="btn btn-sm btn-secondary">✏️</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Empty State Example (hidden, shown when no rules exist) -->
+                <div class="card" style="display: none;">
+                    <div class="empty-state">
+                        <span class="empty-state-icon">📋</span>
+                        <h3 class="empty-state-title">No Rules Created Yet</h3>
+                        <p class="empty-state-description">
+                            Rules help you automatically find devices and applications that need attention. 
+                            Create your first rule to get started with proactive IT management.
+                        </p>
+                        <div class="empty-state-actions">
+                            <button class="btn btn-primary" onclick="window.location.href='05_rule_builder_wizard.html'">
+                                ➕ Create Your First Rule
+                            </button>
+                            <button class="btn btn-secondary">
+                                📖 View Examples
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'b') {
+                e.preventDefault();
+                toggleSidebar();
+            }
+        });
+    </script>
+</body>
+</html>

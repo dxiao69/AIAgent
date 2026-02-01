@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Results - IT Operations AI Agent</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="icon">🤖</span>
+                    <span>ITOA Agent</span>
+                </div>
+            </div>
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar (Ctrl+B)">◀</button>
+            <nav class="sidebar-nav">
+                <a href="02_dashboard.html" class="nav-item">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="03_rules.html" class="nav-item">
+                    <span class="icon">📋</span>
+                    <span>Rules</span>
+                </a>
+                <a href="04_scan_results.html" class="nav-item active">
+                    <span class="icon">🔍</span>
+                    <span>Scan Results</span>
+                </a>
+                <a href="06_approvals.html" class="nav-item">
+                    <span class="icon">⚡</span>
+                    <span>Actions</span>
+                    <span class="badge">5</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">📈</span>
+                    <span>Reports</span>
+                </a>
+                <a href="07_action_definitions.html" class="nav-item">
+                    <span class="icon">🔧</span>
+                    <span>Action Definitions</span>
+                </a>
+                <a href="10_logs.html" class="nav-item">
+                    <span class="icon">📜</span>
+                    <span>Logs</span>
+                </a>
+                <a href="09_settings.html" class="nav-item">
+                    <span class="icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Header -->
+            <header class="header">
+                <div>
+                    <nav class="breadcrumb" aria-label="Breadcrumb">
+                        <a href="02_dashboard.html">Home</a> &gt; <span>Scan Results</span>
+                    </nav>
+                    <h1 class="header-title">Scan Results</h1>
+                    <p style="color: #6C757D; font-size: 14px;">Rule: "Low Disk Space - Inactive" • Executed: Jan 31, 2026 08:00 AM</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary">
+                        <span>📥</span> Export CSV
+                    </button>
+                    <div class="user-menu">
+                        <div class="user-avatar">JD</div>
+                        <span>John Doe</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Entity Type Tabs -->
+                <div style="display: flex; gap: 4px; background: #F1F3F4; padding: 4px; border-radius: 8px; margin-bottom: 20px; width: fit-content;">
+                    <button style="padding: 10px 24px; border: none; background: white; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; color: #2563EB; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                        🖥️ Devices <span style="background: #2563EB; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; margin-left: 8px;">523</span>
+                    </button>
+                    <button style="padding: 10px 24px; border: none; background: transparent; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; color: #495057;">
+                        📦 Applications <span style="background: #6C757D; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; margin-left: 8px;">0</span>
+                    </button>
+                </div>
+
+                <!-- AI Suggestions Panel -->
+                <div class="ai-panel">
+                    <div class="ai-panel-header">
+                        <span class="icon">🤖</span>
+                        <span class="ai-panel-title">AI-Powered Suggestions</span>
+                        <span style="margin-left: auto; font-size: 12px; opacity: 0.8;">Based on analysis of 523 devices</span>
+                    </div>
+                    
+                    <div class="ai-suggestion">
+                        <span class="ai-suggestion-number">1.</span>
+                        <strong>Create MECM Collection "Finance_DiskCleanup_2026-01"</strong> (120 devices)
+                        <div class="ai-suggestion-action">
+                            → These Finance department devices are actively used. Recommend deploying disk cleanup script via 1E Tachyon.
+                        </div>
+                    </div>
+                    
+                    <div class="ai-suggestion">
+                        <span class="ai-suggestion-number">2.</span>
+                        <strong>Create MECM Collection "Engineering_DiskCleanup_2026-01"</strong> (256 devices)
+                        <div class="ai-suggestion-action">
+                            → Engineering devices with large temp files. Consider automated cleanup + notification to users.
+                        </div>
+                    </div>
+                    
+                    <div class="ai-suggestion">
+                        <span class="ai-suggestion-number">3.</span>
+                        <strong>Send Retirement Notifications</strong> (147 devices)
+                        <div class="ai-suggestion-action">
+                            → These devices haven't been active in 4+ weeks. Likely unused - recommend notifying users for retirement confirmation.
+                        </div>
+                    </div>
+                    
+                    <div class="ai-panel-actions">
+                        <button class="btn" onclick="window.location.href='06_approvals.html'">✓ Apply Suggestion 1</button>
+                        <button class="btn">✓ Apply Suggestion 2</button>
+                        <button class="btn">✓ Apply Suggestion 3</button>
+                        <button class="btn" style="opacity: 0.7;">✕ Dismiss</button>
+                    </div>
+                </div>
+
+                <!-- Summary Cards -->
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
+                    <div style="background: white; padding: 16px; border-radius: 8px; border-left: 4px solid #0066CC;">
+                        <div style="font-size: 24px; font-weight: 700;">523</div>
+                        <div style="color: #6C757D; font-size: 14px;">Total Devices</div>
+                    </div>
+                    <div style="background: white; padding: 16px; border-radius: 8px; border-left: 4px solid #28A745;">
+                        <div style="font-size: 24px; font-weight: 700;">376</div>
+                        <div style="color: #6C757D; font-size: 14px;">Active Devices</div>
+                    </div>
+                    <div style="background: white; padding: 16px; border-radius: 8px; border-left: 4px solid #FFC107;">
+                        <div style="font-size: 24px; font-weight: 700;">147</div>
+                        <div style="color: #6C757D; font-size: 14px;">Inactive (4+ weeks)</div>
+                    </div>
+                    <div style="background: white; padding: 16px; border-radius: 8px; border-left: 4px solid #DC3545;">
+                        <div style="font-size: 24px; font-weight: 700;">4.2 GB</div>
+                        <div style="color: #6C757D; font-size: 14px;">Avg. Free Space</div>
+                    </div>
+                </div>
+
+                <!-- Filters & Actions Bar -->
+                <div class="card" style="padding: 16px;">
+                    <div style="display: flex; gap: 16px; align-items: center;">
+                        <input type="text" class="form-input" placeholder="🔍 Search by device name, user..." style="flex: 1;">
+                        <select class="form-select" style="width: 180px;">
+                            <option>All Departments</option>
+                            <option>Finance (120)</option>
+                            <option>Engineering (256)</option>
+                            <option>HR (45)</option>
+                            <option>Marketing (62)</option>
+                            <option>IT (40)</option>
+                        </select>
+                        <select class="form-select" style="width: 150px;">
+                            <option>All Locations</option>
+                            <option>New York</option>
+                            <option>London</option>
+                            <option>Singapore</option>
+                        </select>
+                        <select class="form-select" style="width: 150px;">
+                            <option>Sort: Risk Score</option>
+                            <option>Sort: Free Space</option>
+                            <option>Sort: Days Inactive</option>
+                            <option>Sort: Device Name</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Selected Actions Bar -->
+                <div class="card" style="padding: 16px; background: #E3F2FD; border: 1px solid #0066CC;">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <span style="font-weight: 600;">3 devices selected</span>
+                        <div style="margin-left: auto; display: flex; gap: 8px;">
+                            <button class="btn btn-primary btn-sm">📦 Create Collection</button>
+                            <button class="btn btn-secondary btn-sm">📧 Send Notification</button>
+                            <button class="btn btn-secondary btn-sm">🎫 Create Incident</button>
+                            <button class="btn btn-secondary btn-sm">⚡ Run Tachyon Action</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Table -->
+                <div class="card">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;">
+                                        <div class="checkbox checked">✓</div>
+                                    </th>
+                                    <th>Device Name</th>
+                                    <th>Primary User</th>
+                                    <th>Department</th>
+                                    <th>Location</th>
+                                    <th>Free Space</th>
+                                    <th>Days Inactive</th>
+                                    <th>Risk Score</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background-color: #FFF8E1;">
+                                    <td><div class="checkbox checked">✓</div></td>
+                                    <td>
+                                        <strong>WS-NYC-12345</strong>
+                                        <div style="font-size: 12px; color: #6C757D;">Windows 11 Pro • Dell OptiPlex 7080</div>
+                                    </td>
+                                    <td>john.doe@company.com</td>
+                                    <td>Finance</td>
+                                    <td>New York</td>
+                                    <td>
+                                        <span style="color: #DC3545; font-weight: 600;">2.3 GB</span>
+                                        <div style="font-size: 12px; color: #6C757D;">/ 256 GB</div>
+                                    </td>
+                                    <td>
+                                        <span style="color: #FFC107; font-weight: 600;">45 days</span>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge error">High (85)</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary" title="View Details">👁️</button>
+                                    </td>
+                                </tr>
+                                <tr style="background-color: #FFF8E1;">
+                                    <td><div class="checkbox checked">✓</div></td>
+                                    <td>
+                                        <strong>WS-NYC-12346</strong>
+                                        <div style="font-size: 12px; color: #6C757D;">Windows 11 Pro • HP EliteDesk 800</div>
+                                    </td>
+                                    <td>jane.smith@company.com</td>
+                                    <td>Finance</td>
+                                    <td>New York</td>
+                                    <td>
+                                        <span style="color: #DC3545; font-weight: 600;">3.1 GB</span>
+                                        <div style="font-size: 12px; color: #6C757D;">/ 256 GB</div>
+                                    </td>
+                                    <td>
+                                        <span style="color: #FFC107; font-weight: 600;">32 days</span>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge error">High (78)</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary" title="View Details">👁️</button>
+                                    </td>
+                                </tr>
+                                <tr style="background-color: #FFF8E1;">
+                                    <td><div class="checkbox checked">✓</div></td>
+                                    <td>
+                                        <strong>WS-LON-78901</strong>
+                                        <div style="font-size: 12px; color: #6C757D;">Windows 10 Pro • Lenovo ThinkCentre</div>
+                                    </td>
+                                    <td>bob.wilson@company.com</td>
+                                    <td>Engineering</td>
+                                    <td>London</td>
+                                    <td>
+                                        <span style="color: #FFC107; font-weight: 600;">8.7 GB</span>
+                                        <div style="font-size: 12px; color: #6C757D;">/ 512 GB</div>
+                                    </td>
+                                    <td>
+                                        <span style="font-weight: 600;">29 days</span>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge pending">Medium (62)</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary" title="View Details">👁️</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><div class="checkbox"></div></td>
+                                    <td>
+                                        <strong>WS-LON-78902</strong>
+                                        <div style="font-size: 12px; color: #6C757D;">Windows 11 Pro • Dell Latitude 5520</div>
+                                    </td>
+                                    <td>alice.jones@company.com</td>
+                                    <td>HR</td>
+                                    <td>London</td>
+                                    <td>
+                                        <span style="color: #DC3545; font-weight: 600;">5.2 GB</span>
+                                        <div style="font-size: 12px; color: #6C757D;">/ 256 GB</div>
+                                    </td>
+                                    <td>
+                                        <span style="color: #DC3545; font-weight: 600;">60 days</span>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge error">High (82)</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary" title="View Details">👁️</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><div class="checkbox"></div></td>
+                                    <td>
+                                        <strong>WS-SGP-45678</strong>
+                                        <div style="font-size: 12px; color: #6C757D;">Windows 11 Pro • HP ProDesk 400</div>
+                                    </td>
+                                    <td>charlie.tan@company.com</td>
+                                    <td>Marketing</td>
+                                    <td>Singapore</td>
+                                    <td>
+                                        <span style="color: #FFC107; font-weight: 600;">6.8 GB</span>
+                                        <div style="font-size: 12px; color: #6C757D;">/ 256 GB</div>
+                                    </td>
+                                    <td>
+                                        <span style="font-weight: 600;">35 days</span>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge pending">Medium (55)</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary" title="View Details">👁️</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><div class="checkbox"></div></td>
+                                    <td>
+                                        <strong>WS-NYC-11111</strong>
+                                        <div style="font-size: 12px; color: #6C757D;">Windows 10 Pro • Dell OptiPlex 5080</div>
+                                    </td>
+                                    <td>david.lee@company.com</td>
+                                    <td>IT</td>
+                                    <td>New York</td>
+                                    <td>
+                                        <span style="color: #FFC107; font-weight: 600;">9.5 GB</span>
+                                        <div style="font-size: 12px; color: #6C757D;">/ 512 GB</div>
+                                    </td>
+                                    <td>
+                                        <span style="font-weight: 600;">28 days</span>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge info">Low (35)</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary" title="View Details">👁️</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid #DEE2E6;">
+                        <span style="color: #6C757D;">Showing 1-6 of 523 devices</span>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-sm btn-secondary" disabled>◀ Previous</button>
+                            <button class="btn btn-sm btn-primary">1</button>
+                            <button class="btn btn-sm btn-secondary">2</button>
+                            <button class="btn btn-sm btn-secondary">3</button>
+                            <span style="padding: 4px 8px;">...</span>
+                            <button class="btn btn-sm btn-secondary">88</button>
+                            <button class="btn btn-sm btn-secondary">Next ▶</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'b') {
+                e.preventDefault();
+                toggleSidebar();
+            }
+        });
+    </script>
+</body>
+</html>

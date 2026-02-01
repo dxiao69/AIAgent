@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Rule - Step 1: Define Rule - IT Operations AI Agent</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .wizard-container { max-width: 900px; margin: 0 auto; }
+        .wizard-progress {
+            display: flex; justify-content: space-between; margin-bottom: 32px; position: relative;
+        }
+        .wizard-progress::before {
+            content: ''; position: absolute; top: 20px; left: 60px; right: 60px;
+            height: 3px; background: #E9ECEF; z-index: 0;
+        }
+        .wizard-step { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+        .wizard-step-number {
+            width: 40px; height: 40px; border-radius: 50%; background: #E9ECEF;
+            color: #6C757D; display: flex; align-items: center; justify-content: center;
+            font-weight: 600; font-size: 16px; margin-bottom: 8px; transition: all 0.3s;
+        }
+        .wizard-step.active .wizard-step-number { background: #2563EB; color: white; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2); }
+        .wizard-step.completed .wizard-step-number { background: #28A745; color: white; }
+        .wizard-step-label { font-size: 13px; color: #6C757D; text-align: center; }
+        .wizard-step.active .wizard-step-label { color: #2563EB; font-weight: 600; }
+        .wizard-step.completed .wizard-step-label { color: #28A745; }
+        .wizard-content { background: white; border-radius: 12px; padding: 32px; min-height: 400px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .wizard-footer { display: flex; justify-content: space-between; margin-top: 24px; padding-top: 24px; border-top: 1px solid #E9ECEF; }
+        .wizard-hint { background: #E3F2FD; border-radius: 8px; padding: 16px; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 12px; }
+        .wizard-hint-icon { font-size: 20px; }
+        .wizard-hint-content h4 { margin: 0 0 4px 0; font-size: 14px; color: #1565C0; }
+        .wizard-hint-content p { margin: 0; font-size: 13px; color: #1976D2; }
+        .entity-option {
+            display: flex; align-items: center; gap: 16px; padding: 20px;
+            border: 2px solid #E9ECEF; border-radius: 12px; cursor: pointer;
+            transition: all 0.2s; margin-bottom: 12px;
+        }
+        .entity-option:hover { border-color: #2563EB; background: #F8FAFF; }
+        .entity-option.selected { border-color: #2563EB; background: #E3F2FD; }
+        .entity-option-icon { font-size: 32px; }
+        .entity-option-content h4 { margin: 0 0 4px 0; }
+        .entity-option-content p { margin: 0; font-size: 13px; color: #6C757D; }
+        .draft-indicator { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #6C757D; }
+        .draft-indicator .dot { width: 8px; height: 8px; border-radius: 50%; background: #28A745; }
+        .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #6C757D; margin-bottom: 16px; }
+        .breadcrumb a { color: #2563EB; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .kbd { display: inline-block; padding: 2px 6px; background: #F1F3F4; border: 1px solid #D1D5DB; border-radius: 4px; font-family: monospace; font-size: 11px; }
+        .template-card {
+            border: 2px solid #E9ECEF; border-radius: 12px; padding: 16px; cursor: pointer;
+            transition: all 0.2s; text-align: center;
+        }
+        .template-card:hover { border-color: #2563EB; background: #F8FAFF; }
+        .template-card-icon { font-size: 28px; margin-bottom: 8px; }
+        .template-card-title { font-weight: 600; margin-bottom: 4px; font-size: 14px; }
+        .template-card-desc { font-size: 12px; color: #6C757D; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="icon">🤖</span>
+                    <span>ITOA Agent</span>
+                </div>
+            </div>
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar (Ctrl+B)">◀</button>
+            <nav class="sidebar-nav">
+                <a href="02_dashboard.html" class="nav-item"><span class="icon">📊</span><span>Dashboard</span></a>
+                <a href="03_rules.html" class="nav-item active"><span class="icon">📋</span><span>Rules</span></a>
+                <a href="04_scan_results.html" class="nav-item"><span class="icon">🔍</span><span>Scan Results</span></a>
+                <a href="06_approvals.html" class="nav-item"><span class="icon">⚡</span><span>Actions</span><span class="badge">5</span></a>
+                <a href="07_action_definitions.html" class="nav-item"><span class="icon">🔧</span><span>Action Definitions</span></a>
+                <a href="10_logs.html" class="nav-item"><span class="icon">📜</span><span>Logs</span></a>
+                <a href="09_settings.html" class="nav-item"><span class="icon">⚙️</span><span>Settings</span></a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <header class="header">
+                <div>
+                    <h1 class="header-title">Create New Rule</h1>
+                </div>
+                <div class="header-actions">
+                    <div class="draft-indicator">
+                        <span class="dot" style="background: #FFC107;"></span>
+                        <span>Unsaved changes</span>
+                    </div>
+                    <div class="user-menu">
+                        <div class="user-avatar">JD</div>
+                        <span>John Doe</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <nav class="breadcrumb">
+                    <a href="02_dashboard.html">🏠 Home</a>
+                    <span>›</span>
+                    <a href="03_rules.html">Rules</a>
+                    <span>›</span>
+                    <span>Create New Rule</span>
+                </nav>
+
+                <div class="wizard-container">
+                    <!-- Progress Steps -->
+                    <div class="wizard-progress">
+                        <div class="wizard-step active">
+                            <div class="wizard-step-number">1</div>
+                            <div class="wizard-step-label">1. Define Rule</div>
+                        </div>
+                        <div class="wizard-step">
+                            <div class="wizard-step-number">2</div>
+                            <div class="wizard-step-label">2. Set Conditions</div>
+                        </div>
+                        <div class="wizard-step">
+                            <div class="wizard-step-number">3</div>
+                            <div class="wizard-step-label">3. Choose Actions</div>
+                        </div>
+                        <div class="wizard-step">
+                            <div class="wizard-step-number">4</div>
+                            <div class="wizard-step-label">4. Test & Activate</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Define Rule -->
+                    <div class="wizard-content">
+                        <div class="wizard-hint">
+                            <span class="wizard-hint-icon">💡</span>
+                            <div class="wizard-hint-content">
+                                <h4>Getting Started</h4>
+                                <p>Give your rule a descriptive name and choose what type of assets you want to target. You can start from a template or create from scratch.</p>
+                            </div>
+                        </div>
+
+                        <!-- Quick Start Templates -->
+                        <div style="margin-bottom: 32px;">
+                            <label style="font-weight: 600; display: block; margin-bottom: 12px;">
+                                🚀 Quick Start: Choose a Template <span style="font-weight: normal; color: #6C757D;">(optional)</span>
+                            </label>
+                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+                                <div class="template-card">
+                                    <div class="template-card-icon">💾</div>
+                                    <div class="template-card-title">Low Disk Space</div>
+                                    <div class="template-card-desc">Find devices running low on storage</div>
+                                </div>
+                                <div class="template-card">
+                                    <div class="template-card-icon">⏰</div>
+                                    <div class="template-card-title">EOL Hardware</div>
+                                    <div class="template-card-desc">Devices approaching end of life</div>
+                                </div>
+                                <div class="template-card">
+                                    <div class="template-card-icon">🛡️</div>
+                                    <div class="template-card-title">Vulnerable Apps</div>
+                                    <div class="template-card-desc">Applications with known CVEs</div>
+                                </div>
+                                <div class="template-card">
+                                    <div class="template-card-icon">😴</div>
+                                    <div class="template-card-title">Inactive Devices</div>
+                                    <div class="template-card-desc">Devices not seen recently</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr style="border: none; border-top: 1px solid #E9ECEF; margin: 24px 0;">
+
+                        <!-- Rule Name & Description -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+                            <div class="form-group">
+                                <label class="form-label">Rule Name <span style="color: #DC3545;">*</span></label>
+                                <input type="text" class="form-input" placeholder="e.g., Low Disk Space - Critical" value="">
+                                <small style="color: #6C757D; font-size: 12px;">A descriptive name to identify this rule</small>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Category <span style="color: #DC3545;">*</span></label>
+                                <select class="form-select">
+                                    <option value="">Select a category...</option>
+                                    <option value="disk">💾 Disk Space</option>
+                                    <option value="eol">⏰ End of Life</option>
+                                    <option value="vuln">🛡️ Vulnerability</option>
+                                    <option value="compliance">📋 Compliance</option>
+                                    <option value="software">📦 Software Update</option>
+                                    <option value="custom">🔧 Custom</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 24px;">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-input" rows="2" placeholder="Describe what this rule does and why it's needed..."></textarea>
+                        </div>
+
+                        <!-- Entity Type Selection -->
+                        <div style="margin-bottom: 24px;">
+                            <label class="form-label">What do you want to find? <span style="color: #DC3545;">*</span></label>
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 12px;">
+                                <div class="entity-option selected">
+                                    <span class="entity-option-icon">🖥️</span>
+                                    <div class="entity-option-content">
+                                        <h4>Devices</h4>
+                                        <p>Computers, laptops, workstations</p>
+                                    </div>
+                                </div>
+                                <div class="entity-option">
+                                    <span class="entity-option-icon">📦</span>
+                                    <div class="entity-option-content">
+                                        <h4>Applications</h4>
+                                        <p>Installed software, packages</p>
+                                    </div>
+                                </div>
+                                <div class="entity-option">
+                                    <span class="entity-option-icon">🔗</span>
+                                    <div class="entity-option-content">
+                                        <h4>Both</h4>
+                                        <p>Devices with specific apps</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Schedule -->
+                        <div class="form-group">
+                            <label class="form-label">Schedule</label>
+                            <div style="display: flex; gap: 12px;">
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 12px 16px; border: 2px solid #E9ECEF; border-radius: 8px;">
+                                    <input type="radio" name="schedule" checked> Manual (run on demand)
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 12px 16px; border: 2px solid #E9ECEF; border-radius: 8px;">
+                                    <input type="radio" name="schedule"> Daily
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 12px 16px; border: 2px solid #E9ECEF; border-radius: 8px;">
+                                    <input type="radio" name="schedule"> Weekly
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 12px 16px; border: 2px solid #E9ECEF; border-radius: 8px;">
+                                    <input type="radio" name="schedule"> Custom
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wizard Footer -->
+                    <div class="wizard-footer">
+                        <a href="03_rules.html" class="btn btn-secondary">
+                            ✕ Cancel
+                        </a>
+                        <div style="display: flex; gap: 12px;">
+                            <button class="btn btn-secondary">Save as Draft</button>
+                            <a href="05_wizard_step2.html" class="btn btn-primary">
+                                Next: Set Conditions →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'b') { e.preventDefault(); toggleSidebar(); }
+        });
+        // Entity option selection
+        document.querySelectorAll('.entity-option').forEach(opt => {
+            opt.addEventListener('click', function() {
+                document.querySelectorAll('.entity-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+    </script>
+</body>
+</html>

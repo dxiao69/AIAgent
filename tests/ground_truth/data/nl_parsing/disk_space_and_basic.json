@@ -1,0 +1,296 @@
+[
+  {
+    "test_id": "NL-001",
+    "category": "nl_parsing",
+    "description": "Simple disk space query - less than",
+    "input": {
+      "text": "Find all devices with less than 10GB free disk space"
+    },
+    "expected_output": {
+      "entity_type": "devices",
+      "conditions": [
+        {
+          "field": "disk_free_space_gb",
+          "operator": "less_than",
+          "value": 10,
+          "unit": "GB"
+        }
+      ],
+      "logical_operator": null
+    },
+    "acceptable_variations": [
+      {
+        "conditions": [
+          {
+            "field": "free_disk_space",
+            "operator": "<",
+            "value": 10
+          }
+        ]
+      }
+    ],
+    "evaluation_mode": "semantic",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "easy",
+      "tags": ["disk_space", "simple_query", "less_than"]
+    }
+  },
+  {
+    "test_id": "NL-002",
+    "category": "nl_parsing",
+    "description": "Disk space query with percentage",
+    "input": {
+      "text": "Show me computers where disk usage is above 90%"
+    },
+    "expected_output": {
+      "entity_type": "devices",
+      "conditions": [
+        {
+          "field": "disk_usage_percent",
+          "operator": "greater_than",
+          "value": 90,
+          "unit": "percent"
+        }
+      ],
+      "logical_operator": null
+    },
+    "evaluation_mode": "semantic",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "easy",
+      "tags": ["disk_space", "percentage"]
+    }
+  },
+  {
+    "test_id": "NL-003",
+    "category": "nl_parsing",
+    "description": "Compound condition with AND",
+    "input": {
+      "text": "Find devices with less than 10GB disk space AND not active in 4 weeks"
+    },
+    "expected_output": {
+      "entity_type": "devices",
+      "conditions": [
+        {
+          "field": "disk_free_space_gb",
+          "operator": "less_than",
+          "value": 10,
+          "unit": "GB"
+        },
+        {
+          "field": "last_active_days",
+          "operator": "greater_than",
+          "value": 28,
+          "unit": "days"
+        }
+      ],
+      "logical_operator": "AND"
+    },
+    "evaluation_mode": "semantic",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "medium",
+      "tags": ["disk_space", "inactivity", "compound", "AND"]
+    }
+  },
+  {
+    "test_id": "NL-004",
+    "category": "nl_parsing",
+    "description": "EOL date query - within timeframe",
+    "input": {
+      "text": "List all hardware reaching end of life within the next 12 months"
+    },
+    "expected_output": {
+      "entity_type": "devices",
+      "conditions": [
+        {
+          "field": "eol_date",
+          "operator": "within",
+          "value": 12,
+          "unit": "months"
+        }
+      ],
+      "logical_operator": null
+    },
+    "evaluation_mode": "semantic",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "medium",
+      "tags": ["eol", "date_range"]
+    }
+  },
+  {
+    "test_id": "NL-005",
+    "category": "nl_parsing",
+    "description": "Inactivity query with relative time",
+    "input": {
+      "text": "Show computers that haven't been seen in over 60 days"
+    },
+    "expected_output": {
+      "entity_type": "devices",
+      "conditions": [
+        {
+          "field": "last_seen_days",
+          "operator": "greater_than",
+          "value": 60,
+          "unit": "days"
+        }
+      ],
+      "logical_operator": null
+    },
+    "evaluation_mode": "semantic",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "easy",
+      "tags": ["inactivity", "relative_time"]
+    }
+  },
+  {
+    "test_id": "NL-006",
+    "category": "nl_parsing",
+    "description": "Operating system query",
+    "input": {
+      "text": "Find all Windows 10 machines"
+    },
+    "expected_output": {
+      "entity_type": "devices",
+      "conditions": [
+        {
+          "field": "operating_system",
+          "operator": "contains",
+          "value": "Windows 10"
+        }
+      ],
+      "logical_operator": null
+    },
+    "evaluation_mode": "semantic",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "easy",
+      "tags": ["os", "string_match"]
+    }
+  },
+  {
+    "test_id": "NL-007",
+    "category": "nl_parsing",
+    "description": "Complex compound with OR",
+    "input": {
+      "text": "Find devices with low disk space OR high memory usage"
+    },
+    "expected_output": {
+      "entity_type": "devices",
+      "conditions": [
+        {
+          "field": "disk_free_space_gb",
+          "operator": "less_than",
+          "value": 10,
+          "unit": "GB"
+        },
+        {
+          "field": "memory_usage_percent",
+          "operator": "greater_than",
+          "value": 90,
+          "unit": "percent"
+        }
+      ],
+      "logical_operator": "OR"
+    },
+    "evaluation_mode": "semantic",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "medium",
+      "tags": ["compound", "OR", "disk_space", "memory"]
+    }
+  },
+  {
+    "test_id": "NL-008",
+    "category": "nl_parsing",
+    "description": "Negation query",
+    "input": {
+      "text": "Find devices NOT running Windows 11"
+    },
+    "expected_output": {
+      "entity_type": "devices",
+      "conditions": [
+        {
+          "field": "operating_system",
+          "operator": "not_contains",
+          "value": "Windows 11"
+        }
+      ],
+      "logical_operator": null
+    },
+    "evaluation_mode": "semantic",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "medium",
+      "tags": ["negation", "os"]
+    }
+  },
+  {
+    "test_id": "NL-009",
+    "category": "nl_parsing",
+    "description": "Application-focused query",
+    "input": {
+      "text": "Find all applications with known vulnerabilities"
+    },
+    "expected_output": {
+      "entity_type": "applications",
+      "conditions": [
+        {
+          "field": "cve_count",
+          "operator": "greater_than",
+          "value": 0
+        }
+      ],
+      "logical_operator": null
+    },
+    "evaluation_mode": "semantic",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "easy",
+      "tags": ["applications", "vulnerability", "cve"]
+    }
+  },
+  {
+    "test_id": "NL-010",
+    "category": "nl_parsing",
+    "description": "Combined device and application query",
+    "input": {
+      "text": "Find devices running Java version less than 11"
+    },
+    "expected_output": {
+      "entity_type": "both",
+      "conditions": [
+        {
+          "field": "application_name",
+          "operator": "contains",
+          "value": "Java"
+        },
+        {
+          "field": "application_version",
+          "operator": "less_than",
+          "value": "11"
+        }
+      ],
+      "logical_operator": "AND"
+    },
+    "evaluation_mode": "semantic",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "hard",
+      "tags": ["both", "application_version", "compound"]
+    }
+  }
+]

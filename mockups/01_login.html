@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - IT Operations AI Agent</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-logo">
+                <div class="icon">🤖</div>
+                <h1>IT Operations AI Agent</h1>
+                <p>Intelligent IT infrastructure management</p>
+            </div>
+            
+            <div style="margin-bottom: 24px;">
+                <p style="text-align: center; color: #6C757D; margin-bottom: 24px;">
+                    Sign in with your organization account
+                </p>
+                
+                <button class="microsoft-btn" onclick="window.location.href='02_dashboard.html'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+                        <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+                        <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+                        <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+                        <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+                    </svg>
+                    Sign in with Microsoft
+                </button>
+            </div>
+            
+            <div style="text-align: center; padding-top: 16px; border-top: 1px solid #DEE2E6;">
+                <p style="font-size: 12px; color: #6C757D;">
+                    By signing in, you agree to our Terms of Service and Privacy Policy
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
+                background: #1A1A2E; color: white; padding: 12px 24px; border-radius: 8px;
+                font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+        🔒 <strong>OAuth Flow:</strong> You will be redirected to Microsoft login page → 
+        After authentication, the backend exchanges the code for tokens securely
+    </div>
+</body>
+</html>

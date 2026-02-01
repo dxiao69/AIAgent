@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Operations AI Agent - Executive Presentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            overflow: hidden;
+        }
+
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide.prev {
+            transform: translateX(-100%);
+        }
+
+        /* Title Slide */
+        .slide-title {
+            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .slide-title h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .slide-title .subtitle {
+            font-size: 1.8rem;
+            color: #a0a0a0;
+            margin-bottom: 40px;
+        }
+
+        .slide-title .tagline {
+            font-size: 1.4rem;
+            color: #00d4ff;
+            border: 2px solid #00d4ff;
+            padding: 15px 40px;
+            border-radius: 50px;
+            margin-top: 30px;
+        }
+
+        /* Content Slides */
+        .slide h2 {
+            font-size: 2.8rem;
+            margin-bottom: 40px;
+            color: #00d4ff;
+            text-align: center;
+        }
+
+        .slide h3 {
+            font-size: 1.8rem;
+            color: #7b2cbf;
+            margin-bottom: 20px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .content-grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #00d4ff;
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.1);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .card h4 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #00d4ff;
+        }
+
+        .card p {
+            color: #b0b0b0;
+            line-height: 1.6;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 40px 30px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #a0a0a0;
+        }
+
+        /* Flow Diagram */
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #7b2cbf 0%, #00d4ff 100%);
+            padding: 25px 35px;
+            border-radius: 15px;
+            text-align: center;
+            min-width: 180px;
+        }
+
+        .flow-step .step-num {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .flow-step .step-text {
+            font-size: 1.1rem;
+        }
+
+        .flow-arrow {
+            font-size: 2rem;
+            color: #00d4ff;
+        }
+
+        /* Timeline */
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1100px;
+            width: 100%;
+            position: relative;
+            margin-top: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #7b2cbf, #00d4ff);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-dot {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #7b2cbf, #00d4ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin: 0 auto 15px;
+        }
+
+        .timeline-label {
+            font-size: 1rem;
+            color: #00d4ff;
+            margin-bottom: 5px;
+        }
+
+        .timeline-desc {
+            font-size: 0.9rem;
+            color: #a0a0a0;
+            max-width: 120px;
+        }
+
+        /* Problem/Solution */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            max-width: 1100px;
+        }
+
+        .comparison-col h3 {
+            font-size: 1.6rem;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid;
+        }
+
+        .comparison-col.problem h3 {
+            color: #ff6b6b;
+            border-color: #ff6b6b;
+        }
+
+        .comparison-col.solution h3 {
+            color: #00d4ff;
+            border-color: #00d4ff;
+        }
+
+        .comparison-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .comparison-item .icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .comparison-col.problem .icon {
+            color: #ff6b6b;
+        }
+
+        .comparison-col.solution .icon {
+            color: #00d4ff;
+        }
+
+        /* Demo Button */
+        .demo-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: linear-gradient(135deg, #7b2cbf 0%, #00d4ff 100%);
+            color: white;
+            padding: 20px 50px;
+            border-radius: 50px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-decoration: none;
+            margin-top: 40px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .demo-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(123, 44, 191, 0.4);
+        }
+
+        /* Navigation */
+        .nav-controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            right: 40px;
+            color: #a0a0a0;
+            font-size: 1rem;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #7b2cbf, #00d4ff);
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+
+        /* List styles */
+        .feature-list {
+            list-style: none;
+            max-width: 900px;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            border-left: 4px solid #00d4ff;
+        }
+
+        .feature-list .check {
+            color: #00d4ff;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-list .text {
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+
+        /* Architecture diagram */
+        .architecture {
+            text-align: center;
+            max-width: 1000px;
+        }
+
+        .arch-box {
+            background: rgba(0, 212, 255, 0.1);
+            border: 2px solid #00d4ff;
+            border-radius: 15px;
+            padding: 20px 40px;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .arch-row {
+            margin: 20px 0;
+        }
+
+        .arch-connector {
+            color: #7b2cbf;
+            font-size: 2rem;
+        }
+
+        /* Benefits table */
+        .benefits-table {
+            width: 100%;
+            max-width: 1000px;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        .benefits-table th {
+            text-align: left;
+            padding: 20px;
+            background: rgba(123, 44, 191, 0.3);
+            color: #00d4ff;
+            font-size: 1.1rem;
+        }
+
+        .benefits-table th:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        .benefits-table th:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+
+        .benefits-table td {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .benefits-table tr td:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        .benefits-table tr td:last-child {
+            border-radius: 0 10px 10px 0;
+            color: #00d4ff;
+            font-weight: 600;
+        }
+
+        /* Logo placeholder */
+        .logo {
+            font-size: 1.2rem;
+            color: #a0a0a0;
+            position: fixed;
+            top: 30px;
+            left: 40px;
+            z-index: 1000;
+        }
+
+        /* Keyboard hints */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 30px;
+            left: 40px;
+            color: #606060;
+            font-size: 0.9rem;
+        }
+
+        .keyboard-hint kbd {
+            background: rgba(255,255,255,0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="logo">ITOA Agent</div>
+    
+    <div class="presentation" id="presentation">
+        
+        <!-- Slide 1: Title -->
+        <div class="slide slide-title active" data-slide="1">
+            <h1>IT Operations AI Agent</h1>
+            <p class="subtitle">Intelligent Automation for Enterprise Device & Application Management</p>
+            <div style="display: flex; gap: 40px; margin: 40px 0;">
+                <div class="stat-card" style="padding: 25px 40px;">
+                    <div class="stat-number">100K+</div>
+                    <div class="stat-label">Devices Managed</div>
+                </div>
+                <div class="stat-card" style="padding: 25px 40px;">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Time Saved</div>
+                </div>
+                <div class="stat-card" style="padding: 25px 40px;">
+                    <div class="stat-number">AI</div>
+                    <div class="stat-label">Powered</div>
+                </div>
+            </div>
+            <p class="tagline">Transforming IT Operations with AI</p>
+        </div>
+
+        <!-- Slide 2: The Challenge -->
+        <div class="slide" data-slide="2">
+            <h2>The Challenge We Face Today</h2>
+            <div class="comparison">
+                <div class="comparison-col problem">
+                    <h3>❌ Current State</h3>
+                    <div class="comparison-item">
+                        <span class="icon">⏰</span>
+                        <span>Hours spent manually querying MECM databases</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="icon">🔄</span>
+                        <span>Switching between 5+ tools for single workflow</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="icon">📊</span>
+                        <span>Spreadsheet-based tracking and coordination</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="icon">🔥</span>
+                        <span>Reactive response to issues after user complaints</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="icon">👥</span>
+                        <span>Inconsistent remediation across team members</span>
+                    </div>
+                </div>
+                <div class="comparison-col solution">
+                    <h3>✅ With ITOA Agent</h3>
+                    <div class="comparison-item">
+                        <span class="icon">⚡</span>
+                        <span>Natural language queries — no SQL required</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="icon">🎯</span>
+                        <span>Single unified interface for all operations</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="icon">🤖</span>
+                        <span>AI-powered recommendations and automation</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="icon">🔮</span>
+                        <span>Proactive issue detection before impact</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="icon">📋</span>
+                        <span>Consistent best-practice remediation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: How It Works -->
+        <div class="slide" data-slide="3">
+            <h2>How ITOA Agent Works</h2>
+            <div class="flow-container">
+                <div class="flow-step">
+                    <div class="step-num">1</div>
+                    <div class="step-text">DEFINE</div>
+                    <div style="font-size: 0.9rem; margin-top: 10px; opacity: 0.8;">Create rules in<br>plain English</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="step-num">2</div>
+                    <div class="step-text">IDENTIFY</div>
+                    <div style="font-size: 0.9rem; margin-top: 10px; opacity: 0.8;">AI scans 100K+<br>devices & apps</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="step-num">3</div>
+                    <div class="step-text">RECOMMEND</div>
+                    <div style="font-size: 0.9rem; margin-top: 10px; opacity: 0.8;">LLM suggests<br>remediation</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="step-num">4</div>
+                    <div class="step-text">EXECUTE</div>
+                    <div style="font-size: 0.9rem; margin-top: 10px; opacity: 0.8;">Approved actions<br>across systems</div>
+                </div>
+            </div>
+            <div style="margin-top: 50px; text-align: center;">
+                <p style="font-size: 1.3rem; color: #a0a0a0;">
+                    "Find devices with less than 10GB disk space that haven't been active in 30 days"
+                </p>
+                <p style="margin-top: 15px; color: #00d4ff; font-size: 1.1rem;">
+                    ↓ AI interprets and executes in seconds ↓
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Key Capabilities -->
+        <div class="slide" data-slide="4">
+            <h2>Key Capabilities</h2>
+            <div class="content-grid content-grid-3">
+                <div class="card">
+                    <div class="card-icon">🎯</div>
+                    <h4>Smart Rule Builder</h4>
+                    <p>Create rules using natural language or visual builder. AI interprets your intent.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔍</div>
+                    <h4>Dual Entity Support</h4>
+                    <p>Target both devices AND applications with a single rule. Track app owners.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🤖</div>
+                    <h4>AI Recommendations</h4>
+                    <p>LLM analyzes issues and suggests contextual remediation with risk assessment.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🛡️</div>
+                    <h4>Approval Workflow</h4>
+                    <p>All actions require approval. Complete audit trail for compliance.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔗</div>
+                    <h4>Multi-System Integration</h4>
+                    <p>Execute across MECM, ServiceNow, and 1E Tachyon from one interface.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📊</div>
+                    <h4>Executive Dashboards</h4>
+                    <p>Real-time fleet health, trends, and automated reporting.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Business Impact -->
+        <div class="slide" data-slide="5">
+            <h2>Business Impact</h2>
+            <table class="benefits-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Before</th>
+                        <th>After</th>
+                        <th>Improvement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Time to identify problematic devices</td>
+                        <td>2-4 hours</td>
+                        <td>&lt; 5 minutes</td>
+                        <td>95% reduction</td>
+                    </tr>
+                    <tr>
+                        <td>Rule creation time</td>
+                        <td>30-60 minutes</td>
+                        <td>2-3 minutes</td>
+                        <td>95% reduction</td>
+                    </tr>
+                    <tr>
+                        <td>Cross-system action execution</td>
+                        <td>15-30 minutes</td>
+                        <td>2 minutes</td>
+                        <td>90% reduction</td>
+                    </tr>
+                    <tr>
+                        <td>App owner notification</td>
+                        <td>Manual, days</td>
+                        <td>Automatic</td>
+                        <td>100% automation</td>
+                    </tr>
+                    <tr>
+                        <td>Proactive issue detection</td>
+                        <td>&lt; 20%</td>
+                        <td>&gt; 80%</td>
+                        <td>4x improvement</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slide 6: AI Quality Assurance -->
+        <div class="slide" data-slide="6">
+            <h2>AI Quality Assurance</h2>
+            <p style="color: #a0a0a0; font-size: 1.2rem; margin-bottom: 40px;">
+                Ground Truth Testing ensures AI accuracy and reliability
+            </p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">&gt;90%</div>
+                    <div class="stat-label">NL Parsing Accuracy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">&gt;85%</div>
+                    <div class="stat-label">Action Recommendations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">&gt;95%</div>
+                    <div class="stat-label">Risk Classification</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">115+</div>
+                    <div class="stat-label">Test Cases</div>
+                </div>
+            </div>
+            <ul class="feature-list" style="margin-top: 40px;">
+                <li>
+                    <span class="check">✓</span>
+                    <span class="text"><strong>Automated Pipeline:</strong> Tests run on every code change</span>
+                </li>
+                <li>
+                    <span class="check">✓</span>
+                    <span class="text"><strong>LLM-Assisted Evaluation:</strong> Semantic correctness validation</span>
+                </li>
+                <li>
+                    <span class="check">✓</span>
+                    <span class="text"><strong>Regression Detection:</strong> Quality gates prevent degradation</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Slide 7: Integration Architecture -->
+        <div class="slide" data-slide="7">
+            <h2>Integration Architecture</h2>
+            <div class="architecture">
+                <div class="arch-row">
+                    <div class="arch-box" style="background: linear-gradient(135deg, rgba(123, 44, 191, 0.3), rgba(0, 212, 255, 0.3)); border-color: #7b2cbf;">
+                        <strong style="font-size: 1.3rem;">ITOA Agent</strong><br>
+                        <span style="color: #a0a0a0;">AI Engine + Rule Engine + Action Executor</span>
+                    </div>
+                </div>
+                <div class="arch-connector">↓ ↓ ↓</div>
+                <div class="arch-row" style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                    <div class="arch-box">
+                        <strong>MECM</strong><br>
+                        <span style="color: #a0a0a0; font-size: 0.9rem;">Device Data<br>Collections<br>Deployments</span>
+                    </div>
+                    <div class="arch-box">
+                        <strong>ServiceNow</strong><br>
+                        <span style="color: #a0a0a0; font-size: 0.9rem;">CMDB<br>Incidents<br>App Owners</span>
+                    </div>
+                    <div class="arch-box">
+                        <strong>1E Tachyon</strong><br>
+                        <span style="color: #a0a0a0; font-size: 0.9rem;">Real-time<br>Queries<br>Remediation</span>
+                    </div>
+                    <div class="arch-box">
+                        <strong>LLM</strong><br>
+                        <span style="color: #a0a0a0; font-size: 0.9rem;">OpenAI<br>or<br>QWEN (Local)</span>
+                    </div>
+                </div>
+            </div>
+            <p style="margin-top: 40px; color: #00d4ff; font-size: 1.2rem;">
+                ✓ No rip-and-replace — Enhances existing investments
+            </p>
+        </div>
+
+        <!-- Slide 8: Implementation Timeline -->
+        <div class="slide" data-slide="8">
+            <h2>Implementation Timeline</h2>
+            <p style="color: #a0a0a0; font-size: 1.2rem; margin-bottom: 20px;">12-14 Week Delivery</p>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot">1-2</div>
+                    <div class="timeline-label">Foundation</div>
+                    <div class="timeline-desc">Infrastructure & Auth</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">3-5</div>
+                    <div class="timeline-label">Core Backend</div>
+                    <div class="timeline-desc">Rule Engine & Scanning</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">5-7</div>
+                    <div class="timeline-label">Desktop App</div>
+                    <div class="timeline-desc">UI & Core Screens</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">7-9</div>
+                    <div class="timeline-label">AI Integration</div>
+                    <div class="timeline-desc">LLM & NL Processing</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">9-12</div>
+                    <div class="timeline-label">Actions</div>
+                    <div class="timeline-desc">Full Integration</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">12-14</div>
+                    <div class="timeline-label">Polish</div>
+                    <div class="timeline-desc">Testing & Deploy</div>
+                </div>
+            </div>
+            <div style="margin-top: 60px; display: flex; gap: 40px; justify-content: center;">
+                <div class="card" style="text-align: center; padding: 25px 50px;">
+                    <div style="font-size: 2rem; color: #00d4ff; font-weight: 700;">3.5</div>
+                    <div style="color: #a0a0a0;">FTE Required</div>
+                </div>
+                <div class="card" style="text-align: center; padding: 25px 50px;">
+                    <div style="font-size: 2rem; color: #00d4ff; font-weight: 700;">6</div>
+                    <div style="color: #a0a0a0;">Sprints</div>
+                </div>
+                <div class="card" style="text-align: center; padding: 25px 50px;">
+                    <div style="font-size: 2rem; color: #00d4ff; font-weight: 700;">5</div>
+                    <div style="color: #a0a0a0;">Demo Milestones</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Live Demo -->
+        <div class="slide" data-slide="9">
+            <h2>🎬 Live Demo</h2>
+            <p style="color: #a0a0a0; font-size: 1.3rem; margin-bottom: 40px;">
+                Experience the ITOA Agent in action
+            </p>
+            <div class="content-grid" style="max-width: 900px;">
+                <div class="card" style="text-align: center;">
+                    <div class="card-icon">📊</div>
+                    <h4>Dashboard Overview</h4>
+                    <p>Fleet health at a glance</p>
+                    <a href="../mockups/02_dashboard.html" target="_blank" class="demo-btn" style="font-size: 1rem; padding: 12px 25px; margin-top: 20px;">
+                        View Demo →
+                    </a>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <div class="card-icon">🎯</div>
+                    <h4>Rule Builder Wizard</h4>
+                    <p>Natural language rule creation</p>
+                    <a href="../mockups/05_wizard_step1.html" target="_blank" class="demo-btn" style="font-size: 1rem; padding: 12px 25px; margin-top: 20px;">
+                        View Demo →
+                    </a>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <div class="card-icon">🔍</div>
+                    <h4>Scan Results</h4>
+                    <p>AI-powered analysis</p>
+                    <a href="../mockups/04_scan_results.html" target="_blank" class="demo-btn" style="font-size: 1rem; padding: 12px 25px; margin-top: 20px;">
+                        View Demo →
+                    </a>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <div class="card-icon">⚡</div>
+                    <h4>Action Execution</h4>
+                    <p>Approval workflow</p>
+                    <a href="../mockups/06_approvals.html" target="_blank" class="demo-btn" style="font-size: 1rem; padding: 12px 25px; margin-top: 20px;">
+                        View Demo →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Thank You -->
+        <div class="slide slide-title" data-slide="10">
+            <h1>Thank You</h1>
+            <p class="subtitle">Questions?</p>
+            <div style="margin-top: 40px;">
+                <p style="color: #a0a0a0; font-size: 1.2rem;">Ready to transform IT Operations</p>
+            </div>
+            <a href="../mockups/02_dashboard.html" target="_blank" class="demo-btn">
+                🚀 Start Full Demo
+            </a>
+            <div style="margin-top: 60px; display: flex; gap: 60px;">
+                <div style="text-align: center;">
+                    <div style="color: #00d4ff; font-size: 1.1rem;">Documentation</div>
+                    <div style="color: #a0a0a0;">docs/</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="color: #00d4ff; font-size: 1.1rem;">Mockups</div>
+                    <div style="color: #a0a0a0;">mockups/</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="color: #00d4ff; font-size: 1.1rem;">Contact</div>
+                    <div style="color: #a0a0a0;">itoa-agent@company.com</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="prevSlide()">← Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">10</span>
+    </div>
+
+    <div class="keyboard-hint">
+        <kbd>←</kbd> <kbd>→</kbd> to navigate | <kbd>F</kbd> fullscreen
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 10;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index + 1 < currentSlide) {
+                    slide.classList.add('prev');
+                }
+            });
+
+            slides[currentSlide - 1].classList.add('active');
+            
+            document.getElementById('currentSlide').textContent = currentSlide;
+            document.getElementById('progressBar').style.width = 
+                ((currentSlide / totalSlides) * 100) + '%';
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            } else if (e.key === 'f' || e.key === 'F') {
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                } else {
+                    document.documentElement.requestFullscreen();
+                }
+            }
+        });
+
+        // Touch swipe support
+        let touchStartX = 0;
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) nextSlide();
+                else prevSlide();
+            }
+        });
+
+        // Initialize
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>

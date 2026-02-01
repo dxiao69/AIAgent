@@ -1,0 +1,203 @@
+[
+  {
+    "test_id": "SUM-001",
+    "category": "summarization",
+    "description": "Rule execution summary - successful run",
+    "input": {
+      "rule_name": "Low Disk Space Remediation",
+      "execution_time": "2026-01-31T14:30:00Z",
+      "total_targets": 150,
+      "results": {
+        "successful": 142,
+        "failed": 5,
+        "skipped": 3
+      },
+      "actions_taken": [
+        {"action": "disk_cleanup", "count": 142},
+        {"action": "notification_sent", "count": 150}
+      ],
+      "failures": [
+        {"device": "WKS-001", "error": "Permission denied"},
+        {"device": "WKS-015", "error": "Offline"},
+        {"device": "WKS-023", "error": "Timeout"},
+        {"device": "SRV-100", "error": "Script failed"},
+        {"device": "WKS-088", "error": "Offline"}
+      ]
+    },
+    "expected_output": {
+      "summary_text": "Rule 'Low Disk Space Remediation' completed with 94.7% success rate. 142 of 150 devices remediated. 5 failures occurred (2 offline, 1 permission denied, 1 timeout, 1 script failure). All targets received notifications.",
+      "key_metrics": {
+        "success_rate": 94.7,
+        "primary_failure_reason": "offline"
+      },
+      "recommended_actions": ["Retry offline devices", "Investigate permission issue on WKS-001"]
+    },
+    "acceptable_variations": [
+      "94.67% success rate",
+      "95% success rate",
+      "high success rate"
+    ],
+    "evaluation_mode": "semantic",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "medium",
+      "tags": ["execution_summary", "success_metrics"]
+    }
+  },
+  {
+    "test_id": "SUM-002",
+    "category": "summarization",
+    "description": "Rule execution summary - mostly failed",
+    "input": {
+      "rule_name": "EOL Device Collection",
+      "execution_time": "2026-01-31T08:00:00Z",
+      "total_targets": 500,
+      "results": {
+        "successful": 45,
+        "failed": 450,
+        "skipped": 5
+      },
+      "actions_taken": [
+        {"action": "create_collection", "count": 1},
+        {"action": "add_to_collection", "count": 45}
+      ],
+      "failures": [
+        {"category": "Network unreachable", "count": 380},
+        {"category": "Agent not installed", "count": 50},
+        {"category": "Authentication failed", "count": 20}
+      ]
+    },
+    "expected_output": {
+      "summary_text": "Rule 'EOL Device Collection' completed with low success rate (9%). Only 45 of 500 devices added to collection. Primary failure: 76% of targets network unreachable. Recommend checking network connectivity before retry.",
+      "key_metrics": {
+        "success_rate": 9.0,
+        "primary_failure_reason": "network_unreachable"
+      },
+      "severity": "high",
+      "recommended_actions": ["Check network connectivity", "Verify agent installation on 50 devices", "Review authentication settings"]
+    },
+    "evaluation_mode": "semantic",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "medium",
+      "tags": ["execution_summary", "failure_analysis"]
+    }
+  },
+  {
+    "test_id": "SUM-003",
+    "category": "summarization",
+    "description": "Weekly device health report",
+    "input": {
+      "report_type": "weekly_health",
+      "period": "2026-01-24 to 2026-01-31",
+      "statistics": {
+        "total_devices": 5000,
+        "healthy": 4200,
+        "warning": 600,
+        "critical": 200,
+        "issues_by_category": {
+          "disk_space": 350,
+          "outdated_software": 280,
+          "security_vulnerabilities": 150,
+          "offline": 120
+        },
+        "trend": {
+          "healthy_change": "+2%",
+          "critical_change": "-15%"
+        }
+      }
+    },
+    "expected_output": {
+      "summary_text": "Weekly Health Report (Jan 24-31): Fleet health improved this week. 84% devices healthy (up 2%), critical issues down 15% to 200 devices. Top concerns: 350 low disk space, 280 outdated software. Recommend prioritizing disk cleanup and software updates.",
+      "highlights": [
+        "Overall improvement in fleet health",
+        "Critical issues decreasing trend",
+        "Disk space remains top issue"
+      ],
+      "priority_actions": ["Address disk space on 350 devices", "Update software on 280 devices"]
+    },
+    "evaluation_mode": "semantic",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "hard",
+      "tags": ["health_report", "weekly", "trend_analysis"]
+    }
+  },
+  {
+    "test_id": "SUM-004",
+    "category": "summarization",
+    "description": "Application inventory summary",
+    "input": {
+      "report_type": "application_inventory",
+      "total_applications": 1250,
+      "categories": {
+        "productivity": 150,
+        "development": 200,
+        "security": 80,
+        "utilities": 320,
+        "custom_business": 500
+      },
+      "compliance_status": {
+        "compliant": 1100,
+        "non_compliant": 100,
+        "unknown": 50
+      },
+      "license_issues": 45,
+      "eol_applications": 30
+    },
+    "expected_output": {
+      "summary_text": "Application Inventory: 1,250 applications tracked. 88% compliant, 8% non-compliant, 4% unknown status. 45 applications have licensing issues. 30 end-of-life applications need replacement planning. Custom business apps represent largest category (40%).",
+      "key_findings": [
+        "High compliance rate at 88%",
+        "45 licensing issues require attention",
+        "30 EOL applications need migration plan"
+      ]
+    },
+    "evaluation_mode": "semantic",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "medium",
+      "tags": ["application", "inventory", "compliance"]
+    }
+  },
+  {
+    "test_id": "SUM-005",
+    "category": "summarization",
+    "description": "Alert digest - multiple alerts",
+    "input": {
+      "alert_type": "daily_digest",
+      "time_period": "Last 24 hours",
+      "alerts": [
+        {"severity": "critical", "count": 5, "types": ["security_vulnerability", "service_down"]},
+        {"severity": "high", "count": 23, "types": ["disk_space_critical", "certificate_expiring"]},
+        {"severity": "medium", "count": 156, "types": ["patch_available", "performance_degradation"]},
+        {"severity": "low", "count": 420, "types": ["informational", "routine_maintenance"]}
+      ],
+      "top_affected_systems": [
+        {"name": "Payment Gateway", "alert_count": 8},
+        {"name": "HR Database", "alert_count": 6},
+        {"name": "Web Server Pool", "alert_count": 15}
+      ]
+    },
+    "expected_output": {
+      "summary_text": "Daily Alert Digest: 604 total alerts in last 24 hours. 5 critical alerts requiring immediate attention (security vulnerabilities and service outages). Web Server Pool most affected (15 alerts). Recommend prioritizing critical security vulnerabilities and reviewing service availability.",
+      "action_items": [
+        "Address 5 critical alerts immediately",
+        "Review Payment Gateway stability",
+        "Investigate Web Server Pool issues"
+      ],
+      "priority": "high"
+    },
+    "evaluation_mode": "semantic",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "hard",
+      "tags": ["alert_digest", "priority", "multi_system"]
+    }
+  }
+]

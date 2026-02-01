@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - IT Operations AI Agent</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .settings-nav {
+            background: white;
+            border-radius: 8px;
+            padding: 8px;
+            margin-bottom: 24px;
+        }
+        .settings-nav-item {
+            display: block;
+            padding: 12px 16px;
+            color: #495057;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+        .settings-nav-item:hover {
+            background: #F8F9FA;
+        }
+        .settings-nav-item.active {
+            background: #E3F2FD;
+            color: #2563EB;
+            font-weight: 600;
+        }
+        .settings-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .settings-section h2 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+        }
+        .settings-section p {
+            color: #6C757D;
+            font-size: 14px;
+            margin: 0 0 20px 0;
+        }
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid #E9ECEF;
+        }
+        .setting-row:last-child {
+            border-bottom: none;
+        }
+        .setting-info {
+            flex: 1;
+        }
+        .setting-label {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .setting-description {
+            font-size: 13px;
+            color: #6C757D;
+        }
+        .setting-control {
+            min-width: 200px;
+            text-align: right;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            display: inline-block;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #DEE2E6;
+            transition: 0.3s;
+            border-radius: 26px;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+        .toggle-switch input:checked + .toggle-slider {
+            background-color: #2563EB;
+        }
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        .connection-status.connected {
+            background: #D4EDDA;
+            color: #155724;
+        }
+        .connection-status.disconnected {
+            background: #F8D7DA;
+            color: #721C24;
+        }
+        .connection-status.warning {
+            background: #FFF3CD;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="icon">🤖</span>
+                    <span>ITOA Agent</span>
+                </div>
+            </div>
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar (Ctrl+B)">◀</button>
+            <nav class="sidebar-nav">
+                <a href="02_dashboard.html" class="nav-item">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="03_rules.html" class="nav-item">
+                    <span class="icon">📋</span>
+                    <span>Rules</span>
+                </a>
+                <a href="04_scan_results.html" class="nav-item">
+                    <span class="icon">🔍</span>
+                    <span>Scan Results</span>
+                </a>
+                <a href="06_approvals.html" class="nav-item">
+                    <span class="icon">⚡</span>
+                    <span>Actions</span>
+                    <span class="badge">5</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">📈</span>
+                    <span>Reports</span>
+                </a>
+                <a href="07_action_definitions.html" class="nav-item">
+                    <span class="icon">🔧</span>
+                    <span>Action Definitions</span>
+                </a>
+                <a href="10_logs.html" class="nav-item">
+                    <span class="icon">📜</span>
+                    <span>Logs</span>
+                </a>
+                <a href="09_settings.html" class="nav-item active">
+                    <span class="icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Header -->
+            <header class="header">
+                <div>
+                    <nav class="breadcrumb" aria-label="Breadcrumb">
+                        <a href="02_dashboard.html">Home</a> &gt; <span>Settings</span>
+                    </nav>
+                    <h1 class="header-title">Settings</h1>
+                </div>
+                <div class="header-actions">
+                    <div class="user-menu">
+                        <div class="user-avatar">JD</div>
+                        <span>John Doe</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content">
+                <div style="display: grid; grid-template-columns: 220px 1fr; gap: 24px;">
+                    <!-- Settings Navigation -->
+                    <div class="settings-nav">
+                        <a href="#general" class="settings-nav-item active">
+                            <span>⚙️</span> General
+                        </a>
+                        <a href="#llm" class="settings-nav-item">
+                            <span>🤖</span> LLM Configuration
+                        </a>
+                        <a href="#integrations" class="settings-nav-item">
+                            <span>🔗</span> Integrations
+                        </a>
+                        <a href="#notifications" class="settings-nav-item">
+                            <span>🔔</span> Notifications
+                        </a>
+                        <a href="#approval" class="settings-nav-item">
+                            <span>✅</span> Approval Workflow
+                        </a>
+                        <a href="#security" class="settings-nav-item">
+                            <span>🔒</span> Security
+                        </a>
+                        <a href="#data" class="settings-nav-item">
+                            <span>💾</span> Data & Retention
+                        </a>
+                        <a href="#about" class="settings-nav-item">
+                            <span>ℹ️</span> About
+                        </a>
+                    </div>
+
+                    <!-- Settings Content -->
+                    <div>
+                        <!-- General Settings -->
+                        <div class="settings-section" id="general">
+                            <h2>⚙️ General Settings</h2>
+                            <p>Configure basic application preferences and display options.</p>
+                            
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Theme</div>
+                                    <div class="setting-description">Choose your preferred color scheme</div>
+                                </div>
+                                <div class="setting-control">
+                                    <select class="form-select" style="width: 150px;">
+                                        <option selected>Light</option>
+                                        <option>Dark</option>
+                                        <option>System Default</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Language</div>
+                                    <div class="setting-description">Application display language</div>
+                                </div>
+                                <div class="setting-control">
+                                    <select class="form-select" style="width: 150px;">
+                                        <option selected>English (US)</option>
+                                        <option>English (UK)</option>
+                                        <option>Spanish</option>
+                                        <option>French</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Timezone</div>
+                                    <div class="setting-description">Used for scheduling and timestamps</div>
+                                </div>
+                                <div class="setting-control">
+                                    <select class="form-select" style="width: 200px;">
+                                        <option selected>(UTC-05:00) Eastern Time</option>
+                                        <option>(UTC-06:00) Central Time</option>
+                                        <option>(UTC-07:00) Mountain Time</option>
+                                        <option>(UTC-08:00) Pacific Time</option>
+                                        <option>(UTC+00:00) UTC</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Default Page Size</div>
+                                    <div class="setting-description">Number of items per page in lists</div>
+                                </div>
+                                <div class="setting-control">
+                                    <select class="form-select" style="width: 100px;">
+                                        <option>25</option>
+                                        <option selected>50</option>
+                                        <option>100</option>
+                                        <option>200</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Auto-refresh Dashboard</div>
+                                    <div class="setting-description">Automatically refresh dashboard data</div>
+                                </div>
+                                <div class="setting-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Refresh Interval</div>
+                                    <div class="setting-description">How often to refresh data (when enabled)</div>
+                                </div>
+                                <div class="setting-control">
+                                    <select class="form-select" style="width: 150px;">
+                                        <option>1 minute</option>
+                                        <option selected>5 minutes</option>
+                                        <option>15 minutes</option>
+                                        <option>30 minutes</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- LLM Configuration -->
+                        <div class="settings-section" id="llm">
+                            <h2>🤖 LLM Configuration</h2>
+                            <p>Configure the Large Language Model settings for AI-powered features.</p>
+                            
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">LLM Provider</div>
+                                    <div class="setting-description">Select the AI service to use for suggestions</div>
+                                </div>
+                                <div class="setting-control">
+                                    <select class="form-select" style="width: 180px;">
+                                        <option selected>Azure OpenAI</option>
+                                        <option>OpenAI API</option>
+                                        <option>Local QWEN</option>
+                                        <option>Ollama (Local)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Model</div>
+                                    <div class="setting-description">Specific model to use for generation</div>
+                                </div>
+                                <div class="setting-control">
+                                    <select class="form-select" style="width: 180px;">
+                                        <option selected>gpt-4</option>
+                                        <option>gpt-4-turbo</option>
+                                        <option>gpt-3.5-turbo</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">API Endpoint</div>
+                                    <div class="setting-description">Azure OpenAI or custom endpoint URL</div>
+                                </div>
+                                <div class="setting-control">
+                                    <input type="text" class="form-input" style="width: 300px;" value="https://company-openai.openai.azure.com/">
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">API Key</div>
+                                    <div class="setting-description">Authentication key for the LLM service</div>
+                                </div>
+                                <div class="setting-control">
+                                    <div style="display: flex; gap: 8px;">
+                                        <input type="password" class="form-input" style="width: 220px;" value="sk-xxxxxxxxxxxxxxxxxxxx">
+                                        <button class="btn btn-secondary btn-sm">Show</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Temperature</div>
+                                    <div class="setting-description">Controls randomness (0 = focused, 1 = creative)</div>
+                                </div>
+                                <div class="setting-control">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <input type="range" min="0" max="100" value="30" style="width: 120px;">
+                                        <span style="min-width: 40px;">0.3</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Max Tokens</div>
+                                    <div class="setting-description">Maximum response length</div>
+                                </div>
+                                <div class="setting-control">
+                                    <input type="number" class="form-input" style="width: 100px;" value="2048">
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Sensitive Data Filtering</div>
+                                    <div class="setting-description">Automatically mask PII before sending to LLM</div>
+                                </div>
+                                <div class="setting-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 16px;">
+                                <button class="btn btn-secondary">
+                                    <span>🧪</span> Test Connection
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Integrations -->
+                        <div class="settings-section" id="integrations">
+                            <h2>🔗 Integrations</h2>
+                            <p>Manage connections to external systems.</p>
+                            
+                            <!-- MECM Integration -->
+                            <div style="background: #F8F9FA; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <span style="font-size: 24px;">📦</span>
+                                        <div>
+                                            <div style="font-weight: 600;">Microsoft Endpoint Configuration Manager (MECM)</div>
+                                            <div style="font-size: 12px; color: #6C757D;">Device management and software deployment</div>
+                                        </div>
+                                    </div>
+                                    <div class="connection-status connected">
+                                        <span>●</span> Connected
+                                    </div>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px;">
+                                    <div>
+                                        <div style="color: #6C757D;">Server (Backup DB)</div>
+                                        <code>mecm-sql-backup.corp.local</code>
+                                    </div>
+                                    <div>
+                                        <div style="color: #6C757D;">Database</div>
+                                        <code>CM_PS1</code>
+                                    </div>
+                                    <div>
+                                        <div style="color: #6C757D;">Last Sync</div>
+                                        <span>Today at 6:00 AM</span>
+                                    </div>
+                                    <div>
+                                        <div style="color: #6C757D;">Devices</div>
+                                        <span>98,432 devices</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 12px; display: flex; gap: 8px;">
+                                    <button class="btn btn-secondary btn-sm">Configure</button>
+                                    <button class="btn btn-secondary btn-sm">Test Connection</button>
+                                    <button class="btn btn-secondary btn-sm">Sync Now</button>
+                                </div>
+                            </div>
+
+                            <!-- ServiceNow Integration -->
+                            <div style="background: #F8F9FA; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <span style="font-size: 24px;">🎫</span>
+                                        <div>
+                                            <div style="font-weight: 600;">ServiceNow</div>
+                                            <div style="font-size: 12px; color: #6C757D;">Incident management and CMDB</div>
+                                        </div>
+                                    </div>
+                                    <div class="connection-status connected">
+                                        <span>●</span> Connected
+                                    </div>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px;">
+                                    <div>
+                                        <div style="color: #6C757D;">Instance URL</div>
+                                        <code>https://company.service-now.com</code>
+                                    </div>
+                                    <div>
+                                        <div style="color: #6C757D;">API Version</div>
+                                        <code>v2</code>
+                                    </div>
+                                    <div>
+                                        <div style="color: #6C757D;">Authentication</div>
+                                        <span>OAuth 2.0</span>
+                                    </div>
+                                    <div>
+                                        <div style="color: #6C757D;">Rate Limit</div>
+                                        <span>500 requests/min</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 12px; display: flex; gap: 8px;">
+                                    <button class="btn btn-secondary btn-sm">Configure</button>
+                                    <button class="btn btn-secondary btn-sm">Test Connection</button>
+                                </div>
+                            </div>
+
+                            <!-- 1E Tachyon Integration -->
+                            <div style="background: #F8F9FA; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <span style="font-size: 24px;">⚡</span>
+                                        <div>
+                                            <div style="font-weight: 600;">1E Tachyon</div>
+                                            <div style="font-size: 12px; color: #6C757D;">Real-time endpoint management</div>
+                                        </div>
+                                    </div>
+                                    <div class="connection-status warning">
+                                        <span>●</span> Token Expiring Soon
+                                    </div>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px;">
+                                    <div>
+                                        <div style="color: #6C757D;">API Endpoint</div>
+                                        <code>https://tachyon.corp.local/Consumer</code>
+                                    </div>
+                                    <div>
+                                        <div style="color: #6C757D;">Environment</div>
+                                        <code>Production</code>
+                                    </div>
+                                    <div>
+                                        <div style="color: #6C757D;">Token Expires</div>
+                                        <span style="color: #FFC107;">In 3 days</span>
+                                    </div>
+                                    <div>
+                                        <div style="color: #6C757D;">Available Instructions</div>
+                                        <span>47 instructions</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 12px; display: flex; gap: 8px;">
+                                    <button class="btn btn-secondary btn-sm">Configure</button>
+                                    <button class="btn btn-primary btn-sm">Renew Token</button>
+                                    <button class="btn btn-secondary btn-sm">Test Connection</button>
+                                </div>
+                            </div>
+
+                            <!-- Email/SMTP Integration -->
+                            <div style="background: #F8F9FA; border-radius: 8px; padding: 16px;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <span style="font-size: 24px;">📧</span>
+                                        <div>
+                                            <div style="font-weight: 600;">Email (Microsoft Graph)</div>
+                                            <div style="font-size: 12px; color: #6C757D;">User and owner notifications</div>
+                                        </div>
+                                    </div>
+                                    <div class="connection-status connected">
+                                        <span>●</span> Connected
+                                    </div>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px;">
+                                    <div>
+                                        <div style="color: #6C757D;">Sender Address</div>
+                                        <code>itoa-noreply@company.com</code>
+                                    </div>
+                                    <div>
+                                        <div style="color: #6C757D;">Authentication</div>
+                                        <span>Azure AD App Registration</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 12px; display: flex; gap: 8px;">
+                                    <button class="btn btn-secondary btn-sm">Configure</button>
+                                    <button class="btn btn-secondary btn-sm">Send Test Email</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notifications -->
+                        <div class="settings-section" id="notifications">
+                            <h2>🔔 Notification Settings</h2>
+                            <p>Configure how and when you receive notifications.</p>
+                            
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Email Notifications</div>
+                                    <div class="setting-description">Receive important updates via email</div>
+                                </div>
+                                <div class="setting-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Pending Approval Alerts</div>
+                                    <div class="setting-description">Notify when there are actions awaiting your approval</div>
+                                </div>
+                                <div class="setting-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Action Completion</div>
+                                    <div class="setting-description">Notify when your requested actions complete</div>
+                                </div>
+                                <div class="setting-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Action Failures</div>
+                                    <div class="setting-description">Notify when actions fail to execute</div>
+                                </div>
+                                <div class="setting-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Daily Summary Email</div>
+                                    <div class="setting-description">Receive a daily summary of system activity</div>
+                                </div>
+                                <div class="setting-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Weekly Report</div>
+                                    <div class="setting-description">Receive a weekly compliance and activity report</div>
+                                </div>
+                                <div class="setting-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Approval Workflow -->
+                        <div class="settings-section" id="approval">
+                            <h2>✅ Approval Workflow Settings</h2>
+                            <p>Configure approval requirements and workflow behavior.</p>
+                            
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Approval Expiration</div>
+                                    <div class="setting-description">Pending approvals expire after this duration</div>
+                                </div>
+                                <div class="setting-control">
+                                    <select class="form-select" style="width: 150px;">
+                                        <option>3 days</option>
+                                        <option selected>7 days</option>
+                                        <option>14 days</option>
+                                        <option>30 days</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Self-Approval</div>
+                                    <div class="setting-description">Allow users to approve their own requests (Admin only)</div>
+                                </div>
+                                <div class="setting-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Dual Approval Threshold</div>
+                                    <div class="setting-description">Require two approvers for batches larger than</div>
+                                </div>
+                                <div class="setting-control">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <input type="number" class="form-input" style="width: 80px;" value="100">
+                                        <span>devices</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Auto-Execute Low Risk</div>
+                                    <div class="setting-description">Automatically execute low-risk actions without approval</div>
+                                </div>
+                                <div class="setting-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Require Comments on Rejection</div>
+                                    <div class="setting-description">Approvers must provide reason when rejecting</div>
+                                </div>
+                                <div class="setting-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Reminder Frequency</div>
+                                    <div class="setting-description">Send reminders for pending approvals</div>
+                                </div>
+                                <div class="setting-control">
+                                    <select class="form-select" style="width: 150px;">
+                                        <option>None</option>
+                                        <option selected>Daily</option>
+                                        <option>Every 2 days</option>
+                                        <option>Weekly</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Security -->
+                        <div class="settings-section" id="security">
+                            <h2>🔒 Security Settings</h2>
+                            <p>Configure security and access control settings.</p>
+                            
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Session Timeout</div>
+                                    <div class="setting-description">Automatically log out after inactivity</div>
+                                </div>
+                                <div class="setting-control">
+                                    <select class="form-select" style="width: 150px;">
+                                        <option>15 minutes</option>
+                                        <option selected>30 minutes</option>
+                                        <option>1 hour</option>
+                                        <option>4 hours</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Multi-Factor Authentication</div>
+                                    <div class="setting-description">Require MFA for all users (via Azure AD)</div>
+                                </div>
+                                <div class="setting-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Audit Logging</div>
+                                    <div class="setting-description">Log all user actions and system events</div>
+                                </div>
+                                <div class="setting-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked disabled>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                    <div style="font-size: 11px; color: #6C757D; margin-top: 4px;">Required - Cannot disable</div>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">IP Allowlist</div>
+                                    <div class="setting-description">Restrict access to specific IP ranges</div>
+                                </div>
+                                <div class="setting-control">
+                                    <button class="btn btn-secondary btn-sm">Configure</button>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">API Rate Limiting</div>
+                                    <div class="setting-description">Limit API requests per minute</div>
+                                </div>
+                                <div class="setting-control">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <input type="number" class="form-input" style="width: 80px;" value="100">
+                                        <span>/min</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data & Retention -->
+                        <div class="settings-section" id="data">
+                            <h2>💾 Data & Retention</h2>
+                            <p>Configure data storage and retention policies.</p>
+                            
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Scan Results Retention</div>
+                                    <div class="setting-description">Keep scan results for this duration</div>
+                                </div>
+                                <div class="setting-control">
+                                    <select class="form-select" style="width: 150px;">
+                                        <option>30 days</option>
+                                        <option>90 days</option>
+                                        <option>6 months</option>
+                                        <option selected>1 year</option>
+                                        <option>2 years</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Audit Log Retention</div>
+                                    <div class="setting-description">Keep audit logs for compliance</div>
+                                </div>
+                                <div class="setting-control">
+                                    <select class="form-select" style="width: 150px;">
+                                        <option>1 year</option>
+                                        <option selected>2 years</option>
+                                        <option>5 years</option>
+                                        <option>7 years</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Action History Retention</div>
+                                    <div class="setting-description">Keep action execution history</div>
+                                </div>
+                                <div class="setting-control">
+                                    <select class="form-select" style="width: 150px;">
+                                        <option>6 months</option>
+                                        <option selected>1 year</option>
+                                        <option>2 years</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <div class="setting-label">Database Size</div>
+                                    <div class="setting-description">Current application database usage</div>
+                                </div>
+                                <div class="setting-control">
+                                    <div style="text-align: right;">
+                                        <div style="font-weight: 600;">2.4 GB</div>
+                                        <div style="font-size: 12px; color: #6C757D;">of 50 GB allocated</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 16px; display: flex; gap: 8px;">
+                                <button class="btn btn-secondary">
+                                    <span>📤</span> Export All Data
+                                </button>
+                                <button class="btn btn-secondary">
+                                    <span>🗑️</span> Purge Old Data
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- About -->
+                        <div class="settings-section" id="about">
+                            <h2>ℹ️ About</h2>
+                            <p>Application information and version details.</p>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                <div style="background: #F8F9FA; padding: 16px; border-radius: 8px;">
+                                    <div style="color: #6C757D; font-size: 12px; margin-bottom: 4px;">Application</div>
+                                    <div style="font-weight: 600;">IT Operations AI Agent (ITOA)</div>
+                                </div>
+                                <div style="background: #F8F9FA; padding: 16px; border-radius: 8px;">
+                                    <div style="color: #6C757D; font-size: 12px; margin-bottom: 4px;">Version</div>
+                                    <div style="font-weight: 600;">1.0.0</div>
+                                </div>
+                                <div style="background: #F8F9FA; padding: 16px; border-radius: 8px;">
+                                    <div style="color: #6C757D; font-size: 12px; margin-bottom: 4px;">Build Date</div>
+                                    <div style="font-weight: 600;">January 31, 2026</div>
+                                </div>
+                                <div style="background: #F8F9FA; padding: 16px; border-radius: 8px;">
+                                    <div style="color: #6C757D; font-size: 12px; margin-bottom: 4px;">Environment</div>
+                                    <div style="font-weight: 600;">Production</div>
+                                </div>
+                                <div style="background: #F8F9FA; padding: 16px; border-radius: 8px;">
+                                    <div style="color: #6C757D; font-size: 12px; margin-bottom: 4px;">Backend API</div>
+                                    <div style="font-weight: 600;">https://itoa-api.corp.local</div>
+                                </div>
+                                <div style="background: #F8F9FA; padding: 16px; border-radius: 8px;">
+                                    <div style="color: #6C757D; font-size: 12px; margin-bottom: 4px;">License</div>
+                                    <div style="font-weight: 600;">Enterprise (500 users)</div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #DEE2E6;">
+                                <h3 style="margin: 0 0 12px 0;">System Health</h3>
+                                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+                                    <div style="text-align: center; padding: 12px; background: #D4EDDA; border-radius: 8px;">
+                                        <div style="font-size: 20px;">✓</div>
+                                        <div style="font-size: 12px; color: #155724;">API Server</div>
+                                    </div>
+                                    <div style="text-align: center; padding: 12px; background: #D4EDDA; border-radius: 8px;">
+                                        <div style="font-size: 20px;">✓</div>
+                                        <div style="font-size: 12px; color: #155724;">Database</div>
+                                    </div>
+                                    <div style="text-align: center; padding: 12px; background: #D4EDDA; border-radius: 8px;">
+                                        <div style="font-size: 20px;">✓</div>
+                                        <div style="font-size: 12px; color: #155724;">Redis Cache</div>
+                                    </div>
+                                    <div style="text-align: center; padding: 12px; background: #D4EDDA; border-radius: 8px;">
+                                        <div style="font-size: 20px;">✓</div>
+                                        <div style="font-size: 12px; color: #155724;">Worker Queue</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 24px; display: flex; gap: 8px;">
+                                <button class="btn btn-secondary">
+                                    <span>📋</span> View Changelog
+                                </button>
+                                <button class="btn btn-secondary">
+                                    <span>📖</span> Documentation
+                                </button>
+                                <button class="btn btn-secondary">
+                                    <span>🐛</span> Report Issue
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Save Button -->
+                        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+                            <button class="btn btn-secondary">Reset to Defaults</button>
+                            <button class="btn btn-success btn-lg">
+                                <span>✓</span> Save All Settings
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'b') {
+                e.preventDefault();
+                toggleSidebar();
+            }
+        });
+    </script>
+</body>
+</html>

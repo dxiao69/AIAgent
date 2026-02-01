@@ -1,0 +1,210 @@
+[
+  {
+    "test_id": "AR-001",
+    "category": "action_recommendation",
+    "description": "Low disk space - notification and collection",
+    "input": {
+      "text": "523 devices found with low disk space (less than 10GB)",
+      "context": {
+        "rule_category": "disk_space",
+        "device_count": 523,
+        "severity": "warning",
+        "entity_type": "devices"
+      }
+    },
+    "expected_output": {
+      "recommended_actions": [
+        {
+          "action_type": "send_email_notification",
+          "priority": 1,
+          "risk_level": "low",
+          "rationale": "Notify device owners to free up disk space"
+        },
+        {
+          "action_type": "create_mecm_collection",
+          "priority": 2,
+          "risk_level": "medium",
+          "rationale": "Group devices for potential remediation deployment"
+        }
+      ]
+    },
+    "evaluation_mode": "partial",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "easy",
+      "tags": ["disk_space", "notification", "collection"]
+    }
+  },
+  {
+    "test_id": "AR-002",
+    "category": "action_recommendation",
+    "description": "EOL hardware - high priority actions",
+    "input": {
+      "text": "312 devices reaching end of life within 3 months",
+      "context": {
+        "rule_category": "eol",
+        "device_count": 312,
+        "severity": "critical",
+        "entity_type": "devices",
+        "time_to_eol_months": 3
+      }
+    },
+    "expected_output": {
+      "recommended_actions": [
+        {
+          "action_type": "send_email_notification",
+          "priority": 1,
+          "risk_level": "low",
+          "rationale": "Alert device owners of upcoming EOL"
+        },
+        {
+          "action_type": "create_servicenow_ticket",
+          "priority": 2,
+          "risk_level": "low",
+          "rationale": "Create change request for hardware refresh"
+        },
+        {
+          "action_type": "create_mecm_collection",
+          "priority": 3,
+          "risk_level": "medium",
+          "rationale": "Group for asset management tracking"
+        }
+      ]
+    },
+    "evaluation_mode": "partial",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "medium",
+      "tags": ["eol", "critical", "multi_action"]
+    }
+  },
+  {
+    "test_id": "AR-003",
+    "category": "action_recommendation",
+    "description": "Vulnerable applications - app owner notification",
+    "input": {
+      "text": "45 applications with critical CVEs affecting 1,200 devices",
+      "context": {
+        "rule_category": "vulnerability",
+        "app_count": 45,
+        "device_count": 1200,
+        "severity": "critical",
+        "entity_type": "applications",
+        "has_critical_cve": true
+      }
+    },
+    "expected_output": {
+      "recommended_actions": [
+        {
+          "action_type": "send_email_notification",
+          "priority": 1,
+          "risk_level": "low",
+          "target": "app_owners",
+          "rationale": "Notify application owners of vulnerabilities"
+        },
+        {
+          "action_type": "create_servicenow_ticket",
+          "priority": 2,
+          "risk_level": "low",
+          "rationale": "Create security incident for tracking"
+        }
+      ]
+    },
+    "evaluation_mode": "partial",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "medium",
+      "tags": ["vulnerability", "cve", "app_owner"]
+    }
+  },
+  {
+    "test_id": "AR-004",
+    "category": "action_recommendation",
+    "description": "Inactive devices - cleanup suggestion",
+    "input": {
+      "text": "89 devices not seen in over 90 days",
+      "context": {
+        "rule_category": "inactivity",
+        "device_count": 89,
+        "severity": "info",
+        "entity_type": "devices",
+        "inactive_days": 90
+      }
+    },
+    "expected_output": {
+      "recommended_actions": [
+        {
+          "action_type": "send_email_notification",
+          "priority": 1,
+          "risk_level": "low",
+          "rationale": "Verify if devices are still in use"
+        },
+        {
+          "action_type": "create_mecm_collection",
+          "priority": 2,
+          "risk_level": "medium",
+          "rationale": "Group for potential decommissioning"
+        }
+      ]
+    },
+    "evaluation_mode": "partial",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "easy",
+      "tags": ["inactivity", "cleanup"]
+    }
+  },
+  {
+    "test_id": "AR-005",
+    "category": "action_recommendation",
+    "description": "Critical remediation - high risk action",
+    "input": {
+      "text": "15 servers with critical disk space (less than 1GB)",
+      "context": {
+        "rule_category": "disk_space",
+        "device_count": 15,
+        "severity": "critical",
+        "entity_type": "devices",
+        "device_type": "server",
+        "disk_free_gb": 1
+      }
+    },
+    "expected_output": {
+      "recommended_actions": [
+        {
+          "action_type": "send_email_notification",
+          "priority": 1,
+          "risk_level": "low",
+          "urgency": "immediate",
+          "rationale": "Immediate alert to server admins"
+        },
+        {
+          "action_type": "run_tachyon_script",
+          "priority": 2,
+          "risk_level": "high",
+          "script": "disk_cleanup",
+          "rationale": "Run automated disk cleanup",
+          "requires_approval": true
+        },
+        {
+          "action_type": "create_servicenow_ticket",
+          "priority": 3,
+          "risk_level": "low",
+          "ticket_type": "incident",
+          "rationale": "Create P2 incident for tracking"
+        }
+      ]
+    },
+    "evaluation_mode": "partial",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "hard",
+      "tags": ["critical", "server", "remediation", "high_risk"]
+    }
+  }
+]

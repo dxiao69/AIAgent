@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITOA Agent - Demo Navigation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: #a0a0a0;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #00d4ff;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .demo-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+
+        .demo-card:hover {
+            transform: translateY(-5px);
+            border-color: #00d4ff;
+            box-shadow: 0 15px 30px rgba(0, 212, 255, 0.2);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .demo-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .demo-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #00d4ff;
+        }
+
+        .demo-card p {
+            color: #a0a0a0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .demo-card .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-top: 15px;
+        }
+
+        .badge-primary {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+        }
+
+        .badge-wizard {
+            background: rgba(123, 44, 191, 0.2);
+            color: #b57edc;
+        }
+
+        .badge-action {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+
+        .start-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #7b2cbf 0%, #00d4ff 100%);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            margin-bottom: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(123, 44, 191, 0.4);
+        }
+
+        .demo-path {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .demo-path h3 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+        }
+
+        .path-steps {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .path-step {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .path-step:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .path-arrow {
+            color: #7b2cbf;
+            font-size: 1.2rem;
+        }
+
+        .tip-box {
+            background: rgba(123, 44, 191, 0.1);
+            border: 1px solid rgba(123, 44, 191, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .tip-box h4 {
+            color: #b57edc;
+            margin-bottom: 10px;
+        }
+
+        .tip-box p {
+            color: #a0a0a0;
+            font-size: 0.95rem;
+        }
+
+        .tip-box code {
+            background: rgba(255,255,255,0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 ITOA Agent Demo Hub</h1>
+        <p class="subtitle">Interactive mockups for the IT Operations AI Agent</p>
+
+        <a href="index.html" class="start-btn">
+            📊 Start Presentation →
+        </a>
+
+        <div class="demo-path">
+            <h3>📍 Recommended Demo Path</h3>
+            <div class="path-steps">
+                <a href="index.html" class="path-step">1. Presentation</a>
+                <span class="path-arrow">→</span>
+                <a href="../mockups/02_dashboard.html" class="path-step">2. Dashboard</a>
+                <span class="path-arrow">→</span>
+                <a href="../mockups/05_wizard_step1.html" class="path-step">3. Rule Wizard</a>
+                <span class="path-arrow">→</span>
+                <a href="../mockups/04_scan_results.html" class="path-step">4. Scan Results</a>
+                <span class="path-arrow">→</span>
+                <a href="../mockups/06_approvals.html" class="path-step">5. Actions</a>
+                <span class="path-arrow">→</span>
+                <a href="index.html" class="path-step">6. Q&A</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Main Screens</h2>
+            <div class="demo-grid">
+                <a href="../mockups/02_dashboard.html" class="demo-card">
+                    <div class="icon">📊</div>
+                    <h3>Dashboard</h3>
+                    <p>Executive overview with fleet health, activity feed, and quick actions.</p>
+                    <span class="badge badge-primary">Start Here</span>
+                </a>
+                <a href="../mockups/03_rules.html" class="demo-card">
+                    <div class="icon">📋</div>
+                    <h3>Rules List</h3>
+                    <p>View and manage all defined rules with status indicators.</p>
+                    <span class="badge badge-primary">Core</span>
+                </a>
+                <a href="../mockups/05_rule_builder.html" class="demo-card">
+                    <div class="icon">🛠️</div>
+                    <h3>Visual Rule Builder</h3>
+                    <p>Traditional form-based rule creation interface.</p>
+                    <span class="badge badge-primary">Core</span>
+                </a>
+                <a href="../mockups/04_scan_results.html" class="demo-card">
+                    <div class="icon">🔍</div>
+                    <h3>Scan Results</h3>
+                    <p>View matched devices with filtering, AI insights, and export.</p>
+                    <span class="badge badge-primary">Core</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🧙 Rule Builder Wizard (4 Steps)</h2>
+            <div class="demo-grid">
+                <a href="../mockups/05_wizard_step1.html" class="demo-card">
+                    <div class="icon">1️⃣</div>
+                    <h3>Step 1: Define Rule</h3>
+                    <p>Name, category, entity type selection, and quick-start templates.</p>
+                    <span class="badge badge-wizard">Wizard</span>
+                </a>
+                <a href="../mockups/05_wizard_step2.html" class="demo-card">
+                    <div class="icon">2️⃣</div>
+                    <h3>Step 2: Set Conditions</h3>
+                    <p>Natural language input with AI interpretation preview.</p>
+                    <span class="badge badge-wizard">Wizard</span>
+                </a>
+                <a href="../mockups/05_wizard_step3.html" class="demo-card">
+                    <div class="icon">3️⃣</div>
+                    <h3>Step 3: Choose Actions</h3>
+                    <p>AI-recommended actions with risk badges and parameters.</p>
+                    <span class="badge badge-wizard">Wizard</span>
+                </a>
+                <a href="../mockups/05_wizard_step4.html" class="demo-card">
+                    <div class="icon">4️⃣</div>
+                    <h3>Step 4: Test & Activate</h3>
+                    <p>Summary, dry run preview, and activation options.</p>
+                    <span class="badge badge-wizard">Wizard</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚡ Actions & Workflows</h2>
+            <div class="demo-grid">
+                <a href="../mockups/06_approvals.html" class="demo-card">
+                    <div class="icon">⚡</div>
+                    <h3>Actions Queue</h3>
+                    <p>View pending, completed, and failed actions with status tracking.</p>
+                    <span class="badge badge-action">Actions</span>
+                </a>
+                <a href="../mockups/07_action_definitions.html" class="demo-card">
+                    <div class="icon">💻</div>
+                    <h3>Action Definitions</h3>
+                    <p>Define and configure action templates.</p>
+                    <span class="badge badge-primary">Detail</span>
+                </a>
+                <a href="../mockups/08_action_test.html" class="demo-card">
+                    <div class="icon">✅</div>
+                    <h3>Action Testing</h3>
+                    <p>Test actions before execution with preview.</p>
+                    <span class="badge badge-action">Actions</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚙️ Administration</h2>
+            <div class="demo-grid">
+                <a href="../mockups/09_settings.html" class="demo-card">
+                    <div class="icon">⚙️</div>
+                    <h3>Settings</h3>
+                    <p>System configuration, integrations, and user management.</p>
+                    <span class="badge badge-primary">Admin</span>
+                </a>
+                <a href="../mockups/10_logs.html" class="demo-card">
+                    <div class="icon">📜</div>
+                    <h3>Audit Logs</h3>
+                    <p>Complete activity log with filtering and export capabilities.</p>
+                    <span class="badge badge-primary">Admin</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="tip-box">
+            <h4>💡 Demo Tips</h4>
+            <p>
+                • Use <code>F11</code> for fullscreen browser mode<br>
+                • In the presentation, press <code>F</code> for fullscreen slides<br>
+                • Use <code>←</code> <code>→</code> arrow keys to navigate slides<br>
+                • Click the navigation links in mockups to move between screens<br>
+                • Each mockup has a sidebar for quick navigation
+            </p>
+        </div>
+    </div>
+</body>
+</html>

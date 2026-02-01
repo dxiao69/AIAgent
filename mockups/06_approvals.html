@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Action Approvals - IT Operations AI Agent</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="icon">🤖</span>
+                    <span>ITOA Agent</span>
+                </div>
+            </div>
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar (Ctrl+B)">◀</button>
+            <nav class="sidebar-nav">
+                <a href="02_dashboard.html" class="nav-item">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="03_rules.html" class="nav-item">
+                    <span class="icon">📋</span>
+                    <span>Rules</span>
+                </a>
+                <a href="04_scan_results.html" class="nav-item">
+                    <span class="icon">🔍</span>
+                    <span>Scan Results</span>
+                </a>
+                <a href="06_approvals.html" class="nav-item active">
+                    <span class="icon">⚡</span>
+                    <span>Actions</span>
+                    <span class="badge">5</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">📈</span>
+                    <span>Reports</span>
+                </a>
+                <a href="07_action_definitions.html" class="nav-item">
+                    <span class="icon">🔧</span>
+                    <span>Action Definitions</span>
+                </a>
+                <a href="10_logs.html" class="nav-item">
+                    <span class="icon">📜</span>
+                    <span>Logs</span>
+                </a>
+                <a href="09_settings.html" class="nav-item">
+                    <span class="icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Header -->
+            <header class="header">
+                <div>
+                    <nav class="breadcrumb" aria-label="Breadcrumb">
+                        <a href="02_dashboard.html">Home</a> &gt; <span>Approvals</span>
+                    </nav>
+                    <h1 class="header-title">Action Approvals</h1>
+                </div>
+                <div class="header-actions">
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-secondary btn-sm active" style="background: #E3F2FD;">Pending (5)</button>
+                        <button class="btn btn-secondary btn-sm">Approved</button>
+                        <button class="btn btn-secondary btn-sm">Rejected</button>
+                        <button class="btn btn-secondary btn-sm">All</button>
+                    </div>
+                    <div class="user-menu">
+                        <div class="user-avatar">JD</div>
+                        <span>John Doe</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Info Banner -->
+                <div style="background: #FFF3CD; border: 1px solid #FFECB5; border-radius: 8px; padding: 16px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 24px;">🔒</span>
+                    <div>
+                        <strong>Safety First:</strong> All actions require approval before execution. You cannot approve actions you requested yourself.
+                        <div style="font-size: 12px; color: #6C757D; margin-top: 4px;">Your role: <strong>Approver</strong> • Pending requests will expire in 7 days</div>
+                    </div>
+                </div>
+
+                <!-- Pending Approval 1 - Detailed -->
+                <div class="approval-card">
+                    <div class="approval-header">
+                        <span class="icon">⚠️</span>
+                        <div>
+                            <h3 style="margin: 0;">Action Request #AR-2026-0142</h3>
+                            <span style="font-size: 12px; color: #6C757D;">Submitted 2 hours ago</span>
+                        </div>
+                        <span class="status-badge pending" style="margin-left: auto;">⏳ Pending Approval</span>
+                    </div>
+
+                    <div class="approval-meta">
+                        <div class="approval-meta-item">
+                            <span class="approval-meta-label">Action Type</span>
+                            <span class="approval-meta-value">📦 Create MECM Collection + Deployment</span>
+                        </div>
+                        <div class="approval-meta-item">
+                            <span class="approval-meta-label">Requested By</span>
+                            <span class="approval-meta-value">jane.smith@company.com</span>
+                        </div>
+                        <div class="approval-meta-item">
+                            <span class="approval-meta-label">Source Rule</span>
+                            <span class="approval-meta-value">Low Disk Space - Inactive Devices</span>
+                        </div>
+                        <div class="approval-meta-item">
+                            <span class="approval-meta-label">Expires</span>
+                            <span class="approval-meta-value">Feb 7, 2026 (6 days remaining)</span>
+                        </div>
+                    </div>
+
+                    <div style="background: white; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+                        <h4 style="margin: 0 0 12px 0;">📋 Action Summary</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #495057;">
+                            <li>Create MECM Collection: <strong>"Finance_DiskCleanup_2026-01"</strong></li>
+                            <li>Add <strong>120 devices</strong> from Finance department</li>
+                            <li>Deploy: <strong>Disk Cleanup Script v2.1</strong></li>
+                            <li>Schedule: <strong>Immediate (after approval)</strong></li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="margin: 0 0 12px 0;">💻 Device Preview (showing 5 of 120)</h4>
+                        <div class="approval-devices">
+                            <div class="approval-device-item">
+                                <div>
+                                    <strong>WS-NYC-12345</strong>
+                                    <span style="color: #6C757D; margin-left: 8px;">john.doe@company.com</span>
+                                </div>
+                                <div>
+                                    <span style="color: #DC3545;">5.2 GB free</span>
+                                    <span style="color: #6C757D; margin-left: 16px;">45 days inactive</span>
+                                </div>
+                            </div>
+                            <div class="approval-device-item">
+                                <div>
+                                    <strong>WS-NYC-12346</strong>
+                                    <span style="color: #6C757D; margin-left: 8px;">jane.smith@company.com</span>
+                                </div>
+                                <div>
+                                    <span style="color: #DC3545;">3.1 GB free</span>
+                                    <span style="color: #6C757D; margin-left: 16px;">32 days inactive</span>
+                                </div>
+                            </div>
+                            <div class="approval-device-item">
+                                <div>
+                                    <strong>WS-NYC-12347</strong>
+                                    <span style="color: #6C757D; margin-left: 8px;">mike.brown@company.com</span>
+                                </div>
+                                <div>
+                                    <span style="color: #FFC107;">8.5 GB free</span>
+                                    <span style="color: #6C757D; margin-left: 16px;">29 days inactive</span>
+                                </div>
+                            </div>
+                            <div class="approval-device-item">
+                                <div>
+                                    <strong>WS-NYC-12348</strong>
+                                    <span style="color: #6C757D; margin-left: 8px;">sarah.connor@company.com</span>
+                                </div>
+                                <div>
+                                    <span style="color: #DC3545;">2.8 GB free</span>
+                                    <span style="color: #6C757D; margin-left: 16px;">38 days inactive</span>
+                                </div>
+                            </div>
+                            <div class="approval-device-item">
+                                <div>
+                                    <strong>WS-NYC-12349</strong>
+                                    <span style="color: #6C757D; margin-left: 8px;">tom.wilson@company.com</span>
+                                </div>
+                                <div>
+                                    <span style="color: #FFC107;">7.2 GB free</span>
+                                    <span style="color: #6C757D; margin-left: 16px;">30 days inactive</span>
+                                </div>
+                            </div>
+                            <div style="text-align: center; padding: 8px; color: #6C757D; font-size: 14px;">
+                                ... and 115 more devices
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: white; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+                        <h4 style="margin: 0 0 8px 0;">💬 Notes from Requestor</h4>
+                        <p style="margin: 0; color: #495057; font-style: italic;">
+                            "Routine cleanup for Finance devices with low disk space. These devices have been identified as having critically low storage that may impact patch distribution. The cleanup script will remove temp files and clear Windows Update cache."
+                        </p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Approver Comments (optional)</label>
+                        <textarea class="form-input" rows="2" placeholder="Add any comments or conditions for this approval..."></textarea>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <button class="btn btn-secondary">
+                            <span>👁️</span> View All 120 Devices
+                        </button>
+                        <div style="display: flex; gap: 12px;">
+                            <button class="btn btn-danger btn-lg">
+                                <span>✗</span> Reject
+                            </button>
+                            <button class="btn btn-success btn-lg">
+                                <span>✓</span> Approve & Execute
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Approval 2 - Compact -->
+                <div class="card" style="border-left: 4px solid #FFC107;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <h3 style="margin: 0 0 4px 0;">#AR-2026-0141 • 📧 Send User Notifications</h3>
+                            <span style="color: #6C757D; font-size: 14px;">
+                                147 devices • Requested by bob.wilson@company.com • 4 hours ago
+                            </span>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary btn-sm">View Details</button>
+                            <button class="btn btn-danger btn-sm">Reject</button>
+                            <button class="btn btn-success btn-sm">Approve</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Approval 3 - Compact -->
+                <div class="card" style="border-left: 4px solid #FFC107;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <h3 style="margin: 0 0 4px 0;">#AR-2026-0140 • 🎫 Create ServiceNow Incident</h3>
+                            <span style="color: #6C757D; font-size: 14px;">
+                                87 devices (EOL within 6 months) • Requested by alice.jones@company.com • 1 day ago
+                            </span>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary btn-sm">View Details</button>
+                            <button class="btn btn-danger btn-sm">Reject</button>
+                            <button class="btn btn-success btn-sm">Approve</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Approval 4 - Compact -->
+                <div class="card" style="border-left: 4px solid #FFC107;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <h3 style="margin: 0 0 4px 0;">#AR-2026-0139 • ⚡ Run Tachyon Disk Cleanup</h3>
+                            <span style="color: #6C757D; font-size: 14px;">
+                                256 devices (Engineering) • Requested by jane.smith@company.com • 2 days ago
+                            </span>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary btn-sm">View Details</button>
+                            <button class="btn btn-danger btn-sm">Reject</button>
+                            <button class="btn btn-success btn-sm">Approve</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Approval 5 - Compact -->
+                <div class="card" style="border-left: 4px solid #FFC107;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <h3 style="margin: 0 0 4px 0;">#AR-2026-0138 • 📦 Create Patch Deployment</h3>
+                            <span style="color: #6C757D; font-size: 14px;">
+                                245 devices (Missing critical patches) • Requested by david.lee@company.com • 3 days ago
+                            </span>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary btn-sm">View Details</button>
+                            <button class="btn btn-danger btn-sm">Reject</button>
+                            <button class="btn btn-success btn-sm">Approve</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recently Completed Section -->
+                <h2 style="margin-top: 32px; margin-bottom: 16px; color: #6C757D;">Recently Completed</h2>
+                
+                <div class="card" style="border-left: 4px solid #28A745; opacity: 0.8;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <h3 style="margin: 0 0 4px 0;">#AR-2026-0137 • 📧 Send User Notifications</h3>
+                            <span style="color: #6C757D; font-size: 14px;">
+                                45 users notified • Approved by sarah.manager@company.com • Completed 2 hours ago
+                            </span>
+                        </div>
+                        <span class="status-badge active">✓ Completed</span>
+                    </div>
+                </div>
+
+                <div class="card" style="border-left: 4px solid #DC3545; opacity: 0.8;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <h3 style="margin: 0 0 4px 0;">#AR-2026-0136 • 📦 Create MECM Collection</h3>
+                            <span style="color: #6C757D; font-size: 14px;">
+                                Rejected by sarah.manager@company.com • "Need more specific targeting criteria"
+                            </span>
+                        </div>
+                        <span class="status-badge error">✗ Rejected</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Confirmation Modal (shown when clicking Reject) -->
+    <div class="modal-overlay" id="rejectModal" style="display: none;">
+        <div class="modal confirm-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Confirm Rejection</h2>
+                <button class="modal-close" onclick="closeRejectModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="confirm-modal-icon warning">⚠️</div>
+                <h3 class="confirm-modal-title">Reject this action request?</h3>
+                <p class="confirm-modal-message">
+                    This will reject the email notification action for 312 EOL devices. 
+                    The requester will be notified of your decision.
+                </p>
+                <div class="form-group" style="text-align: left;">
+                    <label class="form-label">Reason for rejection (required)</label>
+                    <textarea class="form-input" rows="3" placeholder="Please provide a reason for rejecting this request..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeRejectModal()">Cancel</button>
+                <button class="btn btn-danger">Confirm Rejection</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Confirmation Modal -->
+    <div class="modal-overlay" id="successModal" style="display: none;">
+        <div class="modal confirm-modal">
+            <div class="modal-body" style="padding: 40px;">
+                <div class="confirm-modal-icon success">✅</div>
+                <h3 class="confirm-modal-title">Action Approved!</h3>
+                <p class="confirm-modal-message">
+                    The email notification will be sent to 312 device owners. 
+                    You can track the progress in the Action Logs.
+                </p>
+                <div style="margin-top: 24px;">
+                    <button class="btn btn-primary" onclick="closeSuccessModal()">Done</button>
+                    <button class="btn btn-secondary" onclick="window.location.href='10_logs.html'">View Logs</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'b') {
+                e.preventDefault();
+                toggleSidebar();
+            }
+        });
+
+        function showRejectModal() {
+            document.getElementById('rejectModal').style.display = 'flex';
+        }
+        function closeRejectModal() {
+            document.getElementById('rejectModal').style.display = 'none';
+        }
+        function showSuccessModal() {
+            document.getElementById('successModal').style.display = 'flex';
+        }
+        function closeSuccessModal() {
+            document.getElementById('successModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

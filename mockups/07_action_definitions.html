@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Action Definitions - IT Operations AI Agent</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .action-def-card {
+            background: white;
+            border: 1px solid #DEE2E6;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: box-shadow 0.2s;
+        }
+        .action-def-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .action-def-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #E9ECEF;
+        }
+        .action-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .risk-low { background: #D4EDDA; }
+        .risk-medium { background: #FFF3CD; }
+        .risk-high { background: #F8D7DA; }
+        .risk-critical { background: #DC3545; color: white; }
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .meta-item {
+            background: #F8F9FA;
+            padding: 12px;
+            border-radius: 8px;
+        }
+        .meta-label {
+            font-size: 11px;
+            color: #6C757D;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .meta-value {
+            font-weight: 500;
+            color: #212529;
+        }
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .param-table th {
+            background: #F8F9FA;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #DEE2E6;
+        }
+        .param-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #E9ECEF;
+        }
+        .param-required {
+            color: #DC3545;
+            font-weight: 600;
+        }
+        .param-optional {
+            color: #6C757D;
+        }
+        .code-block {
+            background: #1E1E1E;
+            color: #D4D4D4;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+        .code-block .key { color: #9CDCFE; }
+        .code-block .string { color: #CE9178; }
+        .code-block .number { color: #B5CEA8; }
+        .code-block .bool { color: #569CD6; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="icon">🤖</span>
+                    <span>ITOA Agent</span>
+                </div>
+            </div>
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar (Ctrl+B)">◀</button>
+            <nav class="sidebar-nav">
+                <a href="02_dashboard.html" class="nav-item">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="03_rules.html" class="nav-item">
+                    <span class="icon">📋</span>
+                    <span>Rules</span>
+                </a>
+                <a href="04_scan_results.html" class="nav-item">
+                    <span class="icon">🔍</span>
+                    <span>Scan Results</span>
+                </a>
+                <a href="06_approvals.html" class="nav-item">
+                    <span class="icon">⚡</span>
+                    <span>Actions</span>
+                    <span class="badge">5</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">📈</span>
+                    <span>Reports</span>
+                </a>
+                <a href="07_action_definitions.html" class="nav-item active">
+                    <span class="icon">🔧</span>
+                    <span>Action Definitions</span>
+                </a>
+                <a href="10_logs.html" class="nav-item">
+                    <span class="icon">📜</span>
+                    <span>Logs</span>
+                </a>
+                <a href="09_settings.html" class="nav-item">
+                    <span class="icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Header -->
+            <header class="header">
+                <div>
+                    <nav class="breadcrumb" aria-label="Breadcrumb">
+                        <a href="02_dashboard.html">Home</a> &gt; <a href="09_settings.html">Settings</a> &gt; <span>Action Definitions</span>
+                    </nav>
+                    <h1 class="header-title">Action Definitions</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary">
+                        <span>➕</span> Create New Action
+                    </button>
+                    <div class="user-menu">
+                        <div class="user-avatar">JD</div>
+                        <span>John Doe</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Info Banner -->
+                <div style="background: #E3F2FD; border: 1px solid #BBDEFB; border-radius: 8px; padding: 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 24px;">ℹ️</span>
+                    <div>
+                        <strong>Action Definitions</strong> define what automated actions can be performed by the system. Each action includes metadata about risk level, required approvals, API endpoints, and parameters.
+                        <div style="font-size: 12px; color: #6C757D; margin-top: 4px;">Only Administrators can create or modify action definitions.</div>
+                    </div>
+                </div>
+
+                <!-- Testing Requirement Banner -->
+                <div style="background: #FFF3CD; border: 1px solid #FFECB5; border-radius: 8px; padding: 16px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 24px;">🧪</span>
+                    <div>
+                        <strong>Testing Required:</strong> All actions must be tested successfully before they can be used in production rules. Use the "Test Action" button to validate connectivity, parameters, and execution in sandbox mode.
+                        <div style="font-size: 12px; color: #6C757D; margin-top: 4px;">Actions without passing tests will show <span class="status-badge" style="background: #F8D7DA; color: #721C24; font-size: 10px;">⚠️ Not Production Ready</span></div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div style="display: flex; gap: 16px; margin-bottom: 24px; align-items: center;">
+                    <input type="text" class="form-input" placeholder="Search actions..." style="max-width: 300px;">
+                    <select class="form-select" style="width: 180px;">
+                        <option value="">All Risk Levels</option>
+                        <option value="low">🟢 Low Risk</option>
+                        <option value="medium">🟡 Medium Risk</option>
+                        <option value="high">🔴 High Risk</option>
+                        <option value="critical">⚫ Critical Risk</option>
+                    </select>
+                    <select class="form-select" style="width: 180px;">
+                        <option value="">All Categories</option>
+                        <option value="notification">📧 Notification</option>
+                        <option value="mecm">📦 MECM</option>
+                        <option value="servicenow">🎫 ServiceNow</option>
+                        <option value="tachyon">⚡ 1E Tachyon</option>
+                        <option value="reporting">📊 Reporting</option>
+                    </select>
+                    <div style="margin-left: auto; color: #6C757D;">
+                        Showing <strong>7</strong> actions
+                    </div>
+                </div>
+
+                <!-- Action Definition 1: Send User Notification -->
+                <div class="action-def-card">
+                    <div class="action-def-header">
+                        <div class="action-icon risk-low">📧</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0;">Send User Notification</h3>
+                            <span style="color: #6C757D; font-size: 14px;">ACT-001 • Notification Category</span>
+                        </div>
+                        <span class="status-badge active">🟢 Low Risk</span>
+                        <span class="status-badge info">No Approval Required</span>
+                        <span class="status-badge" style="background: #D4EDDA; color: #155724;">✓ Test Passed</span>
+                        <button class="btn btn-secondary btn-sm">🧪 Test</button>
+                        <button class="btn btn-secondary btn-sm">Edit</button>
+                    </div>
+                    
+                    <div class="meta-grid">
+                        <div class="meta-item">
+                            <div class="meta-label">Description</div>
+                            <div class="meta-value">Sends email notification to device primary user with issue details and recommended actions</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Integration</div>
+                            <div class="meta-value">Internal SMTP / Microsoft Graph</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Approval Required</div>
+                            <div class="meta-value" style="color: #28A745;">No</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Test Status</div>
+                            <div class="meta-value" style="color: #28A745;">✓ Passed (Jan 30, 2026)</div>
+                        </div>
+                    </div>
+
+                    <!-- Test Results Summary -->
+                    <div style="background: #D4EDDA; border-radius: 8px; padding: 12px; margin-top: 12px; display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span style="font-size: 20px;">✅</span>
+                            <div>
+                                <div style="font-weight: 600; color: #155724;">Last Test: Passed</div>
+                                <div style="font-size: 12px; color: #155724;">Tested on Jan 30, 2026 at 3:45 PM • Test email sent to john.doe@company.com • API response: 200 OK</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm" style="background: #155724; color: white; border: none;">View Test Log</button>
+                    </div>
+
+                    <details style="margin-top: 12px;">
+                        <summary style="cursor: pointer; font-weight: 600; padding: 8px 0;">📋 View Parameters & API Details</summary>
+                        <div style="margin-top: 16px;">
+                            <h4 style="margin: 0 0 12px 0;">Parameters</h4>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                        <th>Example</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>recipient_email</code></td>
+                                        <td>string</td>
+                                        <td class="param-required">Required</td>
+                                        <td>Email address of the recipient (usually device primary user)</td>
+                                        <td><code>john.doe@company.com</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>template_id</code></td>
+                                        <td>string</td>
+                                        <td class="param-required">Required</td>
+                                        <td>ID of the email template to use</td>
+                                        <td><code>TMPL_LOW_DISK_SPACE</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>device_context</code></td>
+                                        <td>object</td>
+                                        <td class="param-required">Required</td>
+                                        <td>Device information to include in the email</td>
+                                        <td><code>{"device_name": "WS-NYC-001", ...}</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>cc_recipients</code></td>
+                                        <td>array</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>Additional CC recipients</td>
+                                        <td><code>["manager@company.com"]</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>priority</code></td>
+                                        <td>string</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>Email priority: low, normal, high</td>
+                                        <td><code>"normal"</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4 style="margin: 24px 0 12px 0;">API Endpoint</h4>
+                            <div class="code-block">
+POST /api/v1/actions/notification/email
+
+<span class="key">{</span>
+  <span class="key">"action_id"</span>: <span class="string">"ACT-001"</span>,
+  <span class="key">"recipient_email"</span>: <span class="string">"john.doe@company.com"</span>,
+  <span class="key">"template_id"</span>: <span class="string">"TMPL_LOW_DISK_SPACE"</span>,
+  <span class="key">"device_context"</span>: {
+    <span class="key">"device_name"</span>: <span class="string">"WS-NYC-12345"</span>,
+    <span class="key">"issue_type"</span>: <span class="string">"low_disk_space"</span>,
+    <span class="key">"disk_free_gb"</span>: <span class="number">5.2</span>,
+    <span class="key">"last_active_days"</span>: <span class="number">45</span>
+  },
+  <span class="key">"priority"</span>: <span class="string">"normal"</span>
+<span class="key">}</span>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Action Definition 2: Notify App Owner -->
+                <div class="action-def-card">
+                    <div class="action-def-header">
+                        <div class="action-icon risk-medium">👤</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0;">Notify App Owner</h3>
+                            <span style="color: #6C757D; font-size: 14px;">ACT-002 • Notification Category</span>
+                        </div>
+                        <span class="status-badge pending">🟡 Medium Risk</span>
+                        <span class="status-badge info">No Approval Required</span>
+                        <span class="status-badge" style="background: #D4EDDA; color: #155724;">✓ Test Passed</span>
+                        <button class="btn btn-secondary btn-sm">🧪 Test</button>
+                        <button class="btn btn-secondary btn-sm">Edit</button>
+                    </div>
+                    
+                    <div class="meta-grid">
+                        <div class="meta-item">
+                            <div class="meta-label">Description</div>
+                            <div class="meta-value">Notifies the registered application owner about affected devices in their ownership domain</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Integration</div>
+                            <div class="meta-value">CMDB Owner Lookup + SMTP</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Approval Required</div>
+                            <div class="meta-value" style="color: #28A745;">No</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Max Batch Size</div>
+                            <div class="meta-value">1000 devices</div>
+                        </div>
+                    </div>
+
+                    <details style="margin-top: 12px;">
+                        <summary style="cursor: pointer; font-weight: 600; padding: 8px 0;">📋 View Parameters & API Details</summary>
+                        <div style="margin-top: 16px;">
+                            <h4 style="margin: 0 0 12px 0;">Parameters</h4>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                        <th>Example</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>owner_id</code></td>
+                                        <td>string</td>
+                                        <td class="param-required">Required</td>
+                                        <td>CMDB owner identifier</td>
+                                        <td><code>OWN-FINANCE-001</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>app_id</code></td>
+                                        <td>string</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>Application ID if device is application-specific</td>
+                                        <td><code>APP-SAP-PROD</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>severity</code></td>
+                                        <td>string</td>
+                                        <td class="param-required">Required</td>
+                                        <td>Severity: info, warning, critical</td>
+                                        <td><code>"warning"</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>device_list</code></td>
+                                        <td>array</td>
+                                        <td class="param-required">Required</td>
+                                        <td>List of affected device IDs</td>
+                                        <td><code>["DEV-001", "DEV-002"]</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>summary_report</code></td>
+                                        <td>boolean</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>Include aggregated summary instead of device list</td>
+                                        <td><code>true</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4 style="margin: 24px 0 12px 0;">API Endpoint</h4>
+                            <div class="code-block">
+POST /api/v1/actions/notification/owner
+
+<span class="key">{</span>
+  <span class="key">"action_id"</span>: <span class="string">"ACT-002"</span>,
+  <span class="key">"owner_id"</span>: <span class="string">"OWN-FINANCE-001"</span>,
+  <span class="key">"severity"</span>: <span class="string">"warning"</span>,
+  <span class="key">"device_list"</span>: [<span class="string">"DEV-001"</span>, <span class="string">"DEV-002"</span>, <span class="string">"DEV-003"</span>],
+  <span class="key">"summary_report"</span>: <span class="bool">false</span>
+<span class="key">}</span>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Action Definition 3: Create MECM Collection -->
+                <div class="action-def-card" style="border-left: 4px solid #DC3545;">
+                    <div class="action-def-header">
+                        <div class="action-icon risk-high">📦</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0;">Create MECM Collection</h3>
+                            <span style="color: #6C757D; font-size: 14px;">ACT-003 • MECM Category</span>
+                        </div>
+                        <span class="status-badge error">🔴 High Risk</span>
+                        <span class="status-badge pending">Approval Required</span>
+                        <span class="status-badge" style="background: #F8D7DA; color: #721C24;">⚠️ Not Tested</span>
+                        <button class="btn btn-primary btn-sm">🧪 Test Now</button>
+                        <button class="btn btn-secondary btn-sm">Edit</button>
+                    </div>
+                    
+                    <div class="meta-grid">
+                        <div class="meta-item">
+                            <div class="meta-label">Description</div>
+                            <div class="meta-value">Creates a device collection in MECM with matched devices for software deployment or policy application</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Integration</div>
+                            <div class="meta-value">MECM Admin SDK / WMI</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Approval Required</div>
+                            <div class="meta-value" style="color: #DC3545;"><strong>Yes</strong> - Modifies infrastructure</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Test Status</div>
+                            <div class="meta-value" style="color: #DC3545;">⚠️ Never Tested</div>
+                        </div>
+                    </div>
+
+                    <!-- Not Tested Warning -->
+                    <div style="background: #F8D7DA; border-radius: 8px; padding: 12px; margin-top: 12px; display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span style="font-size: 20px;">🚫</span>
+                            <div>
+                                <div style="font-weight: 600; color: #721C24;">Not Production Ready</div>
+                                <div style="font-size: 12px; color: #721C24;">This action must be tested before it can be used in production rules. Click "Test Now" to validate connectivity and configuration.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: #FFF3CD; border-radius: 8px; padding: 12px; margin-top: 12px; display: flex; align-items: center; gap: 8px;">
+                        <span>⚠️</span>
+                        <span><strong>Risk Notice:</strong> This action creates collections in production MECM. Collections can be targeted by deployments. Requires Approver role.</span>
+                    </div>
+
+                    <details style="margin-top: 12px;">
+                        <summary style="cursor: pointer; font-weight: 600; padding: 8px 0;">📋 View Parameters & API Details</summary>
+                        <div style="margin-top: 16px;">
+                            <h4 style="margin: 0 0 12px 0;">Parameters</h4>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                        <th>Example</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>collection_name</code></td>
+                                        <td>string</td>
+                                        <td class="param-required">Required</td>
+                                        <td>Name for the new collection (supports templates)</td>
+                                        <td><code>ITOA_Finance_LowDisk_2026-01</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>limiting_collection</code></td>
+                                        <td>string</td>
+                                        <td class="param-required">Required</td>
+                                        <td>Parent collection to limit scope</td>
+                                        <td><code>All Workstations</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>device_ids</code></td>
+                                        <td>array</td>
+                                        <td class="param-required">Required</td>
+                                        <td>List of MECM Resource IDs to include</td>
+                                        <td><code>[16777219, 16777220]</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>refresh_schedule</code></td>
+                                        <td>string</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>Collection refresh: none, daily, weekly</td>
+                                        <td><code>"none"</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>folder_path</code></td>
+                                        <td>string</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>MECM console folder path</td>
+                                        <td><code>ITOA/Automated</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>comment</code></td>
+                                        <td>string</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>Collection description/comment</td>
+                                        <td><code>"Created by ITOA Rule #R-001"</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4 style="margin: 24px 0 12px 0;">API Endpoint</h4>
+                            <div class="code-block">
+POST /api/v1/actions/mecm/collections
+
+<span class="key">{</span>
+  <span class="key">"action_id"</span>: <span class="string">"ACT-003"</span>,
+  <span class="key">"collection_name"</span>: <span class="string">"ITOA_Finance_LowDisk_2026-01"</span>,
+  <span class="key">"limiting_collection"</span>: <span class="string">"All Workstations"</span>,
+  <span class="key">"device_ids"</span>: [<span class="number">16777219</span>, <span class="number">16777220</span>, <span class="number">16777221</span>],
+  <span class="key">"refresh_schedule"</span>: <span class="string">"none"</span>,
+  <span class="key">"folder_path"</span>: <span class="string">"ITOA/Automated"</span>,
+  <span class="key">"comment"</span>: <span class="string">"Created by ITOA Rule #R-001 on 2026-01-31"</span>
+<span class="key">}</span>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Action Definition 4: Create ServiceNow Incident -->
+                <div class="action-def-card" style="border-left: 4px solid #DC3545;">
+                    <div class="action-def-header">
+                        <div class="action-icon risk-high">🎫</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0;">Create ServiceNow Incident</h3>
+                            <span style="color: #6C757D; font-size: 14px;">ACT-004 • ServiceNow Category</span>
+                        </div>
+                        <span class="status-badge error">🔴 High Risk</span>
+                        <span class="status-badge pending">Approval Required</span>
+                        <button class="btn btn-secondary btn-sm">Edit</button>
+                    </div>
+                    
+                    <div class="meta-grid">
+                        <div class="meta-item">
+                            <div class="meta-label">Description</div>
+                            <div class="meta-value">Creates an incident ticket in ServiceNow for tracking and assignment to appropriate teams</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Integration</div>
+                            <div class="meta-value">ServiceNow REST API</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Approval Required</div>
+                            <div class="meta-value" style="color: #DC3545;"><strong>Yes</strong> - Creates tickets</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Max Batch Size</div>
+                            <div class="meta-value">100 incidents</div>
+                        </div>
+                    </div>
+
+                    <details style="margin-top: 12px;">
+                        <summary style="cursor: pointer; font-weight: 600; padding: 8px 0;">📋 View Parameters & API Details</summary>
+                        <div style="margin-top: 16px;">
+                            <h4 style="margin: 0 0 12px 0;">Parameters</h4>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                        <th>Example</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>short_description</code></td>
+                                        <td>string</td>
+                                        <td class="param-required">Required</td>
+                                        <td>Incident title/short description</td>
+                                        <td><code>"EOL devices requiring replacement"</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>description</code></td>
+                                        <td>string</td>
+                                        <td class="param-required">Required</td>
+                                        <td>Full incident description</td>
+                                        <td><code>"87 devices reaching EOL..."</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>assignment_group</code></td>
+                                        <td>string</td>
+                                        <td class="param-required">Required</td>
+                                        <td>ServiceNow assignment group</td>
+                                        <td><code>"Desktop Support"</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>urgency</code></td>
+                                        <td>integer</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>1=High, 2=Medium, 3=Low</td>
+                                        <td><code>2</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>impact</code></td>
+                                        <td>integer</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>1=High, 2=Medium, 3=Low</td>
+                                        <td><code>2</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>category</code></td>
+                                        <td>string</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>Incident category</td>
+                                        <td><code>"Hardware"</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>affected_cis</code></td>
+                                        <td>array</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>Related configuration items</td>
+                                        <td><code>["CI001", "CI002"]</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4 style="margin: 24px 0 12px 0;">API Endpoint</h4>
+                            <div class="code-block">
+POST /api/v1/actions/servicenow/incident
+
+<span class="key">{</span>
+  <span class="key">"action_id"</span>: <span class="string">"ACT-004"</span>,
+  <span class="key">"short_description"</span>: <span class="string">"EOL devices requiring replacement - Finance Dept"</span>,
+  <span class="key">"description"</span>: <span class="string">"87 devices in Finance department are reaching End of Life within 6 months. See attached device list for details."</span>,
+  <span class="key">"assignment_group"</span>: <span class="string">"Desktop Support"</span>,
+  <span class="key">"urgency"</span>: <span class="number">2</span>,
+  <span class="key">"impact"</span>: <span class="number">2</span>,
+  <span class="key">"category"</span>: <span class="string">"Hardware"</span>
+<span class="key">}</span>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Action Definition 5: Run Tachyon Action -->
+                <div class="action-def-card" style="border-left: 4px solid #DC3545;">
+                    <div class="action-def-header">
+                        <div class="action-icon risk-critical">⚡</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0;">Run 1E Tachyon Action</h3>
+                            <span style="color: #6C757D; font-size: 14px;">ACT-005 • 1E Tachyon Category</span>
+                        </div>
+                        <span class="status-badge" style="background: #DC3545; color: white;">⚫ Critical Risk</span>
+                        <span class="status-badge pending">Approval Required</span>
+                        <button class="btn btn-secondary btn-sm">Edit</button>
+                    </div>
+                    
+                    <div class="meta-grid">
+                        <div class="meta-item">
+                            <div class="meta-label">Description</div>
+                            <div class="meta-value">Executes a real-time action on devices via 1E Tachyon platform (disk cleanup, patch, restart services, etc.)</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Integration</div>
+                            <div class="meta-value">1E Tachyon Consumer API</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Approval Required</div>
+                            <div class="meta-value" style="color: #DC3545;"><strong>Yes</strong> - Executes on endpoints</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Max Batch Size</div>
+                            <div class="meta-value">5,000 devices</div>
+                        </div>
+                    </div>
+
+                    <div style="background: #F8D7DA; border-radius: 8px; padding: 12px; margin-top: 12px; display: flex; align-items: center; gap: 8px;">
+                        <span>🔴</span>
+                        <span><strong>Critical Risk:</strong> This action executes scripts/commands directly on endpoints in real-time. Incorrect actions can cause service disruption. Requires dual approval for batches > 100 devices.</span>
+                    </div>
+
+                    <details style="margin-top: 12px;">
+                        <summary style="cursor: pointer; font-weight: 600; padding: 8px 0;">📋 View Parameters & API Details</summary>
+                        <div style="margin-top: 16px;">
+                            <h4 style="margin: 0 0 12px 0;">Parameters</h4>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                        <th>Example</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>instruction_id</code></td>
+                                        <td>string</td>
+                                        <td class="param-required">Required</td>
+                                        <td>1E Tachyon instruction/action ID</td>
+                                        <td><code>1E-DISK-CLEANUP-v2</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>target_fqdns</code></td>
+                                        <td>array</td>
+                                        <td class="param-required">Required</td>
+                                        <td>List of target device FQDNs</td>
+                                        <td><code>["ws001.corp.local"]</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>parameters</code></td>
+                                        <td>object</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>Instruction-specific parameters</td>
+                                        <td><code>{"threshold_gb": 5}</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>schedule_time</code></td>
+                                        <td>datetime</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>Scheduled execution time (default: immediate)</td>
+                                        <td><code>"2026-01-31T22:00:00Z"</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>timeout_minutes</code></td>
+                                        <td>integer</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>Action timeout (default: 30)</td>
+                                        <td><code>60</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4 style="margin: 24px 0 12px 0;">API Endpoint</h4>
+                            <div class="code-block">
+POST /api/v1/actions/tachyon/execute
+
+<span class="key">{</span>
+  <span class="key">"action_id"</span>: <span class="string">"ACT-005"</span>,
+  <span class="key">"instruction_id"</span>: <span class="string">"1E-DISK-CLEANUP-v2"</span>,
+  <span class="key">"target_fqdns"</span>: [
+    <span class="string">"ws-nyc-001.corp.local"</span>,
+    <span class="string">"ws-nyc-002.corp.local"</span>
+  ],
+  <span class="key">"parameters"</span>: {
+    <span class="key">"threshold_gb"</span>: <span class="number">5</span>,
+    <span class="key">"include_temp_files"</span>: <span class="bool">true</span>,
+    <span class="key">"include_windows_update_cache"</span>: <span class="bool">true</span>
+  },
+  <span class="key">"timeout_minutes"</span>: <span class="number">30</span>
+<span class="key">}</span>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Action Definition 6: Generate Report -->
+                <div class="action-def-card">
+                    <div class="action-def-header">
+                        <div class="action-icon risk-low">📊</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0;">Generate Report</h3>
+                            <span style="color: #6C757D; font-size: 14px;">ACT-006 • Reporting Category</span>
+                        </div>
+                        <span class="status-badge active">🟢 Low Risk</span>
+                        <span class="status-badge info">No Approval Required</span>
+                        <button class="btn btn-secondary btn-sm">Edit</button>
+                    </div>
+                    
+                    <div class="meta-grid">
+                        <div class="meta-item">
+                            <div class="meta-label">Description</div>
+                            <div class="meta-value">Generates a compliance, status, or summary report based on matched devices and rule criteria</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Integration</div>
+                            <div class="meta-value">Internal Report Engine</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Approval Required</div>
+                            <div class="meta-value" style="color: #28A745;">No</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Max Batch Size</div>
+                            <div class="meta-value">Unlimited</div>
+                        </div>
+                    </div>
+
+                    <details style="margin-top: 12px;">
+                        <summary style="cursor: pointer; font-weight: 600; padding: 8px 0;">📋 View Parameters & API Details</summary>
+                        <div style="margin-top: 16px;">
+                            <h4 style="margin: 0 0 12px 0;">Parameters</h4>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                        <th>Example</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>report_type</code></td>
+                                        <td>string</td>
+                                        <td class="param-required">Required</td>
+                                        <td>Type: summary, detailed, compliance, executive</td>
+                                        <td><code>"detailed"</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>format</code></td>
+                                        <td>string</td>
+                                        <td class="param-required">Required</td>
+                                        <td>Output format: pdf, xlsx, csv, html</td>
+                                        <td><code>"xlsx"</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>include_charts</code></td>
+                                        <td>boolean</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>Include visual charts (PDF/HTML only)</td>
+                                        <td><code>true</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>email_recipients</code></td>
+                                        <td>array</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>Send report via email</td>
+                                        <td><code>["manager@company.com"]</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4 style="margin: 24px 0 12px 0;">API Endpoint</h4>
+                            <div class="code-block">
+POST /api/v1/actions/reports/generate
+
+<span class="key">{</span>
+  <span class="key">"action_id"</span>: <span class="string">"ACT-006"</span>,
+  <span class="key">"report_type"</span>: <span class="string">"detailed"</span>,
+  <span class="key">"format"</span>: <span class="string">"xlsx"</span>,
+  <span class="key">"include_charts"</span>: <span class="bool">false</span>,
+  <span class="key">"email_recipients"</span>: [<span class="string">"manager@company.com"</span>]
+<span class="key">}</span>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Action Definition 7: Deploy MECM Software -->
+                <div class="action-def-card" style="border-left: 4px solid #DC3545;">
+                    <div class="action-def-header">
+                        <div class="action-icon risk-critical">🚀</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0;">Deploy MECM Software</h3>
+                            <span style="color: #6C757D; font-size: 14px;">ACT-007 • MECM Category</span>
+                        </div>
+                        <span class="status-badge" style="background: #DC3545; color: white;">⚫ Critical Risk</span>
+                        <span class="status-badge pending">Dual Approval Required</span>
+                        <button class="btn btn-secondary btn-sm">Edit</button>
+                    </div>
+                    
+                    <div class="meta-grid">
+                        <div class="meta-item">
+                            <div class="meta-label">Description</div>
+                            <div class="meta-value">Creates a software deployment in MECM targeting a collection with specified application/package</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Integration</div>
+                            <div class="meta-value">MECM Admin SDK / WMI</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Approval Required</div>
+                            <div class="meta-value" style="color: #DC3545;"><strong>Dual Approval</strong> - High impact</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Max Batch Size</div>
+                            <div class="meta-value">10,000 devices</div>
+                        </div>
+                    </div>
+
+                    <div style="background: #F8D7DA; border-radius: 8px; padding: 12px; margin-top: 12px; display: flex; align-items: center; gap: 8px;">
+                        <span>🔴</span>
+                        <span><strong>Critical Risk:</strong> Software deployments can impact device stability and user productivity. Requires approval from two different approvers. Consider maintenance windows.</span>
+                    </div>
+
+                    <details style="margin-top: 12px;">
+                        <summary style="cursor: pointer; font-weight: 600; padding: 8px 0;">📋 View Parameters & API Details</summary>
+                        <div style="margin-top: 16px;">
+                            <h4 style="margin: 0 0 12px 0;">Parameters</h4>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                        <th>Example</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>collection_id</code></td>
+                                        <td>string</td>
+                                        <td class="param-required">Required</td>
+                                        <td>Target MECM collection ID</td>
+                                        <td><code>"SMS00001"</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>application_id</code></td>
+                                        <td>string</td>
+                                        <td class="param-required">Required</td>
+                                        <td>MECM application or package ID</td>
+                                        <td><code>"ScopeId_XXX/Application_YYY"</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>deployment_purpose</code></td>
+                                        <td>string</td>
+                                        <td class="param-required">Required</td>
+                                        <td>available or required</td>
+                                        <td><code>"required"</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>deadline</code></td>
+                                        <td>datetime</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>Installation deadline</td>
+                                        <td><code>"2026-02-15T22:00:00Z"</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>maintenance_window</code></td>
+                                        <td>boolean</td>
+                                        <td class="param-optional">Optional</td>
+                                        <td>Respect maintenance windows</td>
+                                        <td><code>true</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4 style="margin: 24px 0 12px 0;">API Endpoint</h4>
+                            <div class="code-block">
+POST /api/v1/actions/mecm/deployments
+
+<span class="key">{</span>
+  <span class="key">"action_id"</span>: <span class="string">"ACT-007"</span>,
+  <span class="key">"collection_id"</span>: <span class="string">"SMS00001"</span>,
+  <span class="key">"application_id"</span>: <span class="string">"ScopeId_XXX/Application_DiskCleanup"</span>,
+  <span class="key">"deployment_purpose"</span>: <span class="string">"required"</span>,
+  <span class="key">"deadline"</span>: <span class="string">"2026-02-15T22:00:00Z"</span>,
+  <span class="key">"maintenance_window"</span>: <span class="bool">true</span>
+<span class="key">}</span>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'b') {
+                e.preventDefault();
+                toggleSidebar();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Action - IT Operations AI Agent</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .test-step {
+            background: white;
+            border: 2px solid #DEE2E6;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .test-step.active {
+            border-color: #7C3AED;
+            background: linear-gradient(135deg, #FAFBFF 0%, #F5F3FF 100%);
+        }
+        .test-step.passed {
+            border-color: #28A745;
+            background: #F8FFF8;
+        }
+        .test-step.failed {
+            border-color: #DC3545;
+            background: #FFF5F5;
+        }
+        .test-step-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .test-step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #E9ECEF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #495057;
+        }
+        .test-step.active .test-step-number {
+            background: #7C3AED;
+            color: white;
+        }
+        .test-step.passed .test-step-number {
+            background: #28A745;
+            color: white;
+        }
+        .test-step.failed .test-step-number {
+            background: #DC3545;
+            color: white;
+        }
+        .test-log {
+            background: #1E1E1E;
+            color: #D4D4D4;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            padding: 16px;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .test-log .success { color: #4EC9B0; }
+        .test-log .error { color: #F14C4C; }
+        .test-log .warning { color: #CCA700; }
+        .test-log .info { color: #3794FF; }
+        .test-log .timestamp { color: #6A9955; }
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #F8F9FA;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        .checklist-item.passed {
+            background: #D4EDDA;
+        }
+        .checklist-item.failed {
+            background: #F8D7DA;
+        }
+        .checklist-item.pending {
+            background: #FFF3CD;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="icon">🤖</span>
+                    <span>ITOA Agent</span>
+                </div>
+            </div>
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar (Ctrl+B)">◀</button>
+            <nav class="sidebar-nav">
+                <a href="02_dashboard.html" class="nav-item">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="03_rules.html" class="nav-item">
+                    <span class="icon">📋</span>
+                    <span>Rules</span>
+                </a>
+                <a href="04_scan_results.html" class="nav-item">
+                    <span class="icon">🔍</span>
+                    <span>Scan Results</span>
+                </a>
+                <a href="06_approvals.html" class="nav-item">
+                    <span class="icon">⚡</span>
+                    <span>Actions</span>
+                    <span class="badge">5</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">📈</span>
+                    <span>Reports</span>
+                </a>
+                <a href="07_action_definitions.html" class="nav-item active">
+                    <span class="icon">🔧</span>
+                    <span>Action Definitions</span>
+                </a>                <a href="10_logs.html" class="nav-item">
+                    <span class="icon">📜</span>
+                    <span>Logs</span>
+                </a>                <a href="09_settings.html" class="nav-item">
+                    <span class="icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Header -->
+            <header class="header">
+                <div>
+                    <nav class="breadcrumb" aria-label="Breadcrumb">
+                        <a href="02_dashboard.html">Home</a> &gt; <a href="09_settings.html">Settings</a> &gt; <a href="07_action_definitions.html">Action Definitions</a> &gt; <span>Test Action</span>
+                    </nav>
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <a href="07_action_definitions.html" class="btn btn-secondary btn-sm">← Back</a>
+                        <h1 class="header-title">Test Action: Create MECM Collection</h1>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <span class="status-badge" style="background: #F8D7DA; color: #721C24;">⚠️ Not Production Ready</span>
+                    <div class="user-menu">
+                        <div class="user-avatar">JD</div>
+                        <span>John Doe</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Action Info -->
+                <div style="background: #E3F2FD; border-radius: 8px; padding: 16px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px;">
+                    <div style="font-size: 48px;">📦</div>
+                    <div style="flex: 1;">
+                        <h2 style="margin: 0;">ACT-003: Create MECM Collection</h2>
+                        <p style="margin: 8px 0 0 0; color: #495057;">Creates a device collection in MECM with matched devices for software deployment or policy application</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="color: #6C757D; font-size: 12px;">Risk Level</div>
+                        <span class="status-badge error">🔴 High Risk</span>
+                    </div>
+                </div>
+
+                <!-- Test Mode Notice -->
+                <div style="background: #7C3AED; color: white; border-radius: 8px; padding: 16px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 24px;">🧪</span>
+                    <div>
+                        <strong>Sandbox Test Mode</strong> - All tests run against the <strong>MECM Test Environment</strong>. No changes will be made to production systems.
+                        <div style="font-size: 12px; opacity: 0.9; margin-top: 4px;">Test Server: mecm-test.corp.local • Test Database: CM_TST</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 400px; gap: 24px;">
+                    <!-- Left Column: Test Steps -->
+                    <div>
+                        <!-- Step 1: Connectivity -->
+                        <div class="test-step passed">
+                            <div class="test-step-header">
+                                <div class="test-step-number">✓</div>
+                                <div style="flex: 1;">
+                                    <h3 style="margin: 0;">Step 1: Connectivity Test</h3>
+                                    <div style="font-size: 13px; color: #6C757D;">Verify connection to MECM test server</div>
+                                </div>
+                                <span class="status-badge active">✓ Passed</span>
+                            </div>
+                            <div style="background: #D4EDDA; padding: 12px; border-radius: 8px; font-size: 13px;">
+                                <div>✓ Connected to <strong>mecm-test.corp.local</strong></div>
+                                <div>✓ Authentication successful (Service Account: svc_itoa_test)</div>
+                                <div>✓ WMI access verified</div>
+                                <div>✓ Response time: 124ms</div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Parameter Validation -->
+                        <div class="test-step passed">
+                            <div class="test-step-header">
+                                <div class="test-step-number">✓</div>
+                                <div style="flex: 1;">
+                                    <h3 style="margin: 0;">Step 2: Parameter Validation</h3>
+                                    <div style="font-size: 13px; color: #6C757D;">Validate action parameters against MECM schema</div>
+                                </div>
+                                <span class="status-badge active">✓ Passed</span>
+                            </div>
+                            <div class="checklist-item passed">
+                                <span>✓</span>
+                                <div>
+                                    <strong>collection_name</strong>: Pattern validated - supports {Department}_{RuleName}_{Date}
+                                </div>
+                            </div>
+                            <div class="checklist-item passed">
+                                <span>✓</span>
+                                <div>
+                                    <strong>limiting_collection</strong>: "All Workstations" exists in MECM
+                                </div>
+                            </div>
+                            <div class="checklist-item passed">
+                                <span>✓</span>
+                                <div>
+                                    <strong>device_ids</strong>: Array format valid, sample IDs verified
+                                </div>
+                            </div>
+                            <div class="checklist-item passed">
+                                <span>✓</span>
+                                <div>
+                                    <strong>folder_path</strong>: "ITOA/Automated" folder exists or can be created
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Dry Run -->
+                        <div class="test-step active">
+                            <div class="test-step-header">
+                                <div class="test-step-number">3</div>
+                                <div style="flex: 1;">
+                                    <h3 style="margin: 0;">Step 3: Dry Run Execution</h3>
+                                    <div style="font-size: 13px; color: #6C757D;">Execute action in preview mode (no actual changes)</div>
+                                </div>
+                                <span class="status-badge pending">⏳ Running...</span>
+                            </div>
+                            
+                            <!-- Test Input -->
+                            <div style="background: #F8F9FA; padding: 16px; border-radius: 8px; margin-bottom: 12px;">
+                                <div style="font-weight: 600; margin-bottom: 8px;">Test Parameters:</div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px;">
+                                    <div>
+                                        <div style="color: #6C757D;">Collection Name:</div>
+                                        <code>TEST_ITOA_Finance_DiskCleanup_2026-01-31</code>
+                                    </div>
+                                    <div>
+                                        <div style="color: #6C757D;">Limiting Collection:</div>
+                                        <code>All Workstations</code>
+                                    </div>
+                                    <div>
+                                        <div style="color: #6C757D;">Test Devices:</div>
+                                        <code>3 sample devices (from test pool)</code>
+                                    </div>
+                                    <div>
+                                        <div style="color: #6C757D;">Folder Path:</div>
+                                        <code>ITOA/Automated/Test</code>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Execution Preview -->
+                            <div style="background: white; border: 2px solid #7C3AED; padding: 16px; border-radius: 8px; margin-bottom: 12px;">
+                                <div style="font-weight: 600; margin-bottom: 8px; color: #7C3AED;">📋 Dry Run Preview - What WOULD Happen:</div>
+                                <ol style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.8;">
+                                    <li>Create collection: <strong>TEST_ITOA_Finance_DiskCleanup_2026-01-31</strong></li>
+                                    <li>Set limiting collection: <strong>All Workstations</strong></li>
+                                    <li>Add 3 devices to direct membership rules</li>
+                                    <li>Move collection to folder: <strong>ITOA/Automated/Test</strong></li>
+                                    <li>Set refresh schedule: <strong>No automatic refresh</strong></li>
+                                </ol>
+                            </div>
+
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn btn-primary">
+                                    <span>▶️</span> Execute Dry Run
+                                </button>
+                                <button class="btn btn-secondary">
+                                    <span>⏭️</span> Skip (Use Previous Results)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Actual Test Execution -->
+                        <div class="test-step">
+                            <div class="test-step-header">
+                                <div class="test-step-number">4</div>
+                                <div style="flex: 1;">
+                                    <h3 style="margin: 0;">Step 4: Test Environment Execution</h3>
+                                    <div style="font-size: 13px; color: #6C757D;">Create actual collection in test MECM (will be auto-deleted)</div>
+                                </div>
+                                <span class="status-badge" style="background: #E9ECEF; color: #6C757D;">Pending</span>
+                            </div>
+                            <div style="color: #6C757D; font-size: 13px;">
+                                This step will create an actual collection in the MECM test environment to verify full end-to-end functionality.
+                                The test collection will be automatically deleted after 1 hour.
+                            </div>
+                        </div>
+
+                        <!-- Step 5: Rollback Test -->
+                        <div class="test-step">
+                            <div class="test-step-header">
+                                <div class="test-step-number">5</div>
+                                <div style="flex: 1;">
+                                    <h3 style="margin: 0;">Step 5: Rollback Capability</h3>
+                                    <div style="font-size: 13px; color: #6C757D;">Verify collection can be deleted if needed</div>
+                                </div>
+                                <span class="status-badge" style="background: #E9ECEF; color: #6C757D;">Pending</span>
+                            </div>
+                            <div style="color: #6C757D; font-size: 13px;">
+                                Tests the ability to delete/rollback the collection creation if issues are detected after deployment.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Test Summary & Log -->
+                    <div>
+                        <!-- Test Progress -->
+                        <div class="card" style="margin-bottom: 16px;">
+                            <h3 style="margin: 0 0 16px 0;">🎯 Test Progress</h3>
+                            <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+                                <div style="flex: 1; height: 8px; background: #28A745; border-radius: 4px;"></div>
+                                <div style="flex: 1; height: 8px; background: #28A745; border-radius: 4px;"></div>
+                                <div style="flex: 1; height: 8px; background: #7C3AED; border-radius: 4px; animation: pulse 1s infinite;"></div>
+                                <div style="flex: 1; height: 8px; background: #E9ECEF; border-radius: 4px;"></div>
+                                <div style="flex: 1; height: 8px; background: #E9ECEF; border-radius: 4px;"></div>
+                            </div>
+                            <div style="text-align: center; color: #6C757D;">
+                                <strong>2 of 5</strong> steps completed
+                            </div>
+                        </div>
+
+                        <!-- Validation Checklist -->
+                        <div class="card" style="margin-bottom: 16px;">
+                            <h3 style="margin: 0 0 16px 0;">✅ Validation Checklist</h3>
+                            <div class="checklist-item passed">
+                                <span style="color: #28A745; font-size: 18px;">✓</span>
+                                <span>API connectivity verified</span>
+                            </div>
+                            <div class="checklist-item passed">
+                                <span style="color: #28A745; font-size: 18px;">✓</span>
+                                <span>Authentication successful</span>
+                            </div>
+                            <div class="checklist-item passed">
+                                <span style="color: #28A745; font-size: 18px;">✓</span>
+                                <span>Parameters validated</span>
+                            </div>
+                            <div class="checklist-item pending">
+                                <span style="color: #FFC107; font-size: 18px;">⏳</span>
+                                <span>Target system accessible</span>
+                            </div>
+                            <div class="checklist-item">
+                                <span style="color: #6C757D; font-size: 18px;">○</span>
+                                <span>Sample execution successful</span>
+                            </div>
+                            <div class="checklist-item">
+                                <span style="color: #6C757D; font-size: 18px;">○</span>
+                                <span>Rollback capability confirmed</span>
+                            </div>
+                        </div>
+
+                        <!-- Test Log -->
+                        <div class="card">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                                <h3 style="margin: 0;">📜 Test Execution Log</h3>
+                                <button class="btn btn-secondary btn-sm">Export Log</button>
+                            </div>
+                            <div class="test-log">
+<span class="timestamp">[2026-01-31 14:23:01]</span> <span class="info">Starting action test: ACT-003 (Create MECM Collection)</span>
+<span class="timestamp">[2026-01-31 14:23:01]</span> <span class="info">Test mode: SANDBOX</span>
+<span class="timestamp">[2026-01-31 14:23:01]</span> <span class="info">Target: mecm-test.corp.local</span>
+
+<span class="timestamp">[2026-01-31 14:23:02]</span> <span class="info">Step 1: Connectivity Test</span>
+<span class="timestamp">[2026-01-31 14:23:02]</span> Connecting to MECM test server...
+<span class="timestamp">[2026-01-31 14:23:02]</span> <span class="success">✓ Connection established (124ms)</span>
+<span class="timestamp">[2026-01-31 14:23:03]</span> Authenticating with service account...
+<span class="timestamp">[2026-01-31 14:23:03]</span> <span class="success">✓ Authentication successful</span>
+<span class="timestamp">[2026-01-31 14:23:03]</span> Testing WMI access...
+<span class="timestamp">[2026-01-31 14:23:04]</span> <span class="success">✓ WMI access verified</span>
+
+<span class="timestamp">[2026-01-31 14:23:05]</span> <span class="info">Step 2: Parameter Validation</span>
+<span class="timestamp">[2026-01-31 14:23:05]</span> Validating collection_name pattern...
+<span class="timestamp">[2026-01-31 14:23:05]</span> <span class="success">✓ Pattern valid</span>
+<span class="timestamp">[2026-01-31 14:23:06]</span> Checking limiting_collection exists...
+<span class="timestamp">[2026-01-31 14:23:06]</span> <span class="success">✓ Collection "All Workstations" found</span>
+<span class="timestamp">[2026-01-31 14:23:07]</span> Verifying folder path...
+<span class="timestamp">[2026-01-31 14:23:07]</span> <span class="success">✓ Folder path verified</span>
+
+<span class="timestamp">[2026-01-31 14:23:08]</span> <span class="info">Step 3: Dry Run Execution</span>
+<span class="timestamp">[2026-01-31 14:23:08]</span> Preparing dry run with test parameters...
+<span class="timestamp">[2026-01-31 14:23:09]</span> <span class="warning">⏳ Awaiting user action...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 24px; border-top: 1px solid #DEE2E6;">
+                    <button class="btn btn-secondary" onclick="window.location.href='07_action_definitions.html'">
+                        Cancel Test
+                    </button>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-secondary" disabled style="opacity: 0.5;">
+                            <span>📋</span> View Full Report
+                        </button>
+                        <button class="btn btn-success btn-lg" disabled style="opacity: 0.5;" title="Complete all test steps first">
+                            <span>✓</span> Mark as Production Ready
+                        </button>
+                    </div>
+                </div>
+
+                <div style="background: #E3F2FD; border-radius: 8px; padding: 12px; margin-top: 12px; display: flex; align-items: center; gap: 8px;">
+                    <span>ℹ️</span>
+                    <span style="font-size: 13px;">Complete all 5 test steps to mark this action as <strong>Production Ready</strong>. Only actions with passing tests can be used in production rules.</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <style>
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'b') {
+                e.preventDefault();
+                toggleSidebar();
+            }
+        });
+    </script>
+</body>
+</html>

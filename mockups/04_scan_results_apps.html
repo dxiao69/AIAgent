@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Results - Applications - IT Operations AI Agent</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .app-card {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid #E9ECEF;
+            transition: all 0.2s;
+        }
+        .app-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .app-card.critical {
+            border-left: 4px solid #DC3545;
+        }
+        .app-card.high {
+            border-left: 4px solid #FFC107;
+        }
+        .app-card.medium {
+            border-left: 4px solid #17A2B8;
+        }
+        .cve-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+        .cve-badge.critical { background: #F8D7DA; color: #721C24; }
+        .cve-badge.high { background: #FFF3CD; color: #856404; }
+        .cve-badge.medium { background: #D1ECF1; color: #0C5460; }
+        .owner-group {
+            background: #F8F9FA;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .owner-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .owner-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #6F42C1;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="icon">🤖</span>
+                    <span>ITOA Agent</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="02_dashboard.html" class="nav-item">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="03_rules.html" class="nav-item">
+                    <span class="icon">📋</span>
+                    <span>Rules</span>
+                </a>
+                <a href="04_scan_results.html" class="nav-item active">
+                    <span class="icon">🔍</span>
+                    <span>Scan Results</span>
+                </a>
+                <a href="06_approvals.html" class="nav-item">
+                    <span class="icon">⚡</span>
+                    <span>Actions</span>
+                    <span class="badge">5</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">📈</span>
+                    <span>Reports</span>
+                </a>
+                <a href="07_action_definitions.html" class="nav-item">
+                    <span class="icon">🔧</span>
+                    <span>Action Definitions</span>
+                </a>
+                <a href="10_logs.html" class="nav-item">
+                    <span class="icon">📜</span>
+                    <span>Logs</span>
+                </a>
+                <a href="09_settings.html" class="nav-item">
+                    <span class="icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div>
+                    <h1 class="header-title">Scan Results</h1>
+                    <p style="color: #6C757D; font-size: 14px;">Rule: "Outdated Java Installations" • Executed: Jan 31, 2026 09:15 AM • Entity: Applications</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary">
+                        <span>📥</span> Export CSV
+                    </button>
+                    <div class="user-menu">
+                        <div class="user-avatar">JD</div>
+                        <span>John Doe</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Entity Type Tabs -->
+                <div style="display: flex; gap: 4px; background: #F1F3F4; padding: 4px; border-radius: 8px; margin-bottom: 20px; width: fit-content;">
+                    <button style="padding: 10px 24px; border: none; background: transparent; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; color: #495057;">
+                        🖥️ Devices <span style="background: #6C757D; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; margin-left: 8px;">342</span>
+                    </button>
+                    <button style="padding: 10px 24px; border: none; background: white; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; color: #2563EB; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                        📦 Applications <span style="background: #2563EB; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; margin-left: 8px;">5</span>
+                    </button>
+                </div>
+
+                <!-- AI Suggestions Panel for Applications -->
+                <div class="ai-panel">
+                    <div class="ai-panel-header">
+                        <span class="icon">🤖</span>
+                        <span class="ai-panel-title">AI-Powered Suggestions</span>
+                        <span style="margin-left: auto; font-size: 12px; opacity: 0.8;">Based on analysis of 5 applications across 342 devices</span>
+                    </div>
+                    
+                    <div class="ai-suggestion">
+                        <span class="ai-suggestion-number">1.</span>
+                        <strong>Notify App Owners</strong> (3 owners, 5 applications)
+                        <div class="ai-suggestion-action">
+                            → Group applications by owner and send consolidated notification with upgrade recommendations and affected device counts.
+                        </div>
+                    </div>
+                    
+                    <div class="ai-suggestion">
+                        <span class="ai-suggestion-number">2.</span>
+                        <strong>Create ServiceNow Incidents</strong> for Critical CVEs
+                        <div class="ai-suggestion-action">
+                            → Java 8.0.301 has 3 critical CVEs. Recommend immediate incident creation for 156 affected devices.
+                        </div>
+                    </div>
+                    
+                    <div class="ai-suggestion">
+                        <span class="ai-suggestion-number">3.</span>
+                        <strong>Schedule Automated Upgrade</strong> via MECM
+                        <div class="ai-suggestion-action">
+                            → Adobe Reader can be auto-upgraded. Create MECM deployment for 89 devices with maintenance window compliance.
+                        </div>
+                    </div>
+                    
+                    <div class="ai-panel-actions">
+                        <button class="btn">✓ Apply Suggestion 1</button>
+                        <button class="btn">✓ Apply Suggestion 2</button>
+                        <button class="btn">✓ Apply Suggestion 3</button>
+                        <button class="btn" style="opacity: 0.7;">✕ Dismiss</button>
+                    </div>
+                </div>
+
+                <!-- Summary Cards -->
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 24px;">
+                    <div style="background: white; padding: 16px; border-radius: 8px; border-left: 4px solid #6F42C1;">
+                        <div style="font-size: 24px; font-weight: 700;">5</div>
+                        <div style="color: #6C757D; font-size: 14px;">Applications Found</div>
+                    </div>
+                    <div style="background: white; padding: 16px; border-radius: 8px; border-left: 4px solid #0066CC;">
+                        <div style="font-size: 24px; font-weight: 700;">342</div>
+                        <div style="color: #6C757D; font-size: 14px;">Total Installations</div>
+                    </div>
+                    <div style="background: white; padding: 16px; border-radius: 8px; border-left: 4px solid #DC3545;">
+                        <div style="font-size: 24px; font-weight: 700;">7</div>
+                        <div style="color: #6C757D; font-size: 14px;">Critical CVEs</div>
+                    </div>
+                    <div style="background: white; padding: 16px; border-radius: 8px; border-left: 4px solid #FFC107;">
+                        <div style="font-size: 24px; font-weight: 700;">3</div>
+                        <div style="color: #6C757D; font-size: 14px;">App Owners</div>
+                    </div>
+                    <div style="background: white; padding: 16px; border-radius: 8px; border-left: 4px solid #28A745;">
+                        <div style="font-size: 24px; font-weight: 700;">2</div>
+                        <div style="color: #6C757D; font-size: 14px;">Auto-Upgradable</div>
+                    </div>
+                </div>
+
+                <!-- View Toggle -->
+                <div style="display: flex; gap: 16px; margin-bottom: 20px; align-items: center;">
+                    <div style="display: flex; gap: 4px; background: #F1F3F4; padding: 4px; border-radius: 6px;">
+                        <button style="padding: 8px 16px; border: none; background: white; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500; box-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+                            📋 By Application
+                        </button>
+                        <button style="padding: 8px 16px; border: none; background: transparent; border-radius: 4px; cursor: pointer; font-size: 13px; color: #495057;">
+                            👤 By App Owner
+                        </button>
+                    </div>
+                    <div style="flex: 1;"></div>
+                    <input type="text" class="form-input" placeholder="🔍 Search applications..." style="width: 300px;">
+                    <select class="form-select" style="width: 150px;">
+                        <option>All Severities</option>
+                        <option>Critical</option>
+                        <option>High</option>
+                        <option>Medium</option>
+                    </select>
+                </div>
+
+                <!-- Applications List -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 style="margin: 0;">📦 Flagged Applications</h3>
+                        <span style="color: #6C757D; font-size: 13px;">5 applications requiring attention</span>
+                    </div>
+                    <div class="card-body" style="padding: 16px;">
+                        
+                        <!-- Application 1 - Critical -->
+                        <div class="app-card critical">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                        <span style="font-size: 24px;">☕</span>
+                                        <div>
+                                            <div style="font-size: 18px; font-weight: 600;">Java Runtime Environment</div>
+                                            <div style="color: #6C757D; font-size: 13px;">Oracle Corporation</div>
+                                        </div>
+                                        <span class="status-badge error">Critical Risk</span>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 16px 0;">
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">Installed Version</div>
+                                            <div style="font-weight: 600; color: #DC3545;">8.0.301 (EOL)</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">Latest Version</div>
+                                            <div style="font-weight: 600; color: #28A745;">21.0.2</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">Installations</div>
+                                            <div style="font-weight: 600;">156 devices</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">App Owner</div>
+                                            <div style="font-weight: 600;">Sarah Wilson</div>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top: 12px;">
+                                        <div style="font-size: 12px; color: #6C757D; margin-bottom: 6px;">Known Vulnerabilities (3 Critical, 2 High)</div>
+                                        <span class="cve-badge critical">CVE-2024-20919 (9.8)</span>
+                                        <span class="cve-badge critical">CVE-2024-20921 (9.1)</span>
+                                        <span class="cve-badge critical">CVE-2024-20926 (8.9)</span>
+                                        <span class="cve-badge high">CVE-2024-20918 (7.5)</span>
+                                        <span class="cve-badge high">CVE-2024-20952 (7.2)</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <button class="btn btn-primary btn-sm">👤 Notify Owner</button>
+                                    <button class="btn btn-secondary btn-sm">🎫 Create Incident</button>
+                                    <button class="btn btn-secondary btn-sm">👁️ View Devices</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Application 2 - High -->
+                        <div class="app-card high">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                        <span style="font-size: 24px;">📄</span>
+                                        <div>
+                                            <div style="font-size: 18px; font-weight: 600;">Adobe Acrobat Reader</div>
+                                            <div style="color: #6C757D; font-size: 13px;">Adobe Inc.</div>
+                                        </div>
+                                        <span class="status-badge pending">High Risk</span>
+                                        <span class="status-badge success" style="background: #D4EDDA; color: #155724;">Auto-Upgrade Available</span>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 16px 0;">
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">Installed Version</div>
+                                            <div style="font-weight: 600; color: #FFC107;">2023.006.20320</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">Latest Version</div>
+                                            <div style="font-weight: 600; color: #28A745;">2024.001.20604</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">Installations</div>
+                                            <div style="font-weight: 600;">89 devices</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">App Owner</div>
+                                            <div style="font-weight: 600;">IT Operations</div>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top: 12px;">
+                                        <div style="font-size: 12px; color: #6C757D; margin-bottom: 6px;">Known Vulnerabilities (2 High)</div>
+                                        <span class="cve-badge high">CVE-2024-30304 (7.8)</span>
+                                        <span class="cve-badge high">CVE-2024-30303 (7.5)</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <button class="btn btn-success btn-sm">📦 Deploy Update</button>
+                                    <button class="btn btn-secondary btn-sm">👁️ View Devices</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Application 3 - High -->
+                        <div class="app-card high">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                        <span style="font-size: 24px;">🌐</span>
+                                        <div>
+                                            <div style="font-size: 18px; font-weight: 600;">Google Chrome</div>
+                                            <div style="color: #6C757D; font-size: 13px;">Google LLC</div>
+                                        </div>
+                                        <span class="status-badge pending">High Risk</span>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 16px 0;">
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">Installed Version</div>
+                                            <div style="font-weight: 600; color: #FFC107;">118.0.5993.88</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">Latest Version</div>
+                                            <div style="font-weight: 600; color: #28A745;">121.0.6167.85</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">Installations</div>
+                                            <div style="font-weight: 600;">67 devices</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">App Owner</div>
+                                            <div style="font-weight: 600;">IT Operations</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <button class="btn btn-primary btn-sm">📧 Notify Users</button>
+                                    <button class="btn btn-secondary btn-sm">👁️ View Devices</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Application 4 - Medium -->
+                        <div class="app-card medium">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                        <span style="font-size: 24px;">🐍</span>
+                                        <div>
+                                            <div style="font-size: 18px; font-weight: 600;">Python</div>
+                                            <div style="color: #6C757D; font-size: 13px;">Python Software Foundation</div>
+                                        </div>
+                                        <span class="status-badge info">Medium Risk</span>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 16px 0;">
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">Installed Version</div>
+                                            <div style="font-weight: 600;">3.9.7</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">Latest Version</div>
+                                            <div style="font-weight: 600; color: #28A745;">3.12.1</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">Installations</div>
+                                            <div style="font-weight: 600;">18 devices</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">App Owner</div>
+                                            <div style="font-weight: 600;">Engineering Team</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <button class="btn btn-primary btn-sm">👤 Notify Owner</button>
+                                    <button class="btn btn-secondary btn-sm">👁️ View Devices</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Application 5 - Medium -->
+                        <div class="app-card medium">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                        <span style="font-size: 24px;">📝</span>
+                                        <div>
+                                            <div style="font-size: 18px; font-weight: 600;">Notepad++</div>
+                                            <div style="color: #6C757D; font-size: 13px;">Notepad++ Team</div>
+                                        </div>
+                                        <span class="status-badge info">Medium Risk</span>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 16px 0;">
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">Installed Version</div>
+                                            <div style="font-weight: 600;">8.4.5</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">Latest Version</div>
+                                            <div style="font-weight: 600; color: #28A745;">8.6.2</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">Installations</div>
+                                            <div style="font-weight: 600;">12 devices</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 12px; color: #6C757D;">App Owner</div>
+                                            <div style="font-weight: 600;">IT Operations</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <button class="btn btn-secondary btn-sm">📧 Notify Users</button>
+                                    <button class="btn btn-secondary btn-sm">👁️ View Devices</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- App Owner Summary Section -->
+                <div class="card" style="margin-top: 24px;">
+                    <div class="card-header">
+                        <h3 style="margin: 0;">👤 Summary by App Owner</h3>
+                        <span style="color: #6C757D; font-size: 13px;">Grouped for bulk notification</span>
+                    </div>
+                    <div class="card-body" style="padding: 16px;">
+                        
+                        <!-- Owner 1 -->
+                        <div class="owner-group">
+                            <div class="owner-header">
+                                <div class="owner-avatar">SW</div>
+                                <div>
+                                    <div style="font-weight: 600;">Sarah Wilson</div>
+                                    <div style="font-size: 13px; color: #6C757D;">sarah.wilson@company.com • Enterprise Applications</div>
+                                </div>
+                                <div style="margin-left: auto; text-align: right;">
+                                    <div style="font-weight: 600; color: #DC3545;">1 Critical App</div>
+                                    <div style="font-size: 13px; color: #6C757D;">156 devices affected</div>
+                                </div>
+                                <button class="btn btn-primary btn-sm">📧 Send Notification</button>
+                            </div>
+                            <div style="background: white; padding: 12px; border-radius: 6px;">
+                                <table style="width: 100%; font-size: 13px;">
+                                    <tr>
+                                        <td style="padding: 4px 0;"><strong>Java Runtime Environment 8.0.301</strong></td>
+                                        <td style="color: #DC3545;">Critical</td>
+                                        <td>156 devices</td>
+                                        <td>5 CVEs</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Owner 2 -->
+                        <div class="owner-group">
+                            <div class="owner-header">
+                                <div class="owner-avatar" style="background: #17A2B8;">IT</div>
+                                <div>
+                                    <div style="font-weight: 600;">IT Operations</div>
+                                    <div style="font-size: 13px; color: #6C757D;">it-ops@company.com • Infrastructure Team</div>
+                                </div>
+                                <div style="margin-left: auto; text-align: right;">
+                                    <div style="font-weight: 600; color: #FFC107;">3 Apps Need Attention</div>
+                                    <div style="font-size: 13px; color: #6C757D;">168 devices affected</div>
+                                </div>
+                                <button class="btn btn-primary btn-sm">📧 Send Notification</button>
+                            </div>
+                            <div style="background: white; padding: 12px; border-radius: 6px;">
+                                <table style="width: 100%; font-size: 13px;">
+                                    <tr style="border-bottom: 1px solid #E9ECEF;">
+                                        <td style="padding: 8px 0;"><strong>Adobe Acrobat Reader 2023</strong></td>
+                                        <td style="color: #FFC107;">High</td>
+                                        <td>89 devices</td>
+                                        <td>2 CVEs</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #E9ECEF;">
+                                        <td style="padding: 8px 0;"><strong>Google Chrome 118</strong></td>
+                                        <td style="color: #FFC107;">High</td>
+                                        <td>67 devices</td>
+                                        <td>Outdated</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0;"><strong>Notepad++ 8.4.5</strong></td>
+                                        <td style="color: #17A2B8;">Medium</td>
+                                        <td>12 devices</td>
+                                        <td>Outdated</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Owner 3 -->
+                        <div class="owner-group">
+                            <div class="owner-header">
+                                <div class="owner-avatar" style="background: #28A745;">ET</div>
+                                <div>
+                                    <div style="font-weight: 600;">Engineering Team</div>
+                                    <div style="font-size: 13px; color: #6C757D;">engineering@company.com • Development</div>
+                                </div>
+                                <div style="margin-left: auto; text-align: right;">
+                                    <div style="font-weight: 600; color: #17A2B8;">1 App Outdated</div>
+                                    <div style="font-size: 13px; color: #6C757D;">18 devices affected</div>
+                                </div>
+                                <button class="btn btn-primary btn-sm">📧 Send Notification</button>
+                            </div>
+                            <div style="background: white; padding: 12px; border-radius: 6px;">
+                                <table style="width: 100%; font-size: 13px;">
+                                    <tr>
+                                        <td style="padding: 4px 0;"><strong>Python 3.9.7</strong></td>
+                                        <td style="color: #17A2B8;">Medium</td>
+                                        <td>18 devices</td>
+                                        <td>Version behind</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bulk Actions -->
+                    <div style="padding: 16px; border-top: 1px solid #E9ECEF; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                <input type="checkbox" style="width: 18px; height: 18px;">
+                                <span>Select all owners (3)</span>
+                            </label>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary">Preview Notifications</button>
+                            <button class="btn btn-primary">📧 Send to All Selected Owners</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Rule - IT Operations AI Agent</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Wizard Styles */
+        .wizard-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .wizard-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            position: relative;
+        }
+        .wizard-progress::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 60px;
+            right: 60px;
+            height: 3px;
+            background: #E9ECEF;
+            z-index: 0;
+        }
+        .wizard-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .wizard-step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #E9ECEF;
+            color: #6C757D;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+        }
+        .wizard-step.active .wizard-step-number {
+            background: #2563EB;
+            color: white;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+        }
+        .wizard-step.completed .wizard-step-number {
+            background: #28A745;
+            color: white;
+        }
+        .wizard-step-label {
+            font-size: 13px;
+            color: #6C757D;
+            text-align: center;
+        }
+        .wizard-step.active .wizard-step-label {
+            color: #2563EB;
+            font-weight: 600;
+        }
+        .wizard-step.completed .wizard-step-label {
+            color: #28A745;
+        }
+        .wizard-content {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            min-height: 400px;
+        }
+        .wizard-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #E9ECEF;
+        }
+        .wizard-hint {
+            background: #E3F2FD;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .wizard-hint-icon {
+            font-size: 20px;
+        }
+        .wizard-hint-content h4 {
+            margin: 0 0 4px 0;
+            font-size: 14px;
+            color: #1565C0;
+        }
+        .wizard-hint-content p {
+            margin: 0;
+            font-size: 13px;
+            color: #1976D2;
+        }
+        .entity-option {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            border: 2px solid #E9ECEF;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+        }
+        .entity-option:hover {
+            border-color: #2563EB;
+            background: #F8FAFF;
+        }
+        .entity-option.selected {
+            border-color: #2563EB;
+            background: #E3F2FD;
+        }
+        .entity-option-icon {
+            font-size: 32px;
+        }
+        .entity-option-content h4 {
+            margin: 0 0 4px 0;
+        }
+        .entity-option-content p {
+            margin: 0;
+            font-size: 13px;
+            color: #6C757D;
+        }
+        .draft-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #6C757D;
+        }
+        .draft-indicator .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #28A745;
+        }
+        /* Breadcrumb styles */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #6C757D;
+            margin-bottom: 16px;
+        }
+        .breadcrumb a {
+            color: #2563EB;
+            text-decoration: none;
+        }
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        .breadcrumb-separator {
+            color: #ADB5BD;
+        }
+        /* Keyboard shortcut hint */
+        .kbd {
+            display: inline-block;
+            padding: 2px 6px;
+            background: #F1F3F4;
+            border: 1px solid #D1D5DB;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 11px;
+            color: #374151;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar (Collapsible) -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="icon">🤖</span>
+                    <span class="sidebar-text">ITOA Agent</span>
+                </div>
+                <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle Sidebar (Ctrl+B)">
+                    <span>◀</span>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="02_dashboard.html" class="nav-item">
+                    <span class="icon">📊</span>
+                    <span class="sidebar-text">Dashboard</span>
+                </a>
+                <a href="03_rules.html" class="nav-item active">
+                    <span class="icon">📋</span>
+                    <span class="sidebar-text">Rules</span>
+                </a>
+                <a href="04_scan_results.html" class="nav-item">
+                    <span class="icon">🔍</span>
+                    <span class="sidebar-text">Scan Results</span>
+                </a>
+                <a href="06_approvals.html" class="nav-item">
+                    <span class="icon">⚡</span>
+                    <span class="sidebar-text">Actions</span>
+                    <span class="badge">5</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">📈</span>
+                    <span class="sidebar-text">Reports</span>
+                </a>
+                <a href="07_action_definitions.html" class="nav-item">
+                    <span class="icon">🔧</span>
+                    <span class="sidebar-text">Action Definitions</span>
+                </a>
+                <a href="10_logs.html" class="nav-item">
+                    <span class="icon">📜</span>
+                    <span class="sidebar-text">Logs</span>
+                </a>
+                <a href="09_settings.html" class="nav-item">
+                    <span class="icon">⚙️</span>
+                    <span class="sidebar-text">Settings</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-text" style="font-size: 11px; color: #6C757D; padding: 12px 16px;">
+                    <span class="kbd">Ctrl</span>+<span class="kbd">B</span> Toggle sidebar
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <h1 class="header-title">Create New Rule</h1>
+                </div>
+                <div class="header-actions">
+                    <div class="draft-indicator">
+                        <span class="dot"></span>
+                        <span>Draft auto-saved</span>
+                    </div>
+                    <div class="user-menu">
+                        <div class="user-avatar">JD</div>
+                        <span>John Doe</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Breadcrumb -->
+                <nav class="breadcrumb">
+                    <a href="02_dashboard.html">Home</a>
+                    <span class="breadcrumb-separator">›</span>
+                    <a href="03_rules.html">Rules</a>
+                    <span class="breadcrumb-separator">›</span>
+                    <span>Create New Rule</span>
+                </nav>
+
+                <div class="wizard-container">
+                    <!-- Progress Steps -->
+                    <div class="wizard-progress">
+                        <div class="wizard-step completed">
+                            <div class="wizard-step-number">✓</div>
+                            <div class="wizard-step-label">1. Define Rule</div>
+                        </div>
+                        <div class="wizard-step active">
+                            <div class="wizard-step-number">2</div>
+                            <div class="wizard-step-label">2. Set Conditions</div>
+                        </div>
+                        <div class="wizard-step">
+                            <div class="wizard-step-number">3</div>
+                            <div class="wizard-step-label">3. Choose Actions</div>
+                        </div>
+                        <div class="wizard-step">
+                            <div class="wizard-step-number">4</div>
+                            <div class="wizard-step-label">4. Test & Activate</div>
+                        </div>
+                    </div>
+
+                    <!-- Wizard Content - Step 2: Set Conditions -->
+                    <div class="wizard-content">
+                        <!-- Contextual Help -->
+                        <div class="wizard-hint">
+                            <span class="wizard-hint-icon">💡</span>
+                            <div class="wizard-hint-content">
+                                <h4>Setting Conditions</h4>
+                                <p>Define the criteria that will identify matching devices or applications. You can use natural language or build conditions manually. Combine multiple conditions with AND/OR logic.</p>
+                            </div>
+                        </div>
+
+                        <!-- Natural Language Option -->
+                        <div style="margin-bottom: 24px;">
+                            <label style="font-weight: 600; display: block; margin-bottom: 8px;">
+                                Option A: Describe in plain English <span class="status-badge info" style="font-weight: normal;">AI-Powered</span>
+                            </label>
+                            <div style="display: flex; gap: 12px;">
+                                <input type="text" class="form-input" style="flex: 1;" placeholder="Example: Find devices with less than 10GB free disk space" value="Find devices with less than 10GB free disk space that haven't been active in 4 weeks">
+                                <button class="btn btn-secondary">
+                                    <span>🤖</span> Interpret
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- AI Interpretation Result -->
+                        <div style="background: #F0FDF4; border: 1px solid #86EFAC; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                                <span>✅</span>
+                                <strong style="color: #166534;">AI understood your request (95% confidence)</strong>
+                            </div>
+                            <div style="background: white; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 13px;">
+                                <span style="color: #6C757D;">IF</span> Disk Free Space <strong>&lt; 10 GB</strong> 
+                                <span style="color: #2563EB; margin: 0 8px;">AND</span> 
+                                Last Active Days <strong>&gt; 28</strong>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; color: #6C757D; margin: 20px 0; font-size: 13px;">
+                            ── or build conditions manually ──
+                        </div>
+
+                        <!-- Manual Condition Builder -->
+                        <div>
+                            <label style="font-weight: 600; display: block; margin-bottom: 12px;">Option B: Build conditions manually</label>
+                            
+                            <!-- Condition Row 1 -->
+                            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px; padding: 12px; background: #F8F9FA; border-radius: 8px;">
+                                <span style="color: #6C757D; font-weight: 500; min-width: 30px;">IF</span>
+                                <select class="form-select" style="width: 200px;">
+                                    <optgroup label="🖥️ Device Fields">
+                                        <option selected>Disk Free Space (GB)</option>
+                                        <option>Last Active Days</option>
+                                        <option>Operating System</option>
+                                    </optgroup>
+                                    <optgroup label="📦 Application Fields">
+                                        <option>Application Name</option>
+                                        <option>Application Version</option>
+                                        <option>CVE Count</option>
+                                    </optgroup>
+                                </select>
+                                <select class="form-select" style="width: 130px;">
+                                    <option selected>less than</option>
+                                    <option>greater than</option>
+                                    <option>equals</option>
+                                </select>
+                                <input type="text" class="form-input" value="10" style="width: 80px;">
+                                <span style="color: #6C757D;">GB</span>
+                                <button style="background: none; border: none; color: #DC3545; cursor: pointer; font-size: 18px; padding: 4px 8px;" title="Remove condition">×</button>
+                            </div>
+
+                            <!-- Logical Operator -->
+                            <div style="display: flex; justify-content: center; margin: 8px 0;">
+                                <select class="form-select" style="width: 100px; text-align: center; font-weight: 600; color: #2563EB;">
+                                    <option selected>AND</option>
+                                    <option>OR</option>
+                                </select>
+                            </div>
+
+                            <!-- Condition Row 2 -->
+                            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 16px; padding: 12px; background: #F8F9FA; border-radius: 8px;">
+                                <span style="color: #6C757D; font-weight: 500; min-width: 30px; visibility: hidden;">IF</span>
+                                <select class="form-select" style="width: 200px;">
+                                    <optgroup label="🖥️ Device Fields">
+                                        <option>Disk Free Space (GB)</option>
+                                        <option selected>Last Active Days</option>
+                                        <option>Operating System</option>
+                                    </optgroup>
+                                    <optgroup label="📦 Application Fields">
+                                        <option>Application Name</option>
+                                        <option>Application Version</option>
+                                        <option>CVE Count</option>
+                                    </optgroup>
+                                </select>
+                                <select class="form-select" style="width: 130px;">
+                                    <option>less than</option>
+                                    <option selected>greater than</option>
+                                    <option>equals</option>
+                                </select>
+                                <input type="text" class="form-input" value="28" style="width: 80px;">
+                                <span style="color: #6C757D;">days</span>
+                                <button style="background: none; border: none; color: #DC3545; cursor: pointer; font-size: 18px; padding: 4px 8px;" title="Remove condition">×</button>
+                            </div>
+
+                            <button class="btn btn-secondary btn-sm">
+                                <span>➕</span> Add Condition
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Wizard Footer -->
+                    <div class="wizard-footer">
+                        <a href="05_wizard_step1.html" class="btn btn-secondary">
+                            ← Previous: Define Rule
+                        </a>
+                        <div style="display: flex; gap: 12px;">
+                            <button class="btn btn-secondary">
+                                Save as Draft
+                            </button>
+                            <a href="05_wizard_step3.html" class="btn btn-primary">
+                                Next: Choose Actions →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+        // Keyboard shortcut
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'b') {
+                e.preventDefault();
+                toggleSidebar();
+            }
+        });
+    </script>
+</body>
+</html>

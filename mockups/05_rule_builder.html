@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Rule - IT Operations AI Agent</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="icon">🤖</span>
+                    <span>ITOA Agent</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="02_dashboard.html" class="nav-item">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="03_rules.html" class="nav-item active">
+                    <span class="icon">📋</span>
+                    <span>Rules</span>
+                </a>
+                <a href="04_scan_results.html" class="nav-item">
+                    <span class="icon">🔍</span>
+                    <span>Scan Results</span>
+                </a>
+                <a href="06_approvals.html" class="nav-item">
+                    <span class="icon">⚡</span>
+                    <span>Actions</span>
+                    <span class="badge">5</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">📈</span>
+                    <span>Reports</span>
+                </a>
+                <a href="07_action_definitions.html" class="nav-item">
+                    <span class="icon">🔧</span>
+                    <span>Action Definitions</span>
+                </a>
+                <a href="10_logs.html" class="nav-item">
+                    <span class="icon">📜</span>
+                    <span>Logs</span>
+                </a>
+                <a href="09_settings.html" class="nav-item">
+                    <span class="icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <a href="03_rules.html" class="btn btn-secondary btn-sm">← Back</a>
+                    <h1 class="header-title">Create New Rule</h1>
+                </div>
+                <div class="header-actions">
+                    <div class="user-menu">
+                        <div class="user-avatar">JD</div>
+                        <span>John Doe</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Natural Language Input -->
+                <div class="nl-input-container">
+                    <div class="nl-input-header">
+                        <span style="font-size: 20px;">💬</span>
+                        <span style="font-weight: 600;">Describe your rule in plain English</span>
+                        <span class="status-badge info" style="margin-left: auto;">AI-Powered</span>
+                    </div>
+                    <textarea class="nl-input" placeholder="Example: Find devices with less than 10GB free disk space that haven't been active in 4 weeks and notify the users">Find devices with less than 10GB free disk space that haven't been active in 4 weeks</textarea>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+                        <span style="font-size: 12px; color: #6C757D;">
+                            ℹ️ The AI will interpret your description and generate a structured rule below
+                        </span>
+                        <button class="btn btn-primary">
+                            <span>🤖</span> Generate Rule
+                        </button>
+                    </div>
+                </div>
+
+                <!-- AI Generated Preview -->
+                <div class="card" style="border: 2px solid #28A745; background: #F8FFF8;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <span style="font-size: 20px;">✅</span>
+                        <span style="font-weight: 600; color: #28A745;">AI Interpretation (95% confidence)</span>
+                        <button class="btn btn-sm btn-secondary" style="margin-left: auto;">Accept & Edit Below</button>
+                    </div>
+                    <div style="background: white; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 14px;">
+                        <div><span style="color: #6C757D;">Condition 1:</span> Disk Free Space <strong>&lt; 10 GB</strong></div>
+                        <div style="color: #0066CC; margin: 4px 0;">AND</div>
+                        <div><span style="color: #6C757D;">Condition 2:</span> Last Active <strong>&gt; 28 days ago</strong></div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; color: #6C757D; margin: 24px 0;">
+                    ── OR build manually ──
+                </div>
+
+                <!-- Manual Rule Builder -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">📝 Rule Details</h2>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+                        <div>
+                            <div class="form-group">
+                                <label class="form-label">Rule Name *</label>
+                                <input type="text" class="form-input" value="Low Disk Space - Inactive Devices" placeholder="Enter rule name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-input" rows="2" placeholder="Describe what this rule does">Identifies devices with critically low disk space that haven't been active recently, indicating potential cleanup or retirement candidates.</textarea>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="form-group">
+                                <label class="form-label">Entity Type *</label>
+                                <div style="display: flex; gap: 8px;">
+                                    <label style="display: flex; align-items: center; gap: 6px; padding: 10px 16px; background: #E3F2FD; border: 2px solid #2563EB; border-radius: 6px; cursor: pointer; flex: 1;">
+                                        <input type="radio" name="entityType" value="devices" checked style="accent-color: #2563EB;">
+                                        <span style="font-weight: 500;">🖥️ Devices</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; padding: 10px 16px; background: #F8F9FA; border: 2px solid #DEE2E6; border-radius: 6px; cursor: pointer; flex: 1;">
+                                        <input type="radio" name="entityType" value="applications" style="accent-color: #2563EB;">
+                                        <span style="font-weight: 500;">📦 Apps</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; padding: 10px 16px; background: #F8F9FA; border: 2px solid #DEE2E6; border-radius: 6px; cursor: pointer; flex: 1;">
+                                        <input type="radio" name="entityType" value="both" style="accent-color: #2563EB;">
+                                        <span style="font-weight: 500;">🔗 Both</span>
+                                    </label>
+                                </div>
+                                <div style="font-size: 12px; color: #6C757D; margin-top: 6px;">
+                                    💡 Select "Apps" to find applications needing updates, or "Both" to find devices running specific software
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Category *</label>
+                                <select class="form-select">
+                                    <option value="">Select category...</option>
+                                    <option value="disk" selected>Disk Space</option>
+                                    <option value="eol">EOL/EOS</option>
+                                    <option value="compliance">Compliance</option>
+                                    <option value="vulnerability">Vulnerability</option>
+                                    <option value="software">Software Update</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Priority</label>
+                                <select class="form-select">
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                    <option value="critical">Critical</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conditions Builder -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">🎯 Conditions</h2>
+                        <span style="color: #6C757D; font-size: 14px;">Define when this rule should match</span>
+                    </div>
+                    
+                    <!-- Field Type Legend -->
+                    <div style="display: flex; gap: 16px; margin-bottom: 16px; padding: 12px; background: #F8F9FA; border-radius: 8px; font-size: 13px;">
+                        <span><span style="display: inline-block; width: 12px; height: 12px; background: #E3F2FD; border-radius: 3px; margin-right: 4px;"></span> Device Fields</span>
+                        <span><span style="display: inline-block; width: 12px; height: 12px; background: #FFF3CD; border-radius: 3px; margin-right: 4px;"></span> Application Fields</span>
+                        <span><span style="display: inline-block; width: 12px; height: 12px; background: #E8F5E9; border-radius: 3px; margin-right: 4px;"></span> Common Fields</span>
+                    </div>
+                    
+                    <div class="rule-builder">
+                        <!-- Condition 1 -->
+                        <div class="condition-row">
+                            <span style="color: #6C757D; font-weight: 500;">IF</span>
+                            <select style="flex: 1;">
+                                <optgroup label="📦 Application Fields" style="background: #FFF3CD;">
+                                    <option>Application Name</option>
+                                    <option>Application Version</option>
+                                    <option>Application Vendor</option>
+                                    <option>CVE Count</option>
+                                    <option>CVSS Score (Highest)</option>
+                                    <option>App EOL Date</option>
+                                    <option>Days Until App EOL</option>
+                                    <option>Installation Count</option>
+                                    <option>App Owner</option>
+                                    <option>Latest Available Version</option>
+                                </optgroup>
+                                <optgroup label="🖥️ Device Fields" style="background: #E3F2FD;">
+                                    <option>Device Name</option>
+                                    <option>Operating System</option>
+                                    <option selected>Disk Free Space (GB)</option>
+                                    <option>Disk Free Space (%)</option>
+                                    <option>Last Active Date</option>
+                                    <option>Last Active Days</option>
+                                    <option>Primary User</option>
+                                    <option>Department</option>
+                                    <option>Location</option>
+                                    <option>Hardware EOL Date</option>
+                                    <option>Days Until Hardware EOL</option>
+                                    <option>Critical Patches Missing</option>
+                                </optgroup>
+                            </select>
+                            <select style="width: 150px;">
+                                <option>equals</option>
+                                <option>not equals</option>
+                                <option selected>less than</option>
+                                <option>greater than</option>
+                                <option>less or equal</option>
+                                <option>greater or equal</option>
+                                <option>contains</option>
+                                <option>within days</option>
+                            </select>
+                            <input type="text" value="10" style="width: 100px;">
+                            <span style="color: #6C757D;">GB</span>
+                            <span class="logical-operator">AND</span>
+                            <button style="background: none; border: none; color: #DC3545; cursor: pointer; font-size: 18px;">×</button>
+                        </div>
+
+                        <!-- Condition 2 -->
+                        <div class="condition-row">
+                            <span style="color: #6C757D; font-weight: 500; visibility: hidden;">IF</span>
+                            <select style="flex: 1;">
+                                <optgroup label="📦 Application Fields">
+                                    <option>Application Name</option>
+                                    <option>Application Version</option>
+                                    <option>Application Vendor</option>
+                                    <option>CVE Count</option>
+                                    <option>CVSS Score (Highest)</option>
+                                    <option>App EOL Date</option>
+                                    <option>Days Until App EOL</option>
+                                    <option>Installation Count</option>
+                                    <option>App Owner</option>
+                                    <option>Latest Available Version</option>
+                                </optgroup>
+                                <optgroup label="🖥️ Device Fields">
+                                    <option>Device Name</option>
+                                    <option>Operating System</option>
+                                    <option>Disk Free Space (GB)</option>
+                                    <option>Disk Free Space (%)</option>
+                                    <option>Last Active Date</option>
+                                    <option selected>Last Active Days</option>
+                                    <option>Primary User</option>
+                                    <option>Department</option>
+                                    <option>Location</option>
+                                    <option>Hardware EOL Date</option>
+                                    <option>Days Until Hardware EOL</option>
+                                    <option>Critical Patches Missing</option>
+                                </optgroup>
+                            </select>
+                            <select style="width: 150px;">
+                                <option>equals</option>
+                                <option>not equals</option>
+                                <option>less than</option>
+                                <option selected>greater than</option>
+                                <option>less or equal</option>
+                                <option>greater or equal</option>
+                                <option>contains</option>
+                                <option>within days</option>
+                            </select>
+                            <input type="text" value="28" style="width: 100px;">
+                            <span style="color: #6C757D;">days</span>
+                            <select style="width: 80px;">
+                                <option selected>AND</option>
+                                <option>OR</option>
+                            </select>
+                            <button style="background: none; border: none; color: #DC3545; cursor: pointer; font-size: 18px;">×</button>
+                        </div>
+
+                        <button class="btn btn-secondary" style="margin-top: 8px;">
+                            <span>➕</span> Add Condition
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Suggested Actions -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">⚡ Suggested Actions</h2>
+                        <span style="color: #6C757D; font-size: 14px;">Actions to recommend when devices match this rule</span>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                        <label style="display: flex; align-items: center; gap: 12px; padding: 16px; background: #E8F5E9; border-radius: 8px; cursor: pointer; border: 2px solid #28A745;">
+                            <input type="checkbox" checked style="width: 20px; height: 20px;">
+                            <div>
+                                <div style="font-weight: 600;">📧 Send User Notification</div>
+                                <div style="font-size: 12px; color: #6C757D;">Notify the device owner via email</div>
+                            </div>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 12px; padding: 16px; background: #F8F9FA; border-radius: 8px; cursor: pointer; border: 2px solid #DEE2E6;">
+                            <input type="checkbox" style="width: 20px; height: 20px;">
+                            <div>
+                                <div style="font-weight: 600;">🎫 Create Incident</div>
+                                <div style="font-size: 12px; color: #6C757D;">Create ServiceNow incident ticket</div>
+                            </div>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 12px; padding: 16px; background: #E3F2FD; border-radius: 8px; cursor: pointer; border: 2px solid #0066CC;">
+                            <input type="checkbox" checked style="width: 20px; height: 20px;">
+                            <div>
+                                <div style="font-weight: 600;">📦 Create MECM Collection</div>
+                                <div style="font-size: 12px; color: #6C757D;">Group matching devices for deployment</div>
+                            </div>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 12px; padding: 16px; background: #F8F9FA; border-radius: 8px; cursor: pointer; border: 2px solid #DEE2E6;">
+                            <input type="checkbox" style="width: 20px; height: 20px;">
+                            <div>
+                                <div style="font-weight: 600;">⚡ Run Tachyon Action</div>
+                                <div style="font-size: 12px; color: #6C757D;">Execute real-time remediation script</div>
+                            </div>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 12px; padding: 16px; background: #FFF3CD; border-radius: 8px; cursor: pointer; border: 2px solid #FFC107;">
+                            <input type="checkbox" checked style="width: 20px; height: 20px;">
+                            <div>
+                                <div style="font-weight: 600;">👤 Notify App Owner</div>
+                                <div style="font-size: 12px; color: #6C757D;">Alert the application/device owner</div>
+                            </div>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 12px; padding: 16px; background: #F8F9FA; border-radius: 8px; cursor: pointer; border: 2px solid #DEE2E6;">
+                            <input type="checkbox" style="width: 20px; height: 20px;">
+                            <div>
+                                <div style="font-weight: 600;">📊 Generate Report</div>
+                                <div style="font-size: 12px; color: #6C757D;">Create compliance/status report</div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Action Configuration Details -->
+                    <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #DEE2E6;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                            <h3 style="margin: 0;">📋 Configure Selected Actions</h3>
+                            <button class="btn btn-secondary btn-sm">+ Define Custom Action</button>
+                        </div>
+
+                        <!-- Send User Notification Config -->
+                        <div style="background: #F8F9FA; border-radius: 8px; padding: 16px; margin-bottom: 12px; border-left: 4px solid #28A745;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 18px;">📧</span>
+                                    <strong>Send User Notification</strong>
+                                    <span class="status-badge info" style="font-size: 10px;">Low Risk</span>
+                                </div>
+                                <button style="background: none; border: none; cursor: pointer;">▲</button>
+                            </div>
+                            
+                            <!-- Email Template Section -->
+                            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px dashed #DEE2E6;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                                    <span style="font-size: 16px;">✉️</span>
+                                    <strong>Email Template</strong>
+                                    <span class="status-badge" style="background: #7C3AED; color: white; font-size: 10px;">AI-Powered</span>
+                                </div>
+                                
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label style="font-size: 12px; color: #495057; margin-bottom: 4px; display: block;">Select Existing Template or Create New</label>
+                                    <div style="display: flex; gap: 8px;">
+                                        <select class="form-select" style="flex: 1;">
+                                            <option value="">-- Select Template --</option>
+                                            <option value="low_disk">Low Disk Space Warning</option>
+                                            <option value="eol_notice">EOL Hardware Notice</option>
+                                            <option value="patch_reminder">Patch Compliance Reminder</option>
+                                            <option selected value="custom">✨ Create New with AI...</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- AI Template Generator -->
+                                <div style="background: linear-gradient(135deg, #F3E8FF 0%, #E8F4FD 100%); border: 2px solid #7C3AED; border-radius: 8px; padding: 16px; margin-bottom: 12px;">
+                                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                                        <span style="font-size: 18px;">🤖</span>
+                                        <strong style="color: #7C3AED;">AI Email Template Generator</strong>
+                                    </div>
+                                    
+                                    <div class="form-group" style="margin-bottom: 12px;">
+                                        <label style="font-size: 12px; color: #495057; margin-bottom: 4px; display: block;">Describe what you want the email to communicate:</label>
+                                        <textarea class="form-input" rows="3" placeholder="Example: Write a friendly but urgent email to users about their device running low on disk space. Include instructions on how to free up space and mention IT support contact if they need help.">Write a professional email notifying users that their device has low disk space and hasn't been active for a while. Ask them to either clean up their device or contact IT if they no longer need it. Keep it friendly but clear about the urgency.</textarea>
+                                    </div>
+                                    
+                                    <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+                                        <div class="form-group" style="margin: 0; flex: 1;">
+                                            <label style="font-size: 12px; color: #495057;">Tone</label>
+                                            <select class="form-select" style="font-size: 12px;">
+                                                <option>Professional</option>
+                                                <option selected>Friendly Professional</option>
+                                                <option>Urgent</option>
+                                                <option>Casual</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" style="margin: 0; flex: 1;">
+                                            <label style="font-size: 12px; color: #495057;">Length</label>
+                                            <select class="form-select" style="font-size: 12px;">
+                                                <option>Brief (2-3 sentences)</option>
+                                                <option selected>Standard (1 paragraph)</option>
+                                                <option>Detailed (multiple paragraphs)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" style="margin: 0; flex: 1;">
+                                            <label style="font-size: 12px; color: #495057;">Include</label>
+                                            <select class="form-select" style="font-size: 12px;">
+                                                <option selected>Device Details + Action Steps</option>
+                                                <option>Device Details Only</option>
+                                                <option>Action Steps Only</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <button class="btn btn-primary" style="background: #7C3AED; border-color: #7C3AED;">
+                                        <span>✨</span> Generate Email Template
+                                    </button>
+                                </div>
+
+                                <!-- Generated Template Preview -->
+                                <div style="background: white; border: 2px solid #28A745; border-radius: 8px; padding: 16px; margin-bottom: 12px;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 16px;">👁️</span>
+                                            <strong style="color: #28A745;">Preview Generated Template</strong>
+                                            <span class="status-badge active" style="font-size: 10px;">Ready for Review</span>
+                                        </div>
+                                        <div style="display: flex; gap: 8px;">
+                                            <button class="btn btn-secondary btn-sm">🔄 Regenerate</button>
+                                            <button class="btn btn-secondary btn-sm">✏️ Edit Manually</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="background: #F8F9FA; border-radius: 8px; padding: 16px; font-size: 13px;">
+                                        <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #DEE2E6;">
+                                            <div style="color: #6C757D; font-size: 11px;">SUBJECT:</div>
+                                            <div style="font-weight: 600;">Action Required: Your Device {{device_name}} Needs Attention</div>
+                                        </div>
+                                        <div>
+                                            <div style="color: #6C757D; font-size: 11px; margin-bottom: 8px;">BODY:</div>
+                                            <div style="line-height: 1.6;">
+                                                <p style="margin: 0 0 12px 0;">Hi {{user_first_name}},</p>
+                                                <p style="margin: 0 0 12px 0;">We noticed that your device <strong>{{device_name}}</strong> is running low on disk space (currently <strong style="color: #DC3545;">{{disk_free_gb}} GB free</strong>) and hasn't been active for <strong>{{inactive_days}} days</strong>.</p>
+                                                <p style="margin: 0 0 12px 0;"><strong>What you can do:</strong></p>
+                                                <ul style="margin: 0 0 12px 0; padding-left: 20px;">
+                                                    <li>Run Disk Cleanup (search "Disk Cleanup" in Start menu)</li>
+                                                    <li>Delete unnecessary files and empty your Recycle Bin</li>
+                                                    <li>Uninstall programs you no longer use</li>
+                                                </ul>
+                                                <p style="margin: 0 0 12px 0;">If you no longer need this device or need assistance, please contact IT Support at <strong>helpdesk@company.com</strong> or ext. 5555.</p>
+                                                <p style="margin: 0;">Best regards,<br>IT Operations Team</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="margin-top: 12px; padding: 12px; background: #FFF3CD; border-radius: 8px; display: flex; align-items: center; gap: 8px;">
+                                        <span>⚠️</span>
+                                        <span style="font-size: 13px;"><strong>Review Required:</strong> Please review the template above before confirming. Variables in {{brackets}} will be replaced with actual device data.</span>
+                                    </div>
+                                    
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
+                                        <button class="btn btn-secondary">
+                                            <span>📧</span> Send Test Email to Me
+                                        </button>
+                                        <button class="btn btn-success">
+                                            <span>✓</span> Confirm & Save Template
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Available Variables -->
+                                <details style="font-size: 12px;">
+                                    <summary style="cursor: pointer; color: #6C757D; padding: 8px 0;">📌 Available Template Variables</summary>
+                                    <div style="background: #F8F9FA; padding: 12px; border-radius: 8px; margin-top: 8px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                                        <code>{{device_name}}</code>
+                                        <code>{{user_email}}</code>
+                                        <code>{{user_first_name}}</code>
+                                        <code>{{user_last_name}}</code>
+                                        <code>{{disk_free_gb}}</code>
+                                        <code>{{disk_free_percent}}</code>
+                                        <code>{{inactive_days}}</code>
+                                        <code>{{last_active_date}}</code>
+                                        <code>{{department}}</code>
+                                        <code>{{location}}</code>
+                                        <code>{{os_version}}</code>
+                                        <code>{{rule_name}}</code>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- Notify App Owner Config -->
+                        <div style="background: #F8F9FA; border-radius: 8px; padding: 16px; margin-bottom: 12px; border-left: 4px solid #FFC107;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 18px;">👤</span>
+                                    <strong>Notify App Owner</strong>
+                                    <span class="status-badge pending" style="font-size: 10px;">Medium Risk</span>
+                                </div>
+                                <button style="background: none; border: none; cursor: pointer;">▲</button>
+                            </div>
+                            
+                            <!-- Email Template Section for App Owner -->
+                            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px dashed #DEE2E6;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                                    <span style="font-size: 16px;">✉️</span>
+                                    <strong>Owner Notification Template</strong>
+                                    <span class="status-badge" style="background: #7C3AED; color: white; font-size: 10px;">AI-Powered</span>
+                                </div>
+                                
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label style="font-size: 12px; color: #495057; margin-bottom: 4px; display: block;">Select Template</label>
+                                    <div style="display: flex; gap: 8px;">
+                                        <select class="form-select" style="flex: 1;">
+                                            <option value="">-- Select Template --</option>
+                                            <option value="owner_summary">Owner Summary Report</option>
+                                            <option value="owner_urgent">Urgent Owner Alert</option>
+                                            <option selected value="custom">✨ Create New with AI...</option>
+                                        </select>
+                                        <button class="btn btn-secondary btn-sm" style="background: #7C3AED; color: white; border-color: #7C3AED;">
+                                            <span>🤖</span> Generate
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Compact Template Preview for App Owner -->
+                                <div style="background: white; border: 1px solid #DEE2E6; border-radius: 8px; padding: 12px;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="font-size: 12px; color: #6C757D;">Current Template Preview:</span>
+                                        <div style="display: flex; gap: 4px;">
+                                            <button class="btn btn-secondary btn-sm" style="font-size: 10px; padding: 4px 8px;">Edit</button>
+                                            <button class="btn btn-secondary btn-sm" style="font-size: 10px; padding: 4px 8px;">Test</button>
+                                        </div>
+                                    </div>
+                                    <div style="font-size: 12px; background: #F8F9FA; padding: 10px; border-radius: 4px;">
+                                        <div style="font-weight: 600; margin-bottom: 4px;">Subject: {{device_count}} Devices in Your Ownership Require Attention</div>
+                                        <div style="color: #6C757D; font-style: italic;">Hi {{owner_name}}, This is to inform you that {{device_count}} device(s) under your ownership have been flagged for: {{issue_summary}}...</div>
+                                    </div>
+                                    <div style="margin-top: 8px; display: flex; align-items: center; gap: 4px;">
+                                        <span style="color: #28A745; font-size: 12px;">✓</span>
+                                        <span style="font-size: 11px; color: #28A745;">Template confirmed and saved</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Create MECM Collection Config -->
+                        <div style="background: #F8F9FA; border-radius: 8px; padding: 16px; margin-bottom: 12px; border-left: 4px solid #DC3545;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 18px;">📦</span>
+                                    <strong>Create MECM Collection</strong>
+                                    <span class="status-badge error" style="font-size: 10px;">High Risk</span>
+                                </div>
+                                <button style="background: none; border: none; cursor: pointer;">▲</button>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px;">
+                                <div>
+                                    <div style="color: #6C757D; margin-bottom: 4px;">Description</div>
+                                    <div>Creates a device collection in MECM with matched devices for software deployment or policy application</div>
+                                </div>
+                                <div>
+                                    <div style="color: #6C757D; margin-bottom: 4px;">API Format</div>
+                                    <code style="background: #E9ECEF; padding: 4px 8px; border-radius: 4px; font-size: 11px;">POST /api/v1/mecm/collections</code>
+                                </div>
+                                <div>
+                                    <div style="color: #6C757D; margin-bottom: 4px;">Parameters</div>
+                                    <div><code>collection_name</code>, <code>limiting_collection</code>, <code>device_ids[]</code>, <code>refresh_schedule</code></div>
+                                </div>
+                                <div>
+                                    <div style="color: #6C757D; margin-bottom: 4px;">Requires Approval</div>
+                                    <div><strong style="color: #DC3545;">Yes - Modifies infrastructure</strong></div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed #DEE2E6;">
+                                <div style="color: #6C757D; margin-bottom: 8px; font-size: 12px;">Action Parameters:</div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                    <div class="form-group" style="margin: 0;">
+                                        <label style="font-size: 12px; color: #495057;">Collection Name Pattern</label>
+                                        <input type="text" class="form-input" value="{Department}_{RuleName}_{Date}" style="font-size: 12px;">
+                                    </div>
+                                    <div class="form-group" style="margin: 0;">
+                                        <label style="font-size: 12px; color: #495057;">Limiting Collection</label>
+                                        <select class="form-select" style="font-size: 12px;">
+                                            <option>All Systems</option>
+                                            <option selected>All Workstations</option>
+                                            <option>All Servers</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schedule -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">⏰ Schedule</h2>
+                    </div>
+                    
+                    <div style="display: flex; gap: 24px; align-items: start;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="radio" name="schedule" value="manual">
+                            <span>Manual only</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="radio" name="schedule" value="daily" checked>
+                            <span>Daily</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="radio" name="schedule" value="weekly">
+                            <span>Weekly</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="radio" name="schedule" value="monthly">
+                            <span>Monthly</span>
+                        </label>
+                        
+                        <div style="margin-left: 24px; display: flex; align-items: center; gap: 8px;">
+                            <span>Run at:</span>
+                            <select class="form-select" style="width: 120px;">
+                                <option>08:00 AM</option>
+                                <option>09:00 AM</option>
+                                <option>10:00 AM</option>
+                                <option>12:00 PM</option>
+                                <option>06:00 PM</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rule Testing & Validation Section -->
+                <div class="card" style="border: 2px solid #7C3AED; background: linear-gradient(135deg, #FAFBFF 0%, #F5F3FF 100%);">
+                    <div class="card-header">
+                        <h2 class="card-title">🧪 Rule Testing & Validation</h2>
+                        <span class="status-badge" style="background: #7C3AED; color: white;">Required Before Activation</span>
+                    </div>
+                    
+                    <div style="background: #FFF3CD; border-radius: 8px; padding: 12px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                        <span>⚠️</span>
+                        <span><strong>Safety Requirement:</strong> You must test this rule and verify the matched assets are correct before the rule can be scheduled and activated in production.</span>
+                    </div>
+
+                    <!-- Test Status -->
+                    <div style="display: flex; gap: 16px; margin-bottom: 20px;">
+                        <div style="flex: 1; background: white; border: 2px solid #DEE2E6; border-radius: 8px; padding: 16px; text-align: center;">
+                            <div style="font-size: 32px; margin-bottom: 8px;">📋</div>
+                            <div style="font-weight: 600;">Step 1</div>
+                            <div style="font-size: 13px; color: #6C757D;">Run Test Query</div>
+                            <div style="margin-top: 8px;">
+                                <span class="status-badge active">✓ Completed</span>
+                            </div>
+                        </div>
+                        <div style="flex: 1; background: white; border: 2px solid #7C3AED; border-radius: 8px; padding: 16px; text-align: center;">
+                            <div style="font-size: 32px; margin-bottom: 8px;">👁️</div>
+                            <div style="font-weight: 600;">Step 2</div>
+                            <div style="font-size: 13px; color: #6C757D;">Review Results</div>
+                            <div style="margin-top: 8px;">
+                                <span class="status-badge pending">⏳ In Progress</span>
+                            </div>
+                        </div>
+                        <div style="flex: 1; background: white; border: 2px solid #DEE2E6; border-radius: 8px; padding: 16px; text-align: center;">
+                            <div style="font-size: 32px; margin-bottom: 8px;">✅</div>
+                            <div style="font-weight: 600;">Step 3</div>
+                            <div style="font-size: 13px; color: #6C757D;">Confirm & Approve</div>
+                            <div style="margin-top: 8px;">
+                                <span class="status-badge" style="background: #E9ECEF; color: #6C757D;">Pending</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Test Results -->
+                    <div style="background: white; border: 1px solid #DEE2E6; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <span style="font-size: 20px;">📊</span>
+                                <div>
+                                    <strong>Test Results</strong>
+                                    <div style="font-size: 12px; color: #6C757D;">Last tested: January 31, 2026 at 2:34 PM</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary btn-sm">
+                                <span>🔄</span> Re-run Test
+                            </button>
+                        </div>
+
+                        <!-- Summary Stats -->
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px;">
+                            <div style="background: #F8F9FA; padding: 12px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 24px; font-weight: 700; color: #2563EB;">247</div>
+                                <div style="font-size: 12px; color: #6C757D;">Devices Matched</div>
+                            </div>
+                            <div style="background: #F8F9FA; padding: 12px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 24px; font-weight: 700; color: #6C757D;">98,432</div>
+                                <div style="font-size: 12px; color: #6C757D;">Total Devices Scanned</div>
+                            </div>
+                            <div style="background: #F8F9FA; padding: 12px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 24px; font-weight: 700; color: #28A745;">0.25%</div>
+                                <div style="font-size: 12px; color: #6C757D;">Match Rate</div>
+                            </div>
+                            <div style="background: #F8F9FA; padding: 12px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 24px; font-weight: 700; color: #495057;">1.2s</div>
+                                <div style="font-size: 12px; color: #6C757D;">Query Time</div>
+                            </div>
+                        </div>
+
+                        <!-- Department Breakdown -->
+                        <div style="margin-bottom: 16px;">
+                            <div style="font-weight: 600; margin-bottom: 8px;">Matched Devices by Department:</div>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <span style="background: #E3F2FD; padding: 4px 12px; border-radius: 16px; font-size: 13px;">Finance: 87</span>
+                                <span style="background: #E8F5E9; padding: 4px 12px; border-radius: 16px; font-size: 13px;">Engineering: 62</span>
+                                <span style="background: #FFF3E0; padding: 4px 12px; border-radius: 16px; font-size: 13px;">Marketing: 45</span>
+                                <span style="background: #F3E5F5; padding: 4px 12px; border-radius: 16px; font-size: 13px;">HR: 28</span>
+                                <span style="background: #E0F7FA; padding: 4px 12px; border-radius: 16px; font-size: 13px;">Operations: 25</span>
+                            </div>
+                        </div>
+
+                        <!-- Sample Results Table -->
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                                <div style="font-weight: 600;">Preview of Matched Assets (showing 10 of 247):</div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-secondary btn-sm">📥 Export All to CSV</button>
+                                    <button class="btn btn-secondary btn-sm">📋 View Full List</button>
+                                </div>
+                            </div>
+                            <div style="overflow-x: auto;">
+                                <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                                    <thead>
+                                        <tr style="background: #F8F9FA;">
+                                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #DEE2E6;">
+                                                <input type="checkbox" style="margin-right: 8px;">Device Name
+                                            </th>
+                                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #DEE2E6;">Primary User</th>
+                                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #DEE2E6;">Department</th>
+                                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #DEE2E6;">Disk Free</th>
+                                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #DEE2E6;">Inactive Days</th>
+                                            <th style="padding: 10px; text-align: center; border-bottom: 2px solid #DEE2E6;">Valid?</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="border-bottom: 1px solid #E9ECEF;">
+                                            <td style="padding: 10px;"><input type="checkbox" style="margin-right: 8px;" checked><strong>WS-NYC-12345</strong></td>
+                                            <td style="padding: 10px;">john.doe@company.com</td>
+                                            <td style="padding: 10px;">Finance</td>
+                                            <td style="padding: 10px; color: #DC3545; font-weight: 600;">5.2 GB</td>
+                                            <td style="padding: 10px;">45 days</td>
+                                            <td style="padding: 10px; text-align: center;"><span style="color: #28A745;">✓</span></td>
+                                        </tr>
+                                        <tr style="border-bottom: 1px solid #E9ECEF; background: #FFFBEB;">
+                                            <td style="padding: 10px;"><input type="checkbox" style="margin-right: 8px;"><strong>WS-NYC-12346</strong></td>
+                                            <td style="padding: 10px;">jane.smith@company.com</td>
+                                            <td style="padding: 10px;">Engineering</td>
+                                            <td style="padding: 10px; color: #DC3545; font-weight: 600;">3.1 GB</td>
+                                            <td style="padding: 10px;">32 days</td>
+                                            <td style="padding: 10px; text-align: center;"><span style="color: #FFC107;">⚠️</span></td>
+                                        </tr>
+                                        <tr style="border-bottom: 1px solid #E9ECEF;">
+                                            <td style="padding: 10px;"><input type="checkbox" style="margin-right: 8px;" checked><strong>WS-NYC-12347</strong></td>
+                                            <td style="padding: 10px;">mike.brown@company.com</td>
+                                            <td style="padding: 10px;">Marketing</td>
+                                            <td style="padding: 10px; color: #DC3545; font-weight: 600;">8.5 GB</td>
+                                            <td style="padding: 10px;">29 days</td>
+                                            <td style="padding: 10px; text-align: center;"><span style="color: #28A745;">✓</span></td>
+                                        </tr>
+                                        <tr style="border-bottom: 1px solid #E9ECEF;">
+                                            <td style="padding: 10px;"><input type="checkbox" style="margin-right: 8px;" checked><strong>WS-LAX-00891</strong></td>
+                                            <td style="padding: 10px;">sarah.connor@company.com</td>
+                                            <td style="padding: 10px;">HR</td>
+                                            <td style="padding: 10px; color: #DC3545; font-weight: 600;">2.8 GB</td>
+                                            <td style="padding: 10px;">38 days</td>
+                                            <td style="padding: 10px; text-align: center;"><span style="color: #28A745;">✓</span></td>
+                                        </tr>
+                                        <tr style="border-bottom: 1px solid #E9ECEF; background: #FFF5F5;">
+                                            <td style="padding: 10px;"><input type="checkbox" style="margin-right: 8px;"><strong>WS-CHI-55432</strong></td>
+                                            <td style="padding: 10px;">tom.wilson@company.com</td>
+                                            <td style="padding: 10px;">Finance</td>
+                                            <td style="padding: 10px; color: #FFC107; font-weight: 600;">9.8 GB</td>
+                                            <td style="padding: 10px;">30 days</td>
+                                            <td style="padding: 10px; text-align: center;"><span style="color: #DC3545;">✗</span></td>
+                                        </tr>
+                                        <tr style="border-bottom: 1px solid #E9ECEF;">
+                                            <td style="padding: 10px;"><input type="checkbox" style="margin-right: 8px;" checked><strong>WS-NYC-12350</strong></td>
+                                            <td style="padding: 10px;">emily.davis@company.com</td>
+                                            <td style="padding: 10px;">Operations</td>
+                                            <td style="padding: 10px; color: #DC3545; font-weight: 600;">4.1 GB</td>
+                                            <td style="padding: 10px;">52 days</td>
+                                            <td style="padding: 10px; text-align: center;"><span style="color: #28A745;">✓</span></td>
+                                        </tr>
+                                        <tr style="border-bottom: 1px solid #E9ECEF;">
+                                            <td style="padding: 10px;"><input type="checkbox" style="margin-right: 8px;" checked><strong>WS-SEA-78123</strong></td>
+                                            <td style="padding: 10px;">alex.johnson@company.com</td>
+                                            <td style="padding: 10px;">Engineering</td>
+                                            <td style="padding: 10px; color: #DC3545; font-weight: 600;">6.7 GB</td>
+                                            <td style="padding: 10px;">41 days</td>
+                                            <td style="padding: 10px; text-align: center;"><span style="color: #28A745;">✓</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div style="text-align: center; padding: 8px; color: #6C757D; font-size: 13px; border-bottom: 1px solid #E9ECEF;">
+                                ... and 240 more devices. <a href="#" style="color: #2563EB;">View all matched devices →</a>
+                            </div>
+                        </div>
+
+                        <!-- Validation Flags -->
+                        <div style="background: #FFF3CD; border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+                            <div style="font-weight: 600; margin-bottom: 8px;">⚠️ Review Flags (2 items need attention):</div>
+                            <ul style="margin: 0; padding-left: 20px; font-size: 13px;">
+                                <li><strong>WS-NYC-12346</strong> - User jane.smith@company.com is currently on approved leave (may not respond to notification)</li>
+                                <li><strong>WS-CHI-55432</strong> - Disk space 9.8 GB is very close to threshold (10 GB) - may be false positive</li>
+                            </ul>
+                        </div>
+
+                        <!-- Exclusion Options -->
+                        <div style="background: #F8F9FA; border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div>
+                                    <div style="font-weight: 600;">Exclude Flagged Devices?</div>
+                                    <div style="font-size: 12px; color: #6C757D;">Uncheck devices above or use bulk exclude to remove them from this rule's scope</div>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-secondary btn-sm">Exclude 2 Flagged</button>
+                                    <button class="btn btn-secondary btn-sm">Add to Exclusion List</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Verification Confirmation -->
+                    <div style="background: white; border: 2px solid #28A745; border-radius: 8px; padding: 16px;">
+                        <div style="display: flex; align-items: flex-start; gap: 12px;">
+                            <input type="checkbox" id="confirmTest" style="width: 24px; height: 24px; margin-top: 4px;">
+                            <div style="flex: 1;">
+                                <label for="confirmTest" style="font-weight: 600; cursor: pointer; display: block; margin-bottom: 4px;">
+                                    I have reviewed the test results and confirm the matched assets are correct
+                                </label>
+                                <div style="font-size: 13px; color: #6C757D;">
+                                    By checking this box, you confirm that:
+                                    <ul style="margin: 8px 0 0 0; padding-left: 20px;">
+                                        <li>You have reviewed the list of 247 matched devices</li>
+                                        <li>The rule conditions are correctly identifying the intended assets</li>
+                                        <li>You have addressed or accepted all review flags</li>
+                                        <li>This rule is ready for production scheduling</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #DEE2E6; display: flex; justify-content: space-between; align-items: center;">
+                            <div style="font-size: 13px; color: #6C757D;">
+                                <strong>Verification Status:</strong> 
+                                <span style="color: #FFC107;">⏳ Awaiting your confirmation</span>
+                            </div>
+                            <button class="btn btn-success">
+                                <span>✓</span> Confirm Test Results
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+                    <div style="color: #6C757D; font-size: 13px;">
+                        <span>📋</span> Rule validation status: <strong style="color: #FFC107;">Test results pending confirmation</strong>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-secondary" onclick="window.location.href='03_rules.html'">Cancel</button>
+                        <button class="btn btn-secondary">Save as Draft</button>
+                        <button class="btn btn-success btn-lg" disabled style="opacity: 0.5; cursor: not-allowed;" title="Confirm test results before activating">
+                            <span>✓</span> Save & Activate Rule
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Activation Blocked Message -->
+                <div style="background: #E3F2FD; border-radius: 8px; padding: 12px; margin-top: 12px; display: flex; align-items: center; gap: 8px;">
+                    <span>ℹ️</span>
+                    <span style="font-size: 13px;">The <strong>"Save & Activate Rule"</strong> button will be enabled after you confirm the test results above. You can still save as draft without confirmation.</span>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

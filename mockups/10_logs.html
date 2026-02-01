@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logs & Audit Trail - IT Operations AI Agent</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .log-tabs {
+            display: flex;
+            gap: 4px;
+            background: #F1F3F4;
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .log-tab {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #495057;
+            transition: all 0.2s;
+        }
+        .log-tab:hover {
+            background: rgba(255,255,255,0.5);
+        }
+        .log-tab.active {
+            background: white;
+            color: #2563EB;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .log-entry {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px;
+            border-bottom: 1px solid #E9ECEF;
+            transition: background 0.2s;
+        }
+        .log-entry:hover {
+            background: #F8F9FA;
+        }
+        .log-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .log-icon.info { background: #E3F2FD; }
+        .log-icon.success { background: #D4EDDA; }
+        .log-icon.warning { background: #FFF3CD; }
+        .log-icon.error { background: #F8D7DA; }
+        .log-icon.action { background: #E8F5E9; }
+        .log-icon.auth { background: #F3E5F5; }
+        .log-content {
+            flex: 1;
+            min-width: 0;
+        }
+        .log-message {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .log-details {
+            font-size: 13px;
+            color: #6C757D;
+            line-height: 1.5;
+        }
+        .log-meta {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+        .log-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #6C757D;
+        }
+        .log-timestamp {
+            text-align: right;
+            font-size: 12px;
+            color: #6C757D;
+            white-space: nowrap;
+        }
+        .log-level {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .log-level.info { background: #E3F2FD; color: #1565C0; }
+        .log-level.success { background: #D4EDDA; color: #155724; }
+        .log-level.warning { background: #FFF3CD; color: #856404; }
+        .log-level.error { background: #F8D7DA; color: #721C24; }
+        .log-level.debug { background: #E9ECEF; color: #495057; }
+        .filter-panel {
+            background: #F8F9FA;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .filter-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .filter-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #495057;
+        }
+        .json-preview {
+            background: #1E1E1E;
+            color: #D4D4D4;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin-top: 8px;
+        }
+        .json-key { color: #9CDCFE; }
+        .json-string { color: #CE9178; }
+        .json-number { color: #B5CEA8; }
+        .json-boolean { color: #569CD6; }
+        .expandable {
+            cursor: pointer;
+        }
+        .expandable:hover {
+            text-decoration: underline;
+        }
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card-mini {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-card-mini .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .stat-card-mini .stat-label {
+            font-size: 12px;
+            color: #6C757D;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="icon">🤖</span>
+                    <span>ITOA Agent</span>
+                </div>
+            </div>
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar (Ctrl+B)">◀</button>
+            <nav class="sidebar-nav">
+                <a href="02_dashboard.html" class="nav-item">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="03_rules.html" class="nav-item">
+                    <span class="icon">📋</span>
+                    <span>Rules</span>
+                </a>
+                <a href="04_scan_results.html" class="nav-item">
+                    <span class="icon">🔍</span>
+                    <span>Scan Results</span>
+                </a>
+                <a href="06_approvals.html" class="nav-item">
+                    <span class="icon">⚡</span>
+                    <span>Actions</span>
+                    <span class="badge">5</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">📈</span>
+                    <span>Reports</span>
+                </a>
+                <a href="07_action_definitions.html" class="nav-item">
+                    <span class="icon">🔧</span>
+                    <span>Action Definitions</span>
+                </a>
+                <a href="10_logs.html" class="nav-item active">
+                    <span class="icon">📜</span>
+                    <span>Logs</span>
+                </a>
+                <a href="09_settings.html" class="nav-item">
+                    <span class="icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Header -->
+            <header class="header">
+                <div>
+                    <nav class="breadcrumb" aria-label="Breadcrumb">
+                        <a href="02_dashboard.html">Home</a> &gt; <span>Logs</span>
+                    </nav>
+                    <h1 class="header-title">Logs & Audit Trail</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary">
+                        <span>📤</span> Export Logs
+                    </button>
+                    <div class="user-menu">
+                        <div class="user-avatar">JD</div>
+                        <span>John Doe</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Quick Stats -->
+                <div class="stats-row">
+                    <div class="stat-card-mini">
+                        <div class="stat-value" style="color: #2563EB;">12,847</div>
+                        <div class="stat-label">Total Events (24h)</div>
+                    </div>
+                    <div class="stat-card-mini">
+                        <div class="stat-value" style="color: #28A745;">1,234</div>
+                        <div class="stat-label">Actions Executed</div>
+                    </div>
+                    <div class="stat-card-mini">
+                        <div class="stat-value" style="color: #FFC107;">23</div>
+                        <div class="stat-label">Warnings</div>
+                    </div>
+                    <div class="stat-card-mini">
+                        <div class="stat-value" style="color: #DC3545;">3</div>
+                        <div class="stat-label">Errors</div>
+                    </div>
+                    <div class="stat-card-mini">
+                        <div class="stat-value" style="color: #6F42C1;">89</div>
+                        <div class="stat-label">User Sessions</div>
+                    </div>
+                </div>
+
+                <!-- Log Type Tabs -->
+                <div class="log-tabs">
+                    <button class="log-tab active">📋 All Logs</button>
+                    <button class="log-tab">👤 Audit Trail</button>
+                    <button class="log-tab">⚡ Action Logs</button>
+                    <button class="log-tab">🔗 Integration Logs</button>
+                    <button class="log-tab">⚠️ Errors & Warnings</button>
+                    <button class="log-tab">🔐 Security Events</button>
+                </div>
+
+                <!-- Filters -->
+                <div class="filter-panel">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label>Date Range</label>
+                            <select class="form-select" style="width: 150px;">
+                                <option>Last 1 hour</option>
+                                <option selected>Last 24 hours</option>
+                                <option>Last 7 days</option>
+                                <option>Last 30 days</option>
+                                <option>Custom Range</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Log Level</label>
+                            <select class="form-select" style="width: 130px;">
+                                <option selected>All Levels</option>
+                                <option>Info</option>
+                                <option>Success</option>
+                                <option>Warning</option>
+                                <option>Error</option>
+                                <option>Debug</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>User</label>
+                            <select class="form-select" style="width: 150px;">
+                                <option selected>All Users</option>
+                                <option>John Doe</option>
+                                <option>Jane Smith</option>
+                                <option>System</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Category</label>
+                            <select class="form-select" style="width: 150px;">
+                                <option selected>All Categories</option>
+                                <option>Authentication</option>
+                                <option>Rule Execution</option>
+                                <option>Action Execution</option>
+                                <option>Integration</option>
+                                <option>Configuration</option>
+                            </select>
+                        </div>
+                        <div class="filter-group" style="flex: 1;">
+                            <label>Search</label>
+                            <input type="text" class="form-input" placeholder="Search in logs..." style="width: 100%;">
+                        </div>
+                        <div class="filter-group">
+                            <button class="btn btn-primary">Apply Filters</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logs List -->
+                <div class="card">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="margin: 0;">Log Entries</h3>
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                                <input type="checkbox"> Auto-refresh
+                            </label>
+                            <span style="font-size: 13px; color: #6C757D;">Showing 1-50 of 12,847</span>
+                        </div>
+                    </div>
+                    <div class="card-body" style="padding: 0;">
+                        <!-- Log Entry 1 - Action Execution -->
+                        <div class="log-entry">
+                            <div class="log-icon success">✓</div>
+                            <div class="log-content">
+                                <div class="log-message">Action Executed: Create MECM Collection</div>
+                                <div class="log-details">
+                                    Collection "Win11-Upgrade-Batch-47" created with 247 devices. 
+                                    Rule: "Windows 11 Upgrade Candidates" | Approved by: John Doe
+                                </div>
+                                <div class="log-meta">
+                                    <div class="log-meta-item">
+                                        <span>👤</span> System (Automated)
+                                    </div>
+                                    <div class="log-meta-item">
+                                        <span>📋</span> Rule ID: R-2024-0147
+                                    </div>
+                                    <div class="log-meta-item">
+                                        <span>🎯</span> Action ID: ACT-00234
+                                    </div>
+                                </div>
+                                <div class="json-preview" style="display: block;">
+                                    {<br>
+                                    &nbsp;&nbsp;<span class="json-key">"action"</span>: <span class="json-string">"create_mecm_collection"</span>,<br>
+                                    &nbsp;&nbsp;<span class="json-key">"collection_name"</span>: <span class="json-string">"Win11-Upgrade-Batch-47"</span>,<br>
+                                    &nbsp;&nbsp;<span class="json-key">"device_count"</span>: <span class="json-number">247</span>,<br>
+                                    &nbsp;&nbsp;<span class="json-key">"execution_time_ms"</span>: <span class="json-number">1234</span>,<br>
+                                    &nbsp;&nbsp;<span class="json-key">"status"</span>: <span class="json-string">"success"</span><br>
+                                    }
+                                </div>
+                            </div>
+                            <div class="log-timestamp">
+                                <span class="log-level success">Success</span>
+                                <div style="margin-top: 8px;">Today 2:34:12 PM</div>
+                            </div>
+                        </div>
+
+                        <!-- Log Entry 2 - User Login -->
+                        <div class="log-entry">
+                            <div class="log-icon auth">🔐</div>
+                            <div class="log-content">
+                                <div class="log-message">User Login: John Doe</div>
+                                <div class="log-details">
+                                    Successfully authenticated via Azure AD. Session ID: sess_abc123xyz
+                                </div>
+                                <div class="log-meta">
+                                    <div class="log-meta-item">
+                                        <span>👤</span> john.doe@company.com
+                                    </div>
+                                    <div class="log-meta-item">
+                                        <span>🌐</span> IP: 10.0.15.42
+                                    </div>
+                                    <div class="log-meta-item">
+                                        <span>💻</span> Windows 11 / Chrome
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="log-timestamp">
+                                <span class="log-level info">Info</span>
+                                <div style="margin-top: 8px;">Today 2:30:05 PM</div>
+                            </div>
+                        </div>
+
+                        <!-- Log Entry 3 - Rule Execution -->
+                        <div class="log-entry">
+                            <div class="log-icon info">📋</div>
+                            <div class="log-content">
+                                <div class="log-message">Rule Scan Completed: Windows 11 Upgrade Candidates</div>
+                                <div class="log-details">
+                                    Found 247 devices matching criteria. 12 new devices since last scan. Scan duration: 45 seconds.
+                                </div>
+                                <div class="log-meta">
+                                    <div class="log-meta-item">
+                                        <span>📋</span> Rule ID: R-2024-0147
+                                    </div>
+                                    <div class="log-meta-item">
+                                        <span>⏱️</span> Duration: 45s
+                                    </div>
+                                    <div class="log-meta-item">
+                                        <span>🖥️</span> 247 matches
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="log-timestamp">
+                                <span class="log-level info">Info</span>
+                                <div style="margin-top: 8px;">Today 2:15:00 PM</div>
+                            </div>
+                        </div>
+
+                        <!-- Log Entry 4 - Integration Warning -->
+                        <div class="log-entry">
+                            <div class="log-icon warning">⚠️</div>
+                            <div class="log-content">
+                                <div class="log-message">1E Tachyon API Token Expiring Soon</div>
+                                <div class="log-details">
+                                    The API token for 1E Tachyon integration will expire in 3 days. Please renew to avoid service interruption.
+                                </div>
+                                <div class="log-meta">
+                                    <div class="log-meta-item">
+                                        <span>🔗</span> Integration: 1E Tachyon
+                                    </div>
+                                    <div class="log-meta-item">
+                                        <span>📅</span> Expires: Feb 3, 2026
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="log-timestamp">
+                                <span class="log-level warning">Warning</span>
+                                <div style="margin-top: 8px;">Today 1:00:00 PM</div>
+                            </div>
+                        </div>
+
+                        <!-- Log Entry 5 - Approval -->
+                        <div class="log-entry">
+                            <div class="log-icon success">✅</div>
+                            <div class="log-content">
+                                <div class="log-message">Action Approved: Create MECM Collection</div>
+                                <div class="log-details">
+                                    User approved action to create collection for 247 devices. Comment: "Verified device list, approved for Windows 11 upgrade batch."
+                                </div>
+                                <div class="log-meta">
+                                    <div class="log-meta-item">
+                                        <span>👤</span> John Doe
+                                    </div>
+                                    <div class="log-meta-item">
+                                        <span>🎯</span> Action ID: ACT-00234
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="log-timestamp">
+                                <span class="log-level success">Success</span>
+                                <div style="margin-top: 8px;">Today 12:45:30 PM</div>
+                            </div>
+                        </div>
+
+                        <!-- Log Entry 6 - Email Notification -->
+                        <div class="log-entry">
+                            <div class="log-icon info">📧</div>
+                            <div class="log-content">
+                                <div class="log-message">Notification Sent: App Owner Alert</div>
+                                <div class="log-details">
+                                    Email sent to sarah.wilson@company.com regarding 15 devices running outdated software owned by their department.
+                                </div>
+                                <div class="log-meta">
+                                    <div class="log-meta-item">
+                                        <span>📧</span> To: sarah.wilson@company.com
+                                    </div>
+                                    <div class="log-meta-item">
+                                        <span>📋</span> Template: App Owner Notification
+                                    </div>
+                                    <div class="log-meta-item">
+                                        <span>🖥️</span> 15 devices
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="log-timestamp">
+                                <span class="log-level info">Info</span>
+                                <div style="margin-top: 8px;">Today 11:30:00 AM</div>
+                            </div>
+                        </div>
+
+                        <!-- Log Entry 7 - Error -->
+                        <div class="log-entry">
+                            <div class="log-icon error">❌</div>
+                            <div class="log-content">
+                                <div class="log-message">Action Failed: ServiceNow Incident Creation</div>
+                                <div class="log-details">
+                                    Failed to create incident in ServiceNow. Error: API rate limit exceeded (429). Automatic retry scheduled in 5 minutes.
+                                </div>
+                                <div class="log-meta">
+                                    <div class="log-meta-item">
+                                        <span>🔗</span> Integration: ServiceNow
+                                    </div>
+                                    <div class="log-meta-item">
+                                        <span>🎯</span> Action ID: ACT-00231
+                                    </div>
+                                    <div class="log-meta-item">
+                                        <span>🔄</span> Retry: Pending
+                                    </div>
+                                </div>
+                                <div class="json-preview">
+                                    {<br>
+                                    &nbsp;&nbsp;<span class="json-key">"error_code"</span>: <span class="json-number">429</span>,<br>
+                                    &nbsp;&nbsp;<span class="json-key">"error_message"</span>: <span class="json-string">"Rate limit exceeded"</span>,<br>
+                                    &nbsp;&nbsp;<span class="json-key">"retry_after"</span>: <span class="json-number">300</span>,<br>
+                                    &nbsp;&nbsp;<span class="json-key">"retry_attempt"</span>: <span class="json-number">1</span><br>
+                                    }
+                                </div>
+                            </div>
+                            <div class="log-timestamp">
+                                <span class="log-level error">Error</span>
+                                <div style="margin-top: 8px;">Today 10:15:23 AM</div>
+                            </div>
+                        </div>
+
+                        <!-- Log Entry 8 - Configuration Change -->
+                        <div class="log-entry">
+                            <div class="log-icon info">⚙️</div>
+                            <div class="log-content">
+                                <div class="log-message">Configuration Changed: LLM Settings</div>
+                                <div class="log-details">
+                                    Updated LLM temperature from 0.5 to 0.3. Changed by John Doe.
+                                </div>
+                                <div class="log-meta">
+                                    <div class="log-meta-item">
+                                        <span>👤</span> John Doe
+                                    </div>
+                                    <div class="log-meta-item">
+                                        <span>⚙️</span> Setting: llm.temperature
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="log-timestamp">
+                                <span class="log-level info">Info</span>
+                                <div style="margin-top: 8px;">Today 9:45:00 AM</div>
+                            </div>
+                        </div>
+
+                        <!-- Log Entry 9 - MECM Sync -->
+                        <div class="log-entry">
+                            <div class="log-icon success">🔄</div>
+                            <div class="log-content">
+                                <div class="log-message">MECM Database Sync Completed</div>
+                                <div class="log-details">
+                                    Successfully synchronized 98,432 devices from MECM backup database. 156 new devices, 23 removed, 1,247 updated.
+                                </div>
+                                <div class="log-meta">
+                                    <div class="log-meta-item">
+                                        <span>🔗</span> Integration: MECM
+                                    </div>
+                                    <div class="log-meta-item">
+                                        <span>🖥️</span> 98,432 devices
+                                    </div>
+                                    <div class="log-meta-item">
+                                        <span>⏱️</span> Duration: 3m 24s
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="log-timestamp">
+                                <span class="log-level success">Success</span>
+                                <div style="margin-top: 8px;">Today 6:00:00 AM</div>
+                            </div>
+                        </div>
+
+                        <!-- Log Entry 10 - Rule Created -->
+                        <div class="log-entry">
+                            <div class="log-icon action">➕</div>
+                            <div class="log-content">
+                                <div class="log-message">Rule Created: Outdated Antivirus Detection</div>
+                                <div class="log-details">
+                                    New rule created using AI-assisted natural language builder. Criteria: Devices with antivirus definitions older than 7 days.
+                                </div>
+                                <div class="log-meta">
+                                    <div class="log-meta-item">
+                                        <span>👤</span> Jane Smith
+                                    </div>
+                                    <div class="log-meta-item">
+                                        <span>📋</span> Rule ID: R-2024-0148
+                                    </div>
+                                    <div class="log-meta-item">
+                                        <span>🤖</span> AI-Assisted
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="log-timestamp">
+                                <span class="log-level info">Info</span>
+                                <div style="margin-top: 8px;">Yesterday 4:30:00 PM</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div style="padding: 16px; border-top: 1px solid #E9ECEF; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 13px; color: #6C757D;">Show:</span>
+                            <select class="form-select" style="width: 80px;">
+                                <option>50</option>
+                                <option>100</option>
+                                <option>200</option>
+                            </select>
+                            <span style="font-size: 13px; color: #6C757D;">entries</span>
+                        </div>
+                        <div style="display: flex; gap: 4px;">
+                            <button class="btn btn-secondary btn-sm" disabled>Previous</button>
+                            <button class="btn btn-primary btn-sm">1</button>
+                            <button class="btn btn-secondary btn-sm">2</button>
+                            <button class="btn btn-secondary btn-sm">3</button>
+                            <span style="padding: 8px;">...</span>
+                            <button class="btn btn-secondary btn-sm">257</button>
+                            <button class="btn btn-secondary btn-sm">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'b') {
+                e.preventDefault();
+                toggleSidebar();
+            }
+        });
+    </script>
+</body>
+</html>

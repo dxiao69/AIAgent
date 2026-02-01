@@ -1,0 +1,209 @@
+[
+  {
+    "test_id": "RC-001",
+    "category": "risk_classification",
+    "description": "Email notification - Low risk",
+    "input": {
+      "action_type": "send_email_notification",
+      "target_count": 500,
+      "action_parameters": {
+        "template": "low_disk_space_warning"
+      }
+    },
+    "expected_output": {
+      "risk_level": "low",
+      "risk_score": 15,
+      "requires_approval": false,
+      "rationale": "Notification only, no system changes"
+    },
+    "evaluation_mode": "exact",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "easy",
+      "tags": ["notification", "low_risk"]
+    }
+  },
+  {
+    "test_id": "RC-002",
+    "category": "risk_classification",
+    "description": "MECM Collection creation - Medium risk",
+    "input": {
+      "action_type": "create_mecm_collection",
+      "target_count": 300,
+      "action_parameters": {
+        "collection_name": "ITOA_LowDiskSpace",
+        "limiting_collection": "All Systems"
+      }
+    },
+    "expected_output": {
+      "risk_level": "medium",
+      "risk_score": 45,
+      "requires_approval": true,
+      "rationale": "Creates new MECM object, may affect deployments"
+    },
+    "evaluation_mode": "exact",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "easy",
+      "tags": ["mecm", "medium_risk"]
+    }
+  },
+  {
+    "test_id": "RC-003",
+    "category": "risk_classification",
+    "description": "ServiceNow ticket - Low risk",
+    "input": {
+      "action_type": "create_servicenow_ticket",
+      "target_count": 1,
+      "action_parameters": {
+        "ticket_type": "incident",
+        "priority": "P3"
+      }
+    },
+    "expected_output": {
+      "risk_level": "low",
+      "risk_score": 20,
+      "requires_approval": false,
+      "rationale": "Creates ticket for tracking, no system changes"
+    },
+    "evaluation_mode": "exact",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "easy",
+      "tags": ["servicenow", "low_risk"]
+    }
+  },
+  {
+    "test_id": "RC-004",
+    "category": "risk_classification",
+    "description": "Tachyon script execution - High risk",
+    "input": {
+      "action_type": "run_tachyon_script",
+      "target_count": 50,
+      "action_parameters": {
+        "script_name": "disk_cleanup",
+        "script_type": "remediation"
+      }
+    },
+    "expected_output": {
+      "risk_level": "high",
+      "risk_score": 85,
+      "requires_approval": true,
+      "rationale": "Executes scripts on endpoints, may affect system state"
+    },
+    "evaluation_mode": "exact",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "easy",
+      "tags": ["tachyon", "high_risk", "remediation"]
+    }
+  },
+  {
+    "test_id": "RC-005",
+    "category": "risk_classification",
+    "description": "Software deployment - High risk",
+    "input": {
+      "action_type": "deploy_software_package",
+      "target_count": 1000,
+      "action_parameters": {
+        "package_name": "Security Patch KB123456",
+        "deployment_type": "required"
+      }
+    },
+    "expected_output": {
+      "risk_level": "high",
+      "risk_score": 90,
+      "requires_approval": true,
+      "rationale": "Deploys software to endpoints, system changes, large scale"
+    },
+    "evaluation_mode": "exact",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "medium",
+      "tags": ["deployment", "high_risk", "large_scale"]
+    }
+  },
+  {
+    "test_id": "RC-006",
+    "category": "risk_classification",
+    "description": "Teams message - Low risk",
+    "input": {
+      "action_type": "send_teams_message",
+      "target_count": 1,
+      "action_parameters": {
+        "channel": "IT-Ops-Alerts",
+        "message_type": "adaptive_card"
+      }
+    },
+    "expected_output": {
+      "risk_level": "low",
+      "risk_score": 10,
+      "requires_approval": false,
+      "rationale": "Notification only, no system changes"
+    },
+    "evaluation_mode": "exact",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "easy",
+      "tags": ["teams", "notification", "low_risk"]
+    }
+  },
+  {
+    "test_id": "RC-007",
+    "category": "risk_classification",
+    "description": "Large scale notification - Elevated to Medium",
+    "input": {
+      "action_type": "send_email_notification",
+      "target_count": 5000,
+      "action_parameters": {
+        "template": "eol_warning"
+      }
+    },
+    "expected_output": {
+      "risk_level": "medium",
+      "risk_score": 40,
+      "requires_approval": true,
+      "rationale": "Large scale notification, may impact email systems"
+    },
+    "evaluation_mode": "exact",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "medium",
+      "tags": ["notification", "large_scale", "elevated_risk"]
+    }
+  },
+  {
+    "test_id": "RC-008",
+    "category": "risk_classification",
+    "description": "Device reboot script - Critical risk",
+    "input": {
+      "action_type": "run_tachyon_script",
+      "target_count": 100,
+      "action_parameters": {
+        "script_name": "force_reboot",
+        "script_type": "system_control"
+      }
+    },
+    "expected_output": {
+      "risk_level": "critical",
+      "risk_score": 95,
+      "requires_approval": true,
+      "multi_approver_required": true,
+      "rationale": "Forces device reboot, immediate user impact"
+    },
+    "evaluation_mode": "exact",
+    "metadata": {
+      "author": "system",
+      "created_date": "2026-01-31",
+      "difficulty": "hard",
+      "tags": ["tachyon", "critical_risk", "system_control"]
+    }
+  }
+]

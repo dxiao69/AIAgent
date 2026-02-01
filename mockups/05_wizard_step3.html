@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Rule - Step 3: Choose Actions - IT Operations AI Agent</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .wizard-container { max-width: 900px; margin: 0 auto; }
+        .wizard-progress {
+            display: flex; justify-content: space-between; margin-bottom: 32px; position: relative;
+        }
+        .wizard-progress::before {
+            content: ''; position: absolute; top: 20px; left: 60px; right: 60px;
+            height: 3px; background: #E9ECEF; z-index: 0;
+        }
+        .wizard-step { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+        .wizard-step-number {
+            width: 40px; height: 40px; border-radius: 50%; background: #E9ECEF;
+            color: #6C757D; display: flex; align-items: center; justify-content: center;
+            font-weight: 600; font-size: 16px; margin-bottom: 8px; transition: all 0.3s;
+        }
+        .wizard-step.active .wizard-step-number { background: #2563EB; color: white; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2); }
+        .wizard-step.completed .wizard-step-number { background: #28A745; color: white; }
+        .wizard-step-label { font-size: 13px; color: #6C757D; text-align: center; }
+        .wizard-step.active .wizard-step-label { color: #2563EB; font-weight: 600; }
+        .wizard-step.completed .wizard-step-label { color: #28A745; }
+        .wizard-content { background: white; border-radius: 12px; padding: 32px; min-height: 400px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .wizard-footer { display: flex; justify-content: space-between; margin-top: 24px; padding-top: 24px; border-top: 1px solid #E9ECEF; }
+        .wizard-hint { background: #E3F2FD; border-radius: 8px; padding: 16px; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 12px; }
+        .wizard-hint-icon { font-size: 20px; }
+        .wizard-hint-content h4 { margin: 0 0 4px 0; font-size: 14px; color: #1565C0; }
+        .wizard-hint-content p { margin: 0; font-size: 13px; color: #1976D2; }
+        .draft-indicator { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #6C757D; }
+        .draft-indicator .dot { width: 8px; height: 8px; border-radius: 50%; background: #28A745; }
+        .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #6C757D; margin-bottom: 16px; }
+        .breadcrumb a { color: #2563EB; text-decoration: none; }
+        .action-card {
+            border: 2px solid #E9ECEF; border-radius: 12px; padding: 20px;
+            margin-bottom: 12px; cursor: pointer; transition: all 0.2s;
+        }
+        .action-card:hover { border-color: #2563EB; background: #F8FAFF; }
+        .action-card.selected { border-color: #2563EB; background: #E3F2FD; }
+        .action-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+        .action-card-icon { font-size: 24px; }
+        .action-card-title { font-weight: 600; flex: 1; }
+        .action-card-desc { color: #6C757D; font-size: 13px; margin-left: 36px; }
+        .risk-badge { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+        .risk-low { background: #DCFCE7; color: #166534; }
+        .risk-medium { background: #FEF3C7; color: #92400E; }
+        .risk-high { background: #FEE2E2; color: #991B1B; }
+        .action-params { margin-top: 16px; padding-top: 16px; border-top: 1px dashed #E9ECEF; margin-left: 36px; }
+        .selected-actions { background: #F8F9FA; border-radius: 8px; padding: 16px; margin-top: 24px; }
+        .selected-action-item { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #E9ECEF; }
+        .selected-action-item:last-child { border-bottom: none; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="icon">🤖</span>
+                    <span>ITOA Agent</span>
+                </div>
+            </div>
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar (Ctrl+B)">◀</button>
+            <nav class="sidebar-nav">
+                <a href="02_dashboard.html" class="nav-item"><span class="icon">📊</span><span>Dashboard</span></a>
+                <a href="03_rules.html" class="nav-item active"><span class="icon">📋</span><span>Rules</span></a>
+                <a href="04_scan_results.html" class="nav-item"><span class="icon">🔍</span><span>Scan Results</span></a>
+                <a href="06_approvals.html" class="nav-item"><span class="icon">⚡</span><span>Actions</span><span class="badge">5</span></a>
+                <a href="07_action_definitions.html" class="nav-item"><span class="icon">🔧</span><span>Action Definitions</span></a>
+                <a href="10_logs.html" class="nav-item"><span class="icon">📜</span><span>Logs</span></a>
+                <a href="09_settings.html" class="nav-item"><span class="icon">⚙️</span><span>Settings</span></a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <header class="header">
+                <div>
+                    <h1 class="header-title">Create New Rule</h1>
+                    <span style="color: #6C757D; font-size: 14px;">Low Disk Space - Critical</span>
+                </div>
+                <div class="header-actions">
+                    <div class="draft-indicator">
+                        <span class="dot"></span>
+                        <span>Draft auto-saved</span>
+                    </div>
+                    <div class="user-menu">
+                        <div class="user-avatar">JD</div>
+                        <span>John Doe</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <nav class="breadcrumb">
+                    <a href="02_dashboard.html">🏠 Home</a>
+                    <span>›</span>
+                    <a href="03_rules.html">Rules</a>
+                    <span>›</span>
+                    <span>Create New Rule</span>
+                </nav>
+
+                <div class="wizard-container">
+                    <!-- Progress Steps -->
+                    <div class="wizard-progress">
+                        <div class="wizard-step completed">
+                            <div class="wizard-step-number">✓</div>
+                            <div class="wizard-step-label">1. Define Rule</div>
+                        </div>
+                        <div class="wizard-step completed">
+                            <div class="wizard-step-number">✓</div>
+                            <div class="wizard-step-label">2. Set Conditions</div>
+                        </div>
+                        <div class="wizard-step active">
+                            <div class="wizard-step-number">3</div>
+                            <div class="wizard-step-label">3. Choose Actions</div>
+                        </div>
+                        <div class="wizard-step">
+                            <div class="wizard-step-number">4</div>
+                            <div class="wizard-step-label">4. Test & Activate</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Choose Actions -->
+                    <div class="wizard-content">
+                        <div class="wizard-hint">
+                            <span class="wizard-hint-icon">💡</span>
+                            <div class="wizard-hint-content">
+                                <h4>Choosing Actions</h4>
+                                <p>Select what should happen when devices match your rule. You can add multiple actions that will be suggested together. High-risk actions will require approval before execution.</p>
+                            </div>
+                        </div>
+
+                        <!-- AI Suggested Actions -->
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 20px; margin-bottom: 24px; color: white;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                                <span style="font-size: 20px;">🤖</span>
+                                <strong>AI Recommended Actions</strong>
+                                <span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 12px; font-size: 11px;">Based on your conditions</span>
+                            </div>
+                            <div style="display: flex; gap: 12px;">
+                                <div style="background: rgba(255,255,255,0.15); padding: 12px 16px; border-radius: 8px; flex: 1;">
+                                    <div style="font-weight: 600;">📧 Send Email Notification</div>
+                                    <div style="font-size: 12px; opacity: 0.9;">Notify device owners about low disk space</div>
+                                </div>
+                                <div style="background: rgba(255,255,255,0.15); padding: 12px 16px; border-radius: 8px; flex: 1;">
+                                    <div style="font-weight: 600;">📦 Create MECM Collection</div>
+                                    <div style="font-size: 12px; opacity: 0.9;">Group devices for remediation deployment</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-sm" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; margin-top: 12px;">
+                                ✓ Use AI Recommendations
+                            </button>
+                        </div>
+
+                        <!-- Available Actions -->
+                        <div>
+                            <label style="font-weight: 600; display: block; margin-bottom: 12px;">
+                                Available Actions <span style="font-weight: normal; color: #6C757D;">(select one or more)</span>
+                            </label>
+
+                            <!-- Notification Actions -->
+                            <div style="margin-bottom: 20px;">
+                                <div style="font-size: 12px; color: #6C757D; text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">
+                                    📣 Notification Actions
+                                </div>
+                                
+                                <div class="action-card selected">
+                                    <div class="action-card-header">
+                                        <span class="action-card-icon">📧</span>
+                                        <span class="action-card-title">Send Email Notification</span>
+                                        <span class="risk-badge risk-low">Low Risk</span>
+                                        <input type="checkbox" checked style="width: 20px; height: 20px;">
+                                    </div>
+                                    <div class="action-card-desc">Send email to device owners alerting them about the issue</div>
+                                    <div class="action-params">
+                                        <div class="form-group" style="margin-bottom: 12px;">
+                                            <label class="form-label" style="font-size: 13px;">Email Template</label>
+                                            <select class="form-select">
+                                                <option selected>Low Disk Space Warning</option>
+                                                <option>Hardware EOL Notice</option>
+                                                <option>Compliance Alert</option>
+                                                <option>Custom Template</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 0;">
+                                            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                                                <input type="checkbox" checked> Include remediation instructions
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="action-card">
+                                    <div class="action-card-header">
+                                        <span class="action-card-icon">💬</span>
+                                        <span class="action-card-title">Send Teams Message</span>
+                                        <span class="risk-badge risk-low">Low Risk</span>
+                                        <input type="checkbox" style="width: 20px; height: 20px;">
+                                    </div>
+                                    <div class="action-card-desc">Post notification to a Microsoft Teams channel</div>
+                                </div>
+                            </div>
+
+                            <!-- Collection/Grouping Actions -->
+                            <div style="margin-bottom: 20px;">
+                                <div style="font-size: 12px; color: #6C757D; text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">
+                                    📦 Collection & Grouping
+                                </div>
+
+                                <div class="action-card selected">
+                                    <div class="action-card-header">
+                                        <span class="action-card-icon">📦</span>
+                                        <span class="action-card-title">Create MECM Collection</span>
+                                        <span class="risk-badge risk-medium">Medium Risk</span>
+                                        <input type="checkbox" checked style="width: 20px; height: 20px;">
+                                    </div>
+                                    <div class="action-card-desc">Create a dynamic device collection in MECM for deployment targeting</div>
+                                    <div class="action-params">
+                                        <div class="form-group" style="margin-bottom: 12px;">
+                                            <label class="form-label" style="font-size: 13px;">Collection Name Pattern</label>
+                                            <input type="text" class="form-input" value="ITOA_LowDiskSpace_{timestamp}">
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 0;">
+                                            <label class="form-label" style="font-size: 13px;">Limiting Collection</label>
+                                            <select class="form-select">
+                                                <option selected>All Systems</option>
+                                                <option>Workstations</option>
+                                                <option>Servers</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="action-card">
+                                    <div class="action-card-header">
+                                        <span class="action-card-icon">🎫</span>
+                                        <span class="action-card-title">Create ServiceNow Ticket</span>
+                                        <span class="risk-badge risk-low">Low Risk</span>
+                                        <input type="checkbox" style="width: 20px; height: 20px;">
+                                    </div>
+                                    <div class="action-card-desc">Create an incident or change request in ServiceNow</div>
+                                </div>
+                            </div>
+
+                            <!-- Remediation Actions -->
+                            <div>
+                                <div style="font-size: 12px; color: #6C757D; text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">
+                                    🔧 Remediation Actions
+                                </div>
+
+                                <div class="action-card">
+                                    <div class="action-card-header">
+                                        <span class="action-card-icon">🗑️</span>
+                                        <span class="action-card-title">Run Disk Cleanup via 1E Tachyon</span>
+                                        <span class="risk-badge risk-high">High Risk</span>
+                                        <input type="checkbox" style="width: 20px; height: 20px;">
+                                    </div>
+                                    <div class="action-card-desc">Execute disk cleanup script on target devices (requires approval)</div>
+                                </div>
+
+                                <div class="action-card">
+                                    <div class="action-card-header">
+                                        <span class="action-card-icon">🚀</span>
+                                        <span class="action-card-title">Deploy Software Package</span>
+                                        <span class="risk-badge risk-high">High Risk</span>
+                                        <input type="checkbox" style="width: 20px; height: 20px;">
+                                    </div>
+                                    <div class="action-card-desc">Deploy a software package or script to target devices</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Selected Actions Summary -->
+                        <div class="selected-actions">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <strong>📋 Selected Actions (2)</strong>
+                                <span style="color: #6C757D; font-size: 13px;">Will be executed in order</span>
+                            </div>
+                            <div class="selected-action-item">
+                                <span>1.</span>
+                                <span>📧</span>
+                                <span style="flex: 1;">Send Email Notification</span>
+                                <span class="risk-badge risk-low">Low</span>
+                                <span style="color: #28A745;">Auto-execute</span>
+                            </div>
+                            <div class="selected-action-item">
+                                <span>2.</span>
+                                <span>📦</span>
+                                <span style="flex: 1;">Create MECM Collection</span>
+                                <span class="risk-badge risk-medium">Medium</span>
+                                <span style="color: #F59E0B;">Needs approval</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wizard Footer -->
+                    <div class="wizard-footer">
+                        <a href="05_wizard_step2.html" class="btn btn-secondary">
+                            ← Previous: Set Conditions
+                        </a>
+                        <div style="display: flex; gap: 12px;">
+                            <button class="btn btn-secondary">Save as Draft</button>
+                            <a href="05_wizard_step4.html" class="btn btn-primary">
+                                Next: Test & Activate →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'b') { e.preventDefault(); toggleSidebar(); }
+        });
+        // Action card selection
+        document.querySelectorAll('.action-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (e.target.type !== 'checkbox' && e.target.tagName !== 'SELECT' && e.target.tagName !== 'INPUT') {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                    this.classList.toggle('selected', checkbox.checked);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
