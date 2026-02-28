@@ -182,7 +182,7 @@
 **Key Message:** "This enhances your existing investments, it doesn't replace them."
 
 **Talking Points:**
-- Point to each integration: MECM, ServiceNow, Tachyon, LLM
+- Point to each integration: MECM, ServiceNow, Tachyon, Flexera, LLM
 - Emphasize: "We're not asking you to rip anything out"
 - Note the LLM flexibility: "Can use OpenAI OR local QWEN for sensitive data"
 
@@ -190,13 +190,13 @@
 
 > "Let me quickly show you how this fits with our existing systems."
 >
-> "On the left, you see the data sources - MECM for device inventory, ServiceNow for tickets and changes, and Tachyon for real-time queries."
+> "On the left, you see the data sources - MECM for device inventory, ServiceNow for tickets and changes, Tachyon for real-time queries, and Flexera for vulnerability intelligence and software evidence."
 >
 > "In the middle is our AI Agent - the brains of the operation. It uses a large language model to understand your requests and generate recommendations."
 >
 > "On the right, you see the actions we can take - creating collections, opening tickets, running scripts."
 >
-> "Here's what's important: we're not replacing anything. MECM stays. ServiceNow stays. Tachyon stays. This solution sits on top and makes them work together."
+> "Here's what's important: we're not replacing anything. MECM stays. ServiceNow stays. Tachyon stays. Flexera stays. This solution sits on top and makes them work together."
 >
 > "One more thing - for sensitive environments, we can run the AI locally using a model called QWEN. Nothing leaves our network if that's what you prefer."
 
@@ -224,7 +224,7 @@
 >
 > "Phase 3, weeks 7 through 9 - we build the desktop application. This is when you get something you can actually use."
 >
-> "Phase 4, weeks 10 through 12 - system integrations. Connect to MECM, ServiceNow, Tachyon."
+> "Phase 4, weeks 10 through 12 - system integrations. Connect to MECM, ServiceNow, Tachyon, and Flexera."
 >
 > "Phase 5, weeks 13 through 14 - testing and deployment. Make sure everything works, then go live."
 >

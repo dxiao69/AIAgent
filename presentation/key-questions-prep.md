@@ -12,7 +12,7 @@
   - Week 3-5: Core Backend (MECM connector, Rule engine, API)
   - Week 5-7: Desktop Application
   - Week 7-9: AI/LLM Features
-  - Week 9-12: Integrations (ServiceNow, Tachyon, Action Worker)
+  - Week 9-12: Integrations (ServiceNow, Tachyon, Flexera, Action Worker)
   - Week 12-14: Deployment & Testing
 
 **Supporting Data:** See [Implementation Guides](../implementationDetails/00_README.md)
@@ -86,7 +86,7 @@
 - Estimated 20-30% of initial development effort annually
 - Includes:
   - LLM prompt tuning and updates
-  - Integration updates (ServiceNow, MECM API changes)
+  - Integration updates (ServiceNow, MECM API changes, Flexera schema changes)
   - Security patches and dependency updates
   - New rule/action additions
 - Recommendation: Allocate 0.5-1 FTE for ongoing maintenance
@@ -102,6 +102,7 @@
 | MECM | Read-only SQL access to database | [✓/Pending] |
 | ServiceNow | API credentials, integration user | [✓/Pending] |
 | Tachyon (1E) | X.509 certificates, API access | [✓/Pending] |
+| Flexera GraphQL | API token and dataset access | [✓/Pending] |
 | Azure AD | App registration for OAuth | [✓/Pending] |
 | LLM | Azure OpenAI or API key | [✓/Pending] |
 
@@ -130,7 +131,7 @@
 
 **Prepared Answer:**
 - **Cost:** Enterprise AIOps solutions cost $X00K+/year
-- **Customization:** Our specific MECM + ServiceNow + Tachyon stack
+- **Customization:** Our specific MECM + ServiceNow + Tachyon + Flexera stack
 - **Data control:** LLM integration with PII filtering - data stays in-house
 - **Integration depth:** Direct access to existing tools without middleware
 
@@ -180,7 +181,7 @@ Each phase builds on previous but delivers independent value.
 
 Before presenting, confirm:
 
-- [ ] All integration access validated (MECM, ServiceNow, Tachyon, Azure AD)
+- [ ] All integration access validated (MECM, ServiceNow, Tachyon, Flexera, Azure AD)
 - [ ] LLM API costs estimated for pilot scale
 - [ ] IT ops team informed and supportive
 - [ ] Development team capacity confirmed

@@ -551,14 +551,16 @@ PUT  /api/llm/config               - Update LLM configuration
 | **5.1.4** | Implement ServiceNow App Owner lookup | Backend | 0.5 |
 | **5.1.5** | Implement 1E Tachyon connector | Backend | 1.5 |
 | **5.1.6** | Create Tachyon instruction execution | Backend | 1.5 |
-| **5.1.7** | Implement vulnerability database connector (NVD/CVE) | Backend | 1 |
-| **5.1.8** | Build notification service (Email/Teams) | Backend | 1.5 |
-| **5.1.9** | Integration tests with external systems | QA | 2 |
+| **5.1.7** | Implement vulnerability connectors (NVD + Flexera GraphQL) | Backend | 1.5 |
+| **5.1.8** | Implement ServiceNow change request integration (enterprise change mgmt) | Backend | 1 |
+| **5.1.9** | Build notification service (Email/Teams) | Backend | 1.5 |
+| **5.1.10** | Integration tests with external systems | QA | 2 |
 
 **Vulnerability Database Integration:**
 | Source | Data | Usage |
 |--------|------|-------|
 | NVD (NIST) | CVE data, CVSS scores | Application vulnerability lookup |
+| Flexera GraphQL | Vulnerability, advisory, software file evidence, installer evidence, solution status | Vulnerability evidence and remediation context |
 | Vendor Advisories | Security bulletins | EOL and patch information |
 | Internal Vuln DB | Custom tracking | Organization-specific vulnerabilities |
 
@@ -568,6 +570,8 @@ PUT  /api/llm/config               - Update LLM configuration
 | GET /table/cmdb_ci_computer | CMDB records |
 | GET /table/u_eol_table | EOL dates |
 | POST /table/incident | Create incidents |
+| POST /table/change_request | Create production change request |
+| GET /table/change_request | Validate change approval state/window |
 | GET /table/sys_user_group | Assignment groups |
 
 **1E Tachyon Integration:**
@@ -653,7 +657,7 @@ GET    /api/actions/pending      - Get pending approvals
 **Deliverables:**
 - [ ] ServiceNow connector (CMDB, incidents, EOL, App Owners)
 - [ ] 1E Tachyon connector with instruction execution
-- [ ] Vulnerability database connector (NVD/CVE)
+- [ ] Vulnerability connectors (NVD + Flexera GraphQL)
 - [ ] Notification service (Email + Teams)
 - [ ] App Owner notification workflow
 - [ ] Celery action worker with all task types (including App Owner tasks)
@@ -710,8 +714,16 @@ GET    /api/actions/pending      - Get pending approvals
 | **6.2.5** | Ground truth regression testing (all categories) | QA | 1 |
 | **6.2.6** | Create user documentation | Tech Writer | 2 |
 | **6.2.7** | Create admin guide | Tech Writer | 1 |
-| **6.2.8** | Production deployment preparation | DevOps | 2 |
-| **6.2.9** | Final bug fixes and polish | All | 2 |
+| **6.2.8** | Implement pre-prod to prod promotion gate checks | DevOps/Backend | 1 |
+| **6.2.9** | Production deployment preparation | DevOps | 2 |
+| **6.2.10** | Final bug fixes and polish | All | 2 |
+
+**Production Change Governance Gates:**
+- [ ] Pre-production validation passed for all production-bound actions
+- [ ] ServiceNow change request linked and Approved
+- [ ] Approved change window verified before execution
+- [ ] Backout plan captured and validated
+- [ ] Emergency change path tested (with post-implementation review)
 
 **Ground Truth Quality Gates (Pre-Release):**
 | Category | Minimum Accuracy | Status |
@@ -745,6 +757,7 @@ GET    /api/actions/pending      - Get pending approvals
 - [ ] Security audit passed
 - [ ] E2E test suite (>80% coverage)
 - [ ] User documentation complete
+- [ ] Enterprise change management gate validated (ServiceNow + pre-prod evidence)
 - [ ] Production deployment ready
 
 ---
@@ -785,6 +798,7 @@ GET    /api/actions/pending      - Get pending approvals
 | MECM Database | Device & application data | Read-only SQL access |
 | ServiceNow | CMDB, incidents, App Owners | API credentials |
 | 1E Tachyon | Real-time actions | API token |
+| Flexera GraphQL API | Vulnerability evidence + advisory status | API credentials/token |
 | Azure AD | Authentication | App registration |
 | OpenAI API | LLM (optional) | API key |
 | NVD (NIST) | CVE/Vulnerability data | API key (free) |
@@ -830,6 +844,7 @@ GET    /api/actions/pending      - Get pending approvals
 | MECM Database Access | Phase 2 (Week 3) | ⬜ Pending |
 | ServiceNow API Credentials | Phase 5 (Week 9) | ⬜ Pending |
 | 1E Tachyon API Access | Phase 5 (Week 9) | ⬜ Pending |
+| Flexera GraphQL API Access | Phase 5 (Week 9) | ⬜ Pending |
 | OpenShift Staging Cluster | Phase 2 (Week 4) | ⬜ Pending |
 | OpenAI API Key (optional) | Phase 4 (Week 7) | ⬜ Pending |
 | NVD API Access | Phase 5 (Week 9) | ⬜ Pending |
@@ -954,7 +969,7 @@ Phase 1 ──► Phase 2 ──► Phase 3
 - US-020: Ground truth test cases (100+ cases)
 - US-021: ServiceNow connector (including App Owner lookup)
 - US-022: 1E Tachyon connector
-- US-023: Vulnerability database connector
+- US-023: Vulnerability connectors (NVD + Flexera)
 
 ### Sprint 6 (Week 11-12): Actions
 - US-024: Celery action worker
@@ -984,7 +999,7 @@ Phase 1 ──► Phase 2 ──► Phase 3
 | Container | Docker + K8s | OpenShift requirement, scalability |
 | Testing Framework | pytest | Flexible, good fixtures, CI integration |
 | Ground Truth Eval | GPT-4 | Semantic evaluation capability |
-| Vulnerability Data | NVD/NIST | Free, comprehensive CVE database |
+| Vulnerability Data | NVD/NIST + Flexera GraphQL | NVD for baseline CVEs; Flexera for advisory status and software evidence |
 
 ---
 

@@ -86,7 +86,7 @@
                     <span style="font-size: 24px;">🔒</span>
                     <div>
                         <strong>Safety First:</strong> All actions require approval before execution. You cannot approve actions you requested yourself.
-                        <div style="font-size: 12px; color: #6C757D; margin-top: 4px;">Your role: <strong>Approver</strong> • Pending requests will expire in 7 days</div>
+                        <div style="font-size: 12px; color: #6C757D; margin-top: 4px;">Your role: <strong>Approver</strong> • Pending requests will expire in 7 days • Production execution requires approved ServiceNow Change + pre-production validation evidence</div>
                     </div>
                 </div>
 
@@ -118,6 +118,18 @@
                             <span class="approval-meta-label">Expires</span>
                             <span class="approval-meta-value">Feb 7, 2026 (6 days remaining)</span>
                         </div>
+                        <div class="approval-meta-item">
+                            <span class="approval-meta-label">ServiceNow Change</span>
+                            <span class="approval-meta-value">CHG0042187 (Authorized)</span>
+                        </div>
+                        <div class="approval-meta-item">
+                            <span class="approval-meta-label">Change Window</span>
+                            <span class="approval-meta-value">Feb 1, 2026 • 22:00 - 23:30</span>
+                        </div>
+                        <div class="approval-meta-item">
+                            <span class="approval-meta-label">Pre-Prod Validation</span>
+                            <span class="approval-meta-value">Passed • Evidence: TEST-RUN-8821</span>
+                        </div>
                     </div>
 
                     <div style="background: white; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
@@ -126,6 +138,7 @@
                             <li>Create MECM Collection: <strong>"Finance_DiskCleanup_2026-01"</strong></li>
                             <li>Add <strong>120 devices</strong> from Finance department</li>
                             <li>Deploy: <strong>Disk Cleanup Script v2.1</strong></li>
+                            <li>Change Record: <strong>CHG0042187</strong> (CAB approved)</li>
                             <li>Schedule: <strong>Immediate (after approval)</strong></li>
                         </ul>
                     </div>
@@ -210,7 +223,7 @@
                                 <span>✗</span> Reject
                             </button>
                             <button class="btn btn-success btn-lg">
-                                <span>✓</span> Approve & Execute
+                                <span>✓</span> Approve & Execute (In Change Window)
                             </button>
                         </div>
                     </div>

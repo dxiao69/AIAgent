@@ -187,6 +187,7 @@ While these are static mockups, clicking these elements will navigate between pa
 - MECM collection creation
 - ServiceNow ticket generation
 - 1E Tachyon real-time actions
+- Flexera GraphQL vulnerability evidence and remediation status
 - Email notifications
 
 ### 4. Role-Based Access

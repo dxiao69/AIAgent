@@ -51,6 +51,7 @@ The ITOA Agent will:
 | 1E Tachyon | Real-time endpoint management platform |
 | WCAG | Web Content Accessibility Guidelines |
 | CVE | Common Vulnerabilities and Exposures |
+| Flexera | Flexera GraphQL vulnerability and software evidence datasets |
 | App Owner | Person/team responsible for an application |
 
 ### 1.4 Target Users
@@ -79,6 +80,7 @@ The ITOA Agent is a standalone desktop application that integrates with existing
 ┌─────────────┐    ┌──────────────┐    ┌────────────────────────┐
 │  MECM DB    │    │ OpenAI/QWEN  │    │  ServiceNow API        │
 │  (Backup)   │    │    LLM       │    │  1E Tachyon API        │
+│             │    │              │    │  Flexera GraphQL API   │
 └─────────────┘    └──────────────┘    └────────────────────────┘
 ```
 
@@ -116,6 +118,7 @@ The ITOA Agent is a standalone desktop application that integrates with existing
 - MECM database is a backup copy (not real-time)
 - Sensitive data must be filtered before LLM processing
 - All destructive actions require human approval
+- All production changes must pass pre-production validation and enterprise change control
 - WCAG 2.1 AA compliance required
 
 ---
@@ -286,7 +289,8 @@ The ITOA Agent is a standalone desktop application that integrates with existing
 | Vendor | MECM | Software publisher |
 | Installation Count | MECM | Number of devices with this app |
 | App Owner | CMDB | Responsible person/team |
-| CVE Count | Vulnerability DB | Known vulnerabilities |
+| CVE Count | Flexera/NVD | Known vulnerabilities |
+| Evidence Count | Flexera | Number of software evidence records |
 | EOL Date | Vendor/CMDB | End of life date |
 | Risk Score | Agent | Calculated priority |
 | Latest Version | Vendor | Current available version |
@@ -297,6 +301,7 @@ The ITOA Agent is a standalone desktop application that integrates with existing
 **Acceptance Criteria:**
 - Application metadata (name, vendor, version)
 - CVE/vulnerability list (if applicable)
+- File/installer evidence for impacted software (if available)
 - All devices with this application installed
 - App Owner contact information
 - Upgrade path recommendations
@@ -327,8 +332,10 @@ Total Impact: 490 devices (some overlap)
 **Description:** System shall track known vulnerabilities for identified applications.
 
 **Acceptance Criteria:**
-- Integration with vulnerability database (CVE)
+- Integration with vulnerability datasets (NVD + Flexera GraphQL)
 - Display CVE ID, severity, description
+- Display solution status from advisory data (where available)
+- Show file and installer evidence for vulnerable software
 - Link to remediation guidance
 - Track vulnerability age
 - Priority based on CVSS score
@@ -341,6 +348,9 @@ Total Impact: 490 devices (some overlap)
 | Severity | Critical, High, Medium, Low |
 | Published Date | When vulnerability was disclosed |
 | Affected Versions | Version range with vulnerability |
+| Solution Status | Vendor/Flexera advisory remediation status |
+| File Evidence | File path, file name, file version from software file evidence |
+| Installer Evidence | Install path/date/source from installer evidence |
 | Remediation | Upgrade path or workaround |
 
 ---
@@ -506,6 +516,28 @@ Filtered: "User USER_001 on device WORKSTATION_001"
 | Validation Rules | Parameter validation logic |
 | Rollback Support | Whether action can be reversed |
 | Test Status | Not Tested, Test Passed, Test Failed |
+
+#### FR-004.8: Enterprise Change Management Gate (Production)
+**Description:** System shall enforce enterprise change management controls before any production action execution.
+
+**Acceptance Criteria:**
+- Production execution is blocked unless a linked ServiceNow Change Request is in Approved state.
+- Linked change record must include planned window, implementation plan, and backout plan.
+- Action must have a successful pre-production test run recorded in the last 30 days (configurable).
+- Test evidence (logs/results) must be attached or linked to the change record.
+- Execution only allowed within approved change window, except emergency override roles.
+- Emergency changes require post-implementation review record within 24 hours.
+
+**Required Change Control Fields:**
+| Field | Description |
+|-------|-------------|
+| Change Number | ServiceNow change identifier (e.g., CHGxxxxxxx) |
+| Change Type | Standard, Normal, Emergency |
+| Change State | Requested, Assess, Authorized, Scheduled, Implement, Review, Closed |
+| Planned Start/End | Approved implementation window |
+| CAB Approval | Evidence of CAB/approver authorization |
+| Backout Plan | Rollback approach if execution fails |
+| Pre-Prod Test Evidence | Link/reference to pre-production validation logs |
 
 ---
 
@@ -820,13 +852,24 @@ Expected Actions: ["notify_hardware_team", "create_servicenow_ticket", "add_to_m
 | /Consumer/Responses | Get results |
 | /Inventory/Devices | Device lookup |
 
-#### 6.1.4 Vulnerability Data Sources (Optional)
+#### 6.1.4 Vulnerability Data Sources
 
 | Source | Data Elements | Usage |
 |--------|---------------|-------|
 | NVD (NIST) | CVE data, CVSS scores | Read |
+| Flexera GraphQL | Vulnerabilities, advisories, software file/installer evidence, solution status | Read |
 | Vendor Advisories | Security bulletins | Read |
 | Internal Vuln DB | Custom vulnerability tracking | Read/Write |
+
+#### 6.1.5 Flexera GraphQL Dataset Usage
+
+| Dataset | Key Fields | Purpose |
+|---------|------------|---------|
+| `vulnerability` | `cveId`, `cvssScore`, `criticalityLabel`, `threatExploitRiskLabel`, `updatedAt` | Vulnerability scoring and prioritization |
+| `advisory` | `advisoryId`, `solutionStatus`, `threatScore`, `releasedDate`, `saidUrl` | Advisory-level remediation and status tracking |
+| `software` / `deviceSoftware` | `name`, `versionName`, `vulnerabilities`, `fileEvidence`, `installerEvidence` | Link installed software to vulnerabilities |
+| `softwareFileEvidence` | `filePath`, `fileName`, `fileVersion`, `productName` | Evidence of vulnerable binary/file presence |
+| `softwareInstallerEvidence` | `installationPath`, `installDate`, `source`, `version` | Evidence of installed vulnerable software |
 
 ### 6.2 Data Storage
 
@@ -1098,6 +1141,7 @@ Examples:
 |-------------|----------------|
 | Mandatory Approval | All actions require approval |
 | Separation of Duties | Requestor cannot self-approve |
+| Change Management Gate | Production actions require approved ServiceNow change + pre-prod validation |
 | Rollback Capability | Where possible (MECM deployments) |
 | Dry Run Mode | Preview action without execution |
 | Rate Limiting | Max 1000 devices per action |
@@ -1125,6 +1169,14 @@ Examples:
 - Data masking in non-production
 - Right to access (data export)
 - Secure deletion procedures
+
+### 9.4 Enterprise Change Management Compliance
+
+- Production-impacting actions must comply with enterprise change process in ServiceNow
+- Approved change record is mandatory before production execution
+- Pre-production validation evidence is required and auditable
+- CAB approval and change window enforcement must be traceable in audit logs
+- Emergency change path must include mandatory post-implementation review
 
 ---
 
@@ -1180,6 +1232,7 @@ schedule: "weekly"
 - Microsoft Endpoint Configuration Manager Documentation
 - ServiceNow API Reference
 - 1E Tachyon Platform Guide
+- Flexera GraphQL Datasets: https://developer.flexera.com/docs/page/datasets-graphql
 - Azure OAuth 2.0 Documentation
 - WCAG 2.1 Guidelines
 
