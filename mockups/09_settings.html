@@ -702,7 +702,7 @@
                         <!-- Approval Workflow -->
                         <div class="settings-section" id="approval">
                             <h2>✅ Approval Workflow Settings</h2>
-                            <p>Configure approval requirements and workflow behavior.</p>
+                            <p>Configure approval requirements and workflow behavior, including production change-management gates.</p>
                             
                             <div class="setting-row">
                                 <div class="setting-info">
@@ -783,6 +783,75 @@
                                         <option>Every 2 days</option>
                                         <option>Weekly</option>
                                     </select>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #E9ECEF;">
+                                <h3 style="margin: 0 0 12px 0; font-size: 16px;">🏢 Enterprise Change Management (Production)</h3>
+
+                                <div class="setting-row">
+                                    <div class="setting-info">
+                                        <div class="setting-label">Require Approved ServiceNow Change</div>
+                                        <div class="setting-description">Block production execution unless linked change request is in Authorized/Approved state</div>
+                                    </div>
+                                    <div class="setting-control">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="setting-row">
+                                    <div class="setting-info">
+                                        <div class="setting-label">Require Pre-Production Validation</div>
+                                        <div class="setting-description">Require passing sandbox/pre-prod test evidence before production execution</div>
+                                    </div>
+                                    <div class="setting-control">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="setting-row">
+                                    <div class="setting-info">
+                                        <div class="setting-label">Test Evidence Validity</div>
+                                        <div class="setting-description">Maximum age of pre-production test evidence for production promotion</div>
+                                    </div>
+                                    <div class="setting-control">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="number" class="form-input" style="width: 80px;" value="30">
+                                            <span>days</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="setting-row">
+                                    <div class="setting-info">
+                                        <div class="setting-label">Enforce Approved Change Window</div>
+                                        <div class="setting-description">Allow execution only within approved ServiceNow change implementation window</div>
+                                    </div>
+                                    <div class="setting-control">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="setting-row">
+                                    <div class="setting-info">
+                                        <div class="setting-label">Emergency Override with PIR</div>
+                                        <div class="setting-description">Allow emergency execution only for approved roles and require post-implementation review within 24h</div>
+                                    </div>
+                                    <div class="setting-control">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>

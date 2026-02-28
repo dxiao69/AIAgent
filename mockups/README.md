@@ -128,6 +128,9 @@ The mockups demonstrate the following user workflow:
 - **Purpose**: Review and approve pending actions
 - **Key Elements**:
   - Pending approval cards with details
+  - Linked ServiceNow change request and status
+  - Pre-production validation evidence reference
+  - Approved change window awareness before execution
   - Device preview list
   - Approve/Reject buttons
   - Approver comments field
