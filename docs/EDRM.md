@@ -4,6 +4,7 @@
 ---
 
 ## 🧠 High-Level Architecture Diagram (Text)
+····
 +------------------------------+
 | 1) Capture / Ingestion Layer |
 +------------------------------+
@@ -57,7 +58,7 @@ v
 | • Regulatory production |
 | • Audit trail reporting |
 +------------------------------+
-
+····
 
 ---
 
